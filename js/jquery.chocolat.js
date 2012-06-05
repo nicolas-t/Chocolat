@@ -98,7 +98,7 @@
 				$('#Choco_overlay').css('position', 'absolute');
 			}
 			//events
-			$(document).unbind().bind('keydown', function(e){
+			$(document).unbind('keydown').bind('keydown', function(e){
 				switch(e.keyCode){
 					case 37:
 						changePageChocolat(-1);
