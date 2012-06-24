@@ -282,8 +282,8 @@
 
 		}
 		function clear(){
-			$('#Choco_overlay').remove()
-			$('#Choco_content').remove()
+			$('#Choco_overlay').remove();
+			$('#Choco_content').remove();
 		}
 		function close(){
 			$('#Choco_overlay').fadeOut(900, function(){$('#Choco_overlay').remove()});
