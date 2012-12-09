@@ -12,7 +12,7 @@ IE 7+, Safari, Firefox & Chrome.
 
 ##Demo
 -----------
-http://chocolat.insipi.de/demonstration
+http://chocolat.insipi.de/en/Demonstration/
 
 ##Markup
 -----------
