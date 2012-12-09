@@ -8,7 +8,7 @@ Except jQuery. https://github.com/jquery/jquery
 
 #### Compatibility
 recent browsers such as :
-tested on IE 7+, Safari, Firefox & Chrome.
+IE 7+, Safari, Firefox & Chrome.
 
 ##Demo
 -----------
