@@ -8,7 +8,7 @@
  
 */
 (function($) {
-	images = new Array();
+	images = [];
 	var calls = 0;
 	$.fn.Chocolat = function(settings) {
 		settings = $.extend({
@@ -36,26 +36,22 @@
 		
 		calls++;
 		settings.setIndex = calls;
-		images[settings.setIndex] = new Array();
+		images[settings.setIndex] = [];
 		
 		//images:
 		this.each(function(index){
-			
-			if(index == 0 && settings.linkImages){
-				if(settings.setTitle == ''){
-					settings.setTitle = isSet($(this).attr('rel'), ' ');
-				}
+			if(index == 0 && settings.linkImages && settings.setTitle == ''){
+				settings.setTitle = isSet($(this).attr('rel'), ' ');
 			}
 			$(this).each(function() {
 				images[settings.setIndex]['displayAsALink'] = settings.displayAsALink;
-				images[settings.setIndex][index] = new Array();
+				images[settings.setIndex][index] = [];
 				images[settings.setIndex][index]['adress'] = isSet($(this).attr('href'), ' ');
 				images[settings.setIndex][index]['caption'] = isSet($(this).attr('title'), ' ');
 				if(!settings.displayAsALink){
 					$(this).unbind('click').bind('click', {id: settings.setIndex, nom : settings.setTitle, i : index}, _initialise);
 				}
 			})
-
 		});
 		
 		//setIndex:
@@ -156,24 +152,15 @@
 			upadteDescription();
 		}
 		function changePageChocolat(signe){
-			if(!settings.linkImages)
+			if(!settings.linkImages || (settings.currentImage == 0 && signe == -1) || (settings.currentImage == settings.lastImage && signe == 1))
 			{
-				return false;
-			}
-			else if(settings.currentImage == 0 && signe == -1)
-			{
-				return false;
-			}
-			else if(settings.currentImage == settings.lastImage && signe == 1){
 				return false;
 			}
 			else{
-
 				$('#Choco_container_description').fadeTo(settings.fadeOutImageduration,0);
 				$('#Choco_bigImage').fadeTo(settings.fadeOutImageduration, 0, function(){
 					load(settings.currentImage + parseInt(signe), false);
 				});
-
 			}
 		}
 		function ChoColat(hauteur_image,largeur_image,resize){
@@ -207,7 +194,7 @@
 		}
 		function arrowsManaging(){
 			if(settings.linkImages){
-				var what = new Array('Choco_right_arrow','Choco_left_arrow');
+				var what = ['Choco_right_arrow','Choco_left_arrow'];
 				for(var i=0; i < what.length; i++){
 					hide = false;
 					if(what[i] == 'Choco_right_arrow' && settings.currentImage == settings.lastImage){
@@ -238,6 +225,7 @@
 			$('#Choco_container_via').html(settings.setTitle+settings.separator1+current +settings.separator2+last);
 		}
 		function isSet(variable,defaultValue){
+			// return variable === undefined ? defaultValue : variable; ?
 			if (variable === undefined) {
 				return defaultValue;
 			}
@@ -247,9 +235,9 @@
 		}
 		function iWantThePerfectImageSize(himg,limg){
 			//28% = 14% + 14% margin
-			//51px height of description + close
 			var lblock = limg + (limg*28/100);
-			var hblock = himg + 51;
+			var heightDescAndClose = $('#Choco_container_description').height()+$('#Choco_close').height();
+			var hblock = himg + heightDescAndClose;
 			var k = limg/himg;
 			var kk = himg/limg;
 			if(settings.container.get(0).nodeName.toLowerCase() == 'body'){
@@ -263,13 +251,13 @@
 			notFitting = true;
 				while (notFitting){
 				var lblock = limg + (limg*28/100);
-				var hblock = himg + 51;
+				var hblock = himg + heightDescAndClose;
 					if(lblock > windowWidth){
 						limg = windowWidth*100/128;
 						
 						himg = kk * limg;
 					}else if(hblock > windowHeight){
-						himg = (windowHeight - 51);
+						himg = (windowHeight - heightDescAndClose);
 						limg = k * himg;
 					}else{
 						notFitting = false;
