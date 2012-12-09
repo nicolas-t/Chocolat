@@ -1,135 +1,124 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="description" content="bonjour.">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Chocolat Responsive Lightbox Demo</title>
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+		<script src="js/jquery.chocolat.js"></script>
+		<link rel="stylesheet" href="css/chocolat.css" type="text/css" media="screen" charset="utf-8" />
+		<!-- optional CSS -->
+		<style type="text/css">
+			body{
+				width:610px;
+				margin:auto;
+				text-align:center;
+			}
+			li,ul{
+				padding-left:0;
+				list-style: none;
+			}
+			a {
+				color: #ff00c6;
+				text-decoration: none;
+				border-bottom: 1px solid #ff00c6;
+			}
+			a:hover {
+				color: #F00;
+			}
+			.ex{
+				margin:15px 0 15px 0;
+				border-bottom:1px dotted gray;
+				width:610px;
+				padding:5px;
+				color:gray;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Javascript calls -->
+		<script type="text/javascript" charset="utf-8">
+				$(function() {
+					$('#example1 a').Chocolat();
+					$('#example2 a').Chocolat({linkImages:false});
+					$('#example3 a').Chocolat({displayAsALink:true, setTitle:'A Cool Title'});
+					$('#example4 a').Chocolat({container : $('#container'), overlayColor:'silver', overlayOpacity:0.3});
+					$('#example5A a').Chocolat({displayAsALink:true, linksContainer: 'linksContainer'});
+					$('#example5B a').Chocolat({displayAsALink:true, linksContainer: 'linksContainer'});
+					$('#example6 a').Chocolat({overlayColor:'#000',leftImg:'images/leftw.gif',rightImg:'images/rightw.gif',closeImg:'images/closew.gif'});
+				});
+		</script>
+		<!-- HTML markup -->
+		<div class="ex">Exemple 1. Default </div>
+		<p id="example1">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title1">
+				<img width="100" src="series/gouttes/mini/1.jpg" />
+			</a>
+			<a href="series/gouttes/2.jpg" title="Black">
+				<img width="100" src="series/gouttes/mini/2.jpg" />
+			</a>
+			<a href="series/gouttes/3.jpg" title="Orange">
+				<img width="100" src="series/gouttes/mini/3.jpg"/>
+			</a>
+		</p>
 
-<title>Chocolat Demo</title>
-<script src="js/jquery.js"></script>
-<script src="js/jquery.chocolat.js"></script>
-<link rel="stylesheet" href="css/chocolat.css" type="text/css" media="screen" charset="utf-8" />
-<!-- optional CSS -->
-<style type="text/css">
-body{
-width:610px;
-margin:auto;
-text-align:center;
-}	li,ul{
-		padding-left:0;
-		list-style: none;
-	}
+		<div class="ex">Exemple 2. linkImages : false</div>
+		<p id="example2">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title2">
+				<img width="100" src="series/gouttes/mini/1.jpg" />
+			</a>
+			<a href="series/gouttes/2.jpg" title="Black">
+				<img width="100" src="series/gouttes/mini/2.jpg" />
+			</a>
+			<a href="series/gouttes/3.jpg" title="Orange">
+				<img width="100" src="series/gouttes/mini/3.jpg"/>
+			</a>
+		</p>
 
-	a {
-		color: #ff00c6;
-		text-decoration: none;
-		border-bottom: 1px solid #ff00c6;
-	}
-	a:hover {
-		color: #F00;
-	}
-	a:hover{
-		color:red;
-	}
-	.ex{
-		margin:15px 0 15px 0;
-		border-bottom:1px dotted gray;
-		width:610px;
-		padding:5px;
-		color:gray;
-	}
-</style>
-</head>
-<body>
+		<div class="ex">Exemple 3. displayAsALink : true, + title set in params</div>
+		<p id="example3">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title3"></a>
+			<a href="series/gouttes/2.jpg" title="Black"></a>
+			<a href="series/gouttes/3.jpg" title="Orange"></a>
+		</p>
 
-<script type="text/javascript" charset="utf-8">
-	    $(function() {
-			$('#example1 a').Chocolat();
-			$('#example2 a').Chocolat({linkImages:false});
-			$('#example3 a').Chocolat({displayAsALink:true, setTitle:'A Cool Title'});
-			$('#example4 a').Chocolat({container : $('#container'), overlayColor:'silver', overlayOpacity:0.3});
-			
-			$('#example5A a').Chocolat({displayAsALink:true, linksContainer: 'linksContainer'});
-			$('#example5B a').Chocolat({displayAsALink:true, linksContainer: 'linksContainer'});
-			
-			$('#example6 a').Chocolat({overlayColor:'#000',leftImg:'images/leftw.gif',rightImg:'images/rightw.gif',closeImg:'images/closew.gif'});
-		});
-</script>
-<div class="ex">Exemple 1. Default </div>
-<p id="example1">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title1">
-		<img width="100" src="series/gouttes/mini/1.jpg" />
-	</a>
-	<a href="series/gouttes/2.jpg" title="Black">
-		<img width="100" src="series/gouttes/mini/2.jpg" />
-	</a>
-	<a href="series/gouttes/3.jpg" title="Orange">
-		<img width="100" src="series/gouttes/mini/3.jpg"/>
-	</a>
-</p>
+		<div class="ex">Exemple 4. In a container. overlayColor & overlayOpacity</div>
+		<p id="example4">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title4">
+				<img width="100" src="series/gouttes/mini/1.jpg" />
+			</a>
+			<a href="series/gouttes/2.jpg" title="Black">
+				<img width="100" src="series/gouttes/mini/2.jpg" />
+			</a>
+			<a href="series/gouttes/3.jpg" title="Orange">
+				<img width="100" src="series/gouttes/mini/3.jpg"/>
+			</a>
+		</p>
+		<div style="border:1px dotted silver;width:600px; height:400px;" id="container"></div>
 
-<div class="ex">Exemple 2. linkImages : false</div>
-<p id="example2">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title2">
-		<img width="100" src="series/gouttes/mini/1.jpg" />
-	</a>
-	<a href="series/gouttes/2.jpg" title="Black">
-		<img width="100" src="series/gouttes/mini/2.jpg" />
-	</a>
-	<a href="series/gouttes/3.jpg" title="Orange">
-		<img width="100" src="series/gouttes/mini/3.jpg"/>
-	</a>
-</p>
-
-<div class="ex">Exemple 3. displayAsALink : true, + title set in params</div>
-<p id="example3">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title3"></a>
-	<a href="series/gouttes/2.jpg" title="Black"></a>
-	<a href="series/gouttes/3.jpg" title="Orange"></a>
-</p>
-
-<div class="ex">Exemple 4. In a container. overlayColor & overlayOpacity</div>
-<p id="example4">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title4">
-		<img width="100" src="series/gouttes/mini/1.jpg" />
-	</a>
-	<a href="series/gouttes/2.jpg" title="Black">
-		<img width="100" src="series/gouttes/mini/2.jpg" />
-	</a>
-	<a href="series/gouttes/3.jpg" title="Orange">
-		<img width="100" src="series/gouttes/mini/3.jpg"/>
-	</a>
-</p>
-<div style="border:1px dotted silver;width:600px; height:400px;" id="container"></div>
-
-<div class="ex">Exemple 5. displayAsALink : true, + links appended in a specific ul (id:containerLinks)</div>
-<p id="example5A">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title5A"></a>
-	<a href="series/gouttes/2.jpg" title="Black"></a>
-	<a href="series/gouttes/3.jpg" title="Orange"></a>
-</p>
-<p id="example5B">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title5B"></a>
-	<a href="series/gouttes/2.jpg" title="Black"></a>
-	<a href="series/gouttes/3.jpg" title="Orange"></a>
-</p>
-<ul style="border:1px dotted silver;width:300px;" id="linksContainer"></ul>
-<div class="ex">Exemple 6. Black Template </div>
-<p id="example6">
-	<a href="series/gouttes/1.jpg" title="Rose" rel="title6">
-		<img width="100" src="series/gouttes/mini/1.jpg" />
-	</a>
-	<a href="series/gouttes/2.jpg" title="Black">
-		<img width="100" src="series/gouttes/mini/2.jpg" />
-	</a>
-	<a href="series/gouttes/3.jpg" title="Orange">
-		<img width="100" src="series/gouttes/mini/3.jpg"/>
-	</a>
-</p>
-
-<br />
-<a href="http://chocolat.insipi.de/">Learn more</a> 
-<br /><br />
-
-
-</body>
+		<div class="ex">Exemple 5. displayAsALink : true, + links appended in a specific ul (id:containerLinks)</div>
+		<p id="example5A">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title5A"></a>
+			<a href="series/gouttes/2.jpg" title="Black"></a>
+			<a href="series/gouttes/3.jpg" title="Orange"></a>
+		</p>
+		<p id="example5B">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title5B"></a>
+			<a href="series/gouttes/2.jpg" title="Black"></a>
+			<a href="series/gouttes/3.jpg" title="Orange"></a>
+		</p>
+		<ul style="border:1px dotted silver;width:300px;" id="linksContainer"></ul>
+		<div class="ex">Exemple 6. Black Template </div>
+		<p id="example6">
+			<a href="series/gouttes/1.jpg" title="Rose" rel="title6">
+				<img width="100" src="series/gouttes/mini/1.jpg" />
+			</a>
+			<a href="series/gouttes/2.jpg" title="Black">
+				<img width="100" src="series/gouttes/mini/2.jpg" />
+			</a>
+			<a href="series/gouttes/3.jpg" title="Orange">
+				<img width="100" src="series/gouttes/mini/3.jpg"/>
+			</a>
+		</p>
+		<a href="http://chocolat.insipi.de/">Learn more</a> 
+	</body>
 </html>

@@ -169,7 +169,7 @@
 				$('#Choco_container_photo, #Choco_content, #Choco_bigImage').stop(true,false).css({'overflow':'visible'});
 				$('#Choco_bigImage').animate({
 					'height' : hauteur_image+'px',
-					'width' : largeur_image+'px',
+					'width' : largeur_image+'px'
 				},settings.fadeInImageduration);
 			}
 			$('#Choco_container_photo').animate({
