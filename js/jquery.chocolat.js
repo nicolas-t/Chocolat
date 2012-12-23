@@ -157,7 +157,8 @@
 				return false;
 			}
 			else{
-				$('#Choco_container_description').fadeTo(settings.fadeOutImageduration,0);
+				//$('#Choco_container_description').fadeTo(settings.fadeOutImageduration,0); making a weird bug with firefox 17
+				$('#Choco_container_description').css('visibility','hidden');
 				$('#Choco_bigImage').fadeTo(settings.fadeOutImageduration, 0, function(){
 					load(settings.currentImage + parseInt(signe), false);
 				});
@@ -182,11 +183,12 @@
 				'marginLeft' : -largeur_image/2,
 				'marginTop' : -(hauteur_image)/2
 			},settings.fadeInImageduration, 'swing', function(){
-				$('#Choco_bigImage').fadeTo(settings.fadeInImageduration, 1).height(hauteur_image).width(largeur_image).fadeIn(settings.fadeInImageduration);
+				$('#Choco_bigImage').fadeTo(settings.fadeInImageduration, 1).height(hauteur_image).width(largeur_image);
 				if(!resize)
 				{
 					arrowsManaging();
-					$('#Choco_container_description').fadeTo(settings.fadeInImageduration,1);
+					//$('#Choco_container_description').fadeTo(settings.fadeInImageduration,1); making a weird bug with firefox 17
+					$('#Choco_container_description').css('visibility','visible');
 					$('#Choco_close').fadeIn(settings.fadeInImageduration);
 				}
 			}).
