@@ -2,7 +2,7 @@ $(document).ready(function(){
 	var timeOut = false;
 	var imgOrigHeight = false;
 	var imgOrigWidth = false;
-	var fullScreen = true;
+	var fullScreen = false;
 	images = ['images/1.jpg','images/2.jpg'];
 	settings = {};
 	settings.linkImages = true;
@@ -24,7 +24,7 @@ $(document).ready(function(){
 		$('#img').fadeTo(400,0, function(){
 			settings.currentImage = i;
 			storeImgSize(imgLoader);
-			fitting = fit(imgOrigHeight, imgOrigWidth, $(window).height(), $(window).width(), 100, 100);
+			fitting = fit(imgOrigHeight, imgOrigWidth, $(window).height(), $(window).width(), getOutMarginH(), getOutMarginW());
 			center(fitting.width, fitting.height, fitting.left, fitting.top, 150, function(){ $('#img').attr('src', images[i]).fadeTo(400,1);});
 			arrows();
 		});
@@ -96,6 +96,12 @@ $(document).ready(function(){
 		imgOrigHeight = img.height;
 		imgOrigWidth = img.width;
 	}
+	function getOutMarginW(){
+		return ($('#left').outerWidth() - $('#left').width()) + ($('#right').outerWidth() - $('#right').width());
+	}
+	function getOutMarginH(){
+		return $('#top').outerHeight() + $('#bottom').outerHeight();
+	}
 	function tool_debounce(duration, callback){
 		clearTimeout(timeOut);
 		timeOut = setTimeout(function(){callback();},duration);
@@ -114,7 +120,7 @@ $(document).ready(function(){
 	});
 	$(window).on('resize', function(){
 		tool_debounce(100, function(){
-			fitting = fit(imgOrigHeight, imgOrigWidth, $(window).height(), $(window).width(), 100, 100);
+			fitting = fit(imgOrigHeight, imgOrigWidth, $(window).height(), $(window).width(), getOutMarginH(), getOutMarginW());
 			center(fitting.width, fitting.height, fitting.left, fitting.top, 150);
 		});
 	});
