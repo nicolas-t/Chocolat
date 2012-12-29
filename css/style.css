@@ -35,19 +35,19 @@ a{
 }
 #left{
 	position:absolute;
-	left:-14%;
+	left:-50px;
 	width:50%;
 	height:100%;
-	padding-right:14%;
+	padding-right:50px;
 	cursor:pointer;
 	border-left:2px solid red;
 }
 #right{
 	position:absolute;
-	right:-14%;
+	right:-50px;
 	width:50%;
 	height:100%;
-	padding-left:14%;
+	padding-left:50px;
 	border-right:2px solid red;
 	cursor:pointer;
 }
