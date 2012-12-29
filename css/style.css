@@ -1,0 +1,90 @@
+/*
+	CSS RESET
+*/
+
+html, body, div, span{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+a{
+	text-decoration:none;
+}
+
+#container{
+	position:absolute;
+	width:0px;
+	height:0px;
+	left:50%;
+	top:50%;
+}
+#img{
+	opacity:0;
+	position:absolute;
+	width:100%;
+	height:100%;
+}
+#left{
+	position:absolute;
+	left:-14%;
+	width:50%;
+	height:100%;
+	padding-right:14%;
+	cursor:pointer;
+	border-left:2px solid red;
+}
+#right{
+	position:absolute;
+	right:-14%;
+	width:50%;
+	height:100%;
+	padding-left:14%;
+	border-right:2px solid red;
+	cursor:pointer;
+}
+#top{
+	position:absolute;
+	top:-40px;
+	width:100%;
+	height:40px;
+	background:blue;
+}
+#bottom{
+	position:absolute;
+	bottom:-40px;
+	width:100%;
+	height:40px;
+	background:blue;
+}
+
+/*make it with js
+@media (max-width: 940px) {
+	#left{
+		position:absolute;
+		right:30px;
+		left:auto;
+		top:-40px;
+		width:30px;
+		height:40px;
+		background:green;
+		padding:0;
+	}
+	#right{
+		position:absolute;
+		right:0px;
+		top:-40px;
+		width:30px;
+		height:40px;
+		background: red;
+		padding:0;
+	}
+}*/
