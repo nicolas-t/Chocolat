@@ -1,6 +1,6 @@
 ;(function ( $, window, document, undefined ) {
 
-    var pluginName = 'defaultPluginName',
+    var pluginName = 'Chocolat',
         defaults = {
             timeOut: false,
             imgOrigHeight: false,
@@ -98,20 +98,17 @@
         },
         arrows: function() {
 			if(this.settings.linkImages){
-				var what = ['right','left'];
-				for(var i=0; i < what.length; i++){
-					hide = false;
-					if(what[i] == 'right' && this.settings.currentImage == this.settings.lastImage){
-						hide = true;
-						$('#'+what[i]).fadeOut(300);
-					}
-					else if(what[i] == 'left' && this.settings.currentImage == 0){
-						hide = true;
-						$('#'+what[i]).fadeOut(300);
-					}
-					if(!hide){
-						$('#'+what[i]).fadeIn(this.settings.fadeOutImageduration);
-					}
+				if(this.settings.currentImage == this.settings.lastImage){
+					$('#right').fadeOut(300);
+				}
+				else{
+					$('#right').fadeIn(300);
+				}
+				if(this.settings.currentImage == 0){
+					$('#left').fadeOut(300);
+				}
+				else{
+					$('#left').fadeIn(300);
 				}
 			}
         },
