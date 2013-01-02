@@ -12,6 +12,7 @@ html, body, div, span{
 }
 body {
 	line-height: 1;
+	background:silver;
 }
 ol, ul {
 	list-style: none;
@@ -19,13 +20,36 @@ ol, ul {
 a{
 	text-decoration:none;
 }
-
+#overlay{
+	height:100%;
+	width:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	z-index:10 !important;
+	background-color:#fff;
+	display:none;
+}
+#loader{
+	height:32px;
+	width:32px;
+	position:fixed;
+	left:50%;
+	top:50%	;
+	margin-left:-32px;
+	margin-top:-32px;
+	z-index:11 !important;
+	background:url(../images/loader.gif);
+	background-color:#fff;
+	display:none;
+}
 #container{
 	position:absolute;
 	width:0px;
 	height:0px;
 	left:50%;
 	top:50%;
+	z-index:12;
 }
 #img{
 	opacity:0;

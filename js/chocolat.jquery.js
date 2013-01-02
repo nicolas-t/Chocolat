@@ -1,5 +1,4 @@
 ;(function ( $, window, document, undefined ) {
-
 	var pluginName = 'Chocolat';
 	var defaults = {
 			container:  	 'body',
@@ -11,8 +10,10 @@
 			fullScreen:      false,
 			linkImages:		 true,
 			currentImage:	 0,
+			overlayOpacity : 0.5,
+			timer: 			 false,
 			lastImage: 		 false,
-			images :		 ['images/1.jpg','images/2.jpg']
+			images :		 ['img/1.jpg','img/2.jpg','img/1.jpg']
 		};
 		
 	function Plugin( element, settings ) {
@@ -28,6 +29,7 @@
 		init: function() {
 			this.markup();
 			this.events();
+			$('#overlay').fadeTo(800, this.settings.overlayOpacity)
 			this.settings.lastImage = this.settings.images.length - 1;
 			this.load(0);
 		}, 
@@ -38,14 +40,20 @@
 			imgLoader.src = this.settings.images[i];
 		},
 		load: function(i) {
-			this.preload(i, this.appear);
+			this.settings.timer = setTimeout(function(){$('#loader').fadeIn();},400);
+			this.preload(i,this.appear);
 		},
 		appear: function(i, imgLoader) {
-			$('#img').fadeTo(400,0, function(){
+			$('#img').fadeTo(200,0, function(){
 				that.settings.currentImage = i;
 				that.storeImgSize(imgLoader);
 				fitting = that.fit(that.settings.imgOrigHeight, that.settings.imgOrigWidth, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
-				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, function(){ $('#img').attr('src', that.settings.images[i]).fadeTo(400,1);});
+				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, function(){
+					clearTimeout(that.settings.timer);
+					$('#loader').stop().fadeOut(300, function(){
+						$('#img').attr('src', that.settings.images[i]).fadeTo(400,1);
+					});
+				});
 				that.arrows();
 			});
 		},
@@ -86,7 +94,7 @@
 			},duration,callback()).css('overflow', 'visible');
 		},
 		change: function(signe) {
-			if(this.settings.linkImages && (this.settings.currentImage == 0 && signe !== -1) || (this.settings.currentImage == this.settings.lastImage && signe !== 1)) {
+			if(this.settings.linkImages && ((this.settings.currentImage !== 0 && signe == -1) || (this.settings.currentImage !== this.settings.lastImage && signe == 1))) {
 				this.load(this.settings.currentImage + parseInt(signe));
 			}
 		},
@@ -118,6 +126,8 @@
 		},
 		markup: function(){
 			$(this.settings.container).append('\
+			<div id="overlay"></div>\
+			<div id="loader"></div>\
 			<div id="container">\
 				<img src="" id="img" alt=""/>\
 				<div id="top"></div>\
