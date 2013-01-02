@@ -7,7 +7,7 @@
 			timeOut:		 false,
 			imgOrigHeight:	 false,
 			imgOrigWidth:	 false,
-			fullWindow:      true,
+			fullWindow:      false,
 			fullScreen:      false,
 			linkImages:		 true,
 			currentImage:	 0,
@@ -144,15 +144,17 @@
 			</div>');
 		},
 		openFullScreen:function(){
-			var docElm = document.documentElement;
-			if (docElm.requestFullscreen) {
-				docElm.requestFullscreen();
-			}
-			else if (docElm.mozRequestFullScreen) {
-				docElm.mozRequestFullScreen();
-			}
-			else if (docElm.webkitRequestFullScreen) {
-				docElm.webkitRequestFullScreen();
+			if(this.settings.fullScreen){
+				var docElm = document.documentElement;
+				if (docElm.requestFullscreen) {
+					docElm.requestFullscreen();
+				}
+				else if (docElm.mozRequestFullScreen) {
+					docElm.mozRequestFullScreen();
+				}
+				else if (docElm.webkitRequestFullScreen) {
+					docElm.webkitRequestFullScreen();
+				}
 			}
 		},
 		events : function(){
