@@ -7,6 +7,7 @@
 			timeOut:		 false,
 			imgOrigHeight:	 false,
 			imgOrigWidth:	 false,
+			fullWindow:      true,
 			fullScreen:      false,
 			linkImages:		 true,
 			currentImage:	 0,
@@ -73,7 +74,7 @@
 				height = width * imgRatio;
 			}
 
-			if(!fullScreen && (width>=imgWidth || height>=imgHeight)){
+			if(!this.settings.fullWindow && (width>=imgWidth || height>=imgHeight)){
 				width=imgWidth;
 				height=imgHeight;
 			}
@@ -119,6 +120,11 @@
 			this.settings.imgOrigHeight = img.height;
 			this.settings.imgOrigWidth = img.width;
 		},
+		close:function(){
+			$('#overlay, #loader, #container').fadeOut(200, function(){
+				$(this).remove();
+			});
+		},
 		getOutMarginW: function(el, options) {
 			return ($('#left').outerWidth() - $('#left').width()) + ($('#right').outerWidth() - $('#right').width());
 		},
@@ -137,12 +143,40 @@
 				<div id="bottom"></div>\
 			</div>');
 		},
+		openFullScreen:function(){
+			var docElm = document.documentElement;
+			if (docElm.requestFullscreen) {
+				docElm.requestFullscreen();
+			}
+			else if (docElm.mozRequestFullScreen) {
+				docElm.mozRequestFullScreen();
+			}
+			else if (docElm.webkitRequestFullScreen) {
+				docElm.webkitRequestFullScreen();
+			}
+		},
 		events : function(){
+			$(document).off('keydown').on('keydown', function(e){
+				switch(e.keyCode){
+					case 37:
+					that.change(-1);
+					break;
+					case 39:
+					that.change(1);
+					break;
+					case 27:
+					that.close();
+					break;
+				};
+			});
 			$(this.settings.next).off('click').on('click', function(){
 				that.change(+1);	
 			});
 			$(this.settings.prev).off('click').on('click', function(){
 				that.change(-1);	
+			});
+			$('#overlay').off('click').on('click', function(){
+				that.close();	
 			});
 			$(window).off('resize').on('resize', function(){
 				that.tool_debounce(100, function(){
