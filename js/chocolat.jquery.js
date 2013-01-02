@@ -41,20 +41,21 @@
 		},
 		load: function(i) {
 			this.settings.timer = setTimeout(function(){$('#loader').fadeIn();},400);
-			this.preload(i,this.appear);
+			this.preload(i,this.place);
 		},
-		appear: function(i, imgLoader) {
+		place: function(i, imgLoader) {
 			$('#img').fadeTo(200,0, function(){
-				that.settings.currentImage = i;
 				that.storeImgSize(imgLoader);
 				fitting = that.fit(that.settings.imgOrigHeight, that.settings.imgOrigWidth, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
-				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, function(){
-					clearTimeout(that.settings.timer);
-					$('#loader').stop().fadeOut(300, function(){
-						$('#img').attr('src', that.settings.images[i]).fadeTo(400,1);
-					});
-				});
+				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, that.appear(i));
 				that.arrows();
+			});
+		},
+		appear:function(i){
+			clearTimeout(that.settings.timer);
+			that.settings.currentImage = i;
+			$('#loader').stop().fadeOut(300, function(){
+				$('#img').attr('src', that.settings.images[i]).fadeTo(400,1);
 			});
 		},
 		fit: function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW){ 
