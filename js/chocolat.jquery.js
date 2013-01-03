@@ -73,12 +73,10 @@
 				width = holderGlobalWidth;
 				height = width * imgRatio;
 			}
-
 			if(!this.settings.fullWindow && (width>=imgWidth || height>=imgHeight)){
 				width=imgWidth;
 				height=imgHeight;
 			}
-			
 			return {
 				'height' :height,
 				'width' : width,
