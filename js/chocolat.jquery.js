@@ -186,7 +186,7 @@
 			});
 			$(window).off('resize').on('resize', function(){
 				that.tool_debounce(100, function(){
-					fitting = that.fit(that.settings.images[i].height, that.settings.images[i].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
+					fitting = that.fit(that.settings.images[that.settings.setIndex].height, that.settings.images[that.settings.setIndex].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
 					that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150);
 				});
 			});
@@ -218,9 +218,7 @@
 		this.each(function (i) {
 			$(this).off('click').on('click', function(event){
 				event.preventDefault();
-				if (!$.data(this, 'plugin_' + pluginName)) {
-					$.data(this, 'plugin_' + pluginName, new Plugin( this, $.extend(options, {currentImage : i})));
-				}
+				$.data(this, 'plugin_' + pluginName, new Plugin( this, $.extend(options, {currentImage : i})));
 			});
 		});
 		
