@@ -1,12 +1,13 @@
 ;(function ( $, window, document, undefined ) {
 	var pluginName = 'Chocolat';
+	var calls = 0;
 	var defaults = {
 			container:  	 'body',
 			next: 			 '#right',
 			prev: 			 '#left',
+			setIndex:		 0,
+			setTitle:		 '',
 			timeOut:		 false,
-			imgOrigHeight:	 false,
-			imgOrigWidth:	 false,
 			fullWindow:      false,
 			fullScreen:      false,
 			linkImages:		 true,
@@ -14,16 +15,18 @@
 			overlayOpacity : 0.5,
 			timer: 			 false,
 			lastImage: 		 false,
-			images :		 ['img/1.jpg','img/2.jpg','img/1.jpg']
+			images :		 []
 		};
 		
 	function Plugin( element, settings ) {
+	
 		this.element = element;
 		this.settings = $.extend( {}, defaults, settings) ;
 		this._defaults = defaults;
 		this._name = pluginName;
 		that = this;
-		
+
+		this.storeImg();
 		this.init();
 	}
 	Plugin.prototype = {
@@ -34,11 +37,21 @@
 			this.settings.lastImage = this.settings.images.length - 1;
 			this.load(0);
 		}, 
+		storeImg: function(){
+			this.element.each(function () {
+				that.settings.images.push({
+					title : $(this).attr('title'),
+					src : $(this).attr('href'),
+					height : false,
+					width : false
+				})
+			});
+		},
 		preload: function(i, callback) {
 			callback = this.tool_optFuncParam(callback);
 			imgLoader = new Image();
 			imgLoader.onload = callback(i, imgLoader);
-			imgLoader.src = this.settings.images[i];
+			imgLoader.src = this.settings.images[i].src;
 		},
 		load: function(i) {
 			this.settings.timer = setTimeout(function(){$('#loader').fadeIn();},400);
@@ -46,8 +59,8 @@
 		},
 		place: function(i, imgLoader) {
 			$('#img').fadeTo(200,0, function(){
-				that.storeImgSize(imgLoader);
-				fitting = that.fit(that.settings.imgOrigHeight, that.settings.imgOrigWidth, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
+				that.storeImgSize(imgLoader, i);
+				fitting = that.fit(that.settings.images[i].height, that.settings.images[i].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
 				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, that.appear(i));
 				that.arrows();
 			});
@@ -56,7 +69,7 @@
 			clearTimeout(that.settings.timer);
 			that.settings.currentImage = i;
 			$('#loader').stop().fadeOut(300, function(){
-				$('#img').attr('src', that.settings.images[i]).fadeTo(400,1);
+				$('#img').attr('src', that.settings.images[i].src).fadeTo(400,1);
 			});
 		},
 		fit: function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW){ 
@@ -116,9 +129,11 @@
 				}
 			}
 		},
-		storeImgSize: function(img) {
-			this.settings.imgOrigHeight = img.height;
-			this.settings.imgOrigWidth = img.width;
+		storeImgSize: function(img, i) {
+			if(!this.settings.images[i].height || !this.settings.images[i].width){
+				this.settings.images[i].height = img.height;
+				this.settings.images[i].width = img.width;
+			}
 		},
 		close:function(){
 			$('#overlay, #loader, #container').fadeOut(200, function(){
@@ -182,7 +197,7 @@
 			});
 			$(window).off('resize').on('resize', function(){
 				that.tool_debounce(100, function(){
-					fitting = that.fit(that.settings.imgOrigHeight, that.settings.imgOrigWidth, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
+					fitting = that.fit(that.settings.images[i].height, that.settings.images[i].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
 					that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150);
 				});
 			});
@@ -196,12 +211,12 @@
 			else{return f;}
 		}
 	};
-	
 	$.fn[pluginName] = function ( options ) {
-		return this.each(function () {
-			if (!$.data(this, 'plugin_' + pluginName)) {
-				$.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
-			}
-		});
+		calls++;
+		options = $.extend(options, {setIndex:calls, images : [], setTitle : ''});
+		if (!$.data(this, 'plugin_' + pluginName)) {
+			$.data(this, 'plugin_' + pluginName, new Plugin( this, options));
+		}
+		return this;
 	}
 })( jQuery, window, document );

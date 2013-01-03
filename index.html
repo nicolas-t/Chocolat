@@ -6,13 +6,35 @@
 		<script type="text/javascript" src="js/jquery1.8.3.js"></script>
 		<script type="text/javascript" src="js/chocolat.jquery.js"></script>
         <title></title>
-    </head>
-    <body>
 		<script>
 		$(function(){
-			$('body').Chocolat();
+			$('#example1 a').Chocolat();
+			$('#example2 a').Chocolat();
 		});
 		</script>
-
+    </head>
+    <body>
+	<p id="example1">
+		<a href="img/1.jpg" title="Rose" rel="title1">
+			<img width="100" src="" alt="sd1"/>
+		</a>
+		<a href="img/2.jpg" title="Black">
+			<img width="100" src=""  alt="sd2"/>
+		</a>
+		<a href="img/1.jpg" title="Orange">
+			<img width="100" src="" alt="sd3"/>
+		</a>
+	</p>
+	<p id="example2">
+		<a href="img/1.jpg" title="Rose" rel="title2">
+			<img width="100" src=""  alt="sd1"/>
+		</a>
+		<a href="img/2.jpg" title="Black">
+			<img width="100" src=""  alt="sd2"/>
+		</a>
+		<a href="img/1.jpg" title="Orange">
+			<img width="100" src="" alt="sd3"/>
+		</a>
+	</p>
     </body>
 </html>
