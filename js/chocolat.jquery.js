@@ -1,4 +1,4 @@
-;(function ( $, window, document, undefined ) {
+﻿;(function ( $, window, document, undefined ) {
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
@@ -19,14 +19,11 @@
 		};
 		
 	function Plugin( element, settings ) {
-	
+		that = this;
 		this.element = element;
 		this.settings = $.extend( {}, defaults, settings) ;
 		this._defaults = defaults;
 		this._name = pluginName;
-		that = this;
-
-		this.storeImg();
 		this.init();
 	}
 	Plugin.prototype = {
@@ -35,18 +32,8 @@
 			this.events();
 			$('#overlay').fadeTo(800, this.settings.overlayOpacity)
 			this.settings.lastImage = this.settings.images.length - 1;
-			this.load(0);
+			this.load(this.settings.currentImage);
 		}, 
-		storeImg: function(){
-			this.element.each(function () {
-				that.settings.images.push({
-					title : $(this).attr('title'),
-					src : $(this).attr('href'),
-					height : false,
-					width : false
-				})
-			});
-		},
 		preload: function(i, callback) {
 			callback = this.tool_optFuncParam(callback);
 			imgLoader = new Image();
@@ -127,6 +114,8 @@
 				else{
 					$('#left').fadeIn(300);
 				}
+			}else{
+				$('#left, #right').css('display','none');
 			}
 		},
 		storeImgSize: function(img, i) {
@@ -213,10 +202,28 @@
 	};
 	$.fn[pluginName] = function ( options ) {
 		calls++;
-		options = $.extend(options, {setIndex:calls, images : [], setTitle : ''});
-		if (!$.data(this, 'plugin_' + pluginName)) {
-			$.data(this, 'plugin_' + pluginName, new Plugin( this, options));
-		}
+		img = [];
+		// store images of the set
+		this.each(function () {
+			img.push({
+				title : $(this).attr('title'),
+				src : $(this).attr('href'),
+				height : false,
+				width : false
+			})
+		});
+		options = $.extend(options, {setIndex:calls, images : img, setTitle : ''});
+
+		//attach init event
+		this.each(function (i) {
+			$(this).off('click').on('click', function(event){
+				event.preventDefault();
+				if (!$.data(this, 'plugin_' + pluginName)) {
+					$.data(this, 'plugin_' + pluginName, new Plugin( this, $.extend(options, {currentImage : i})));
+				}
+			});
+		});
+		
 		return this;
 	}
 })( jQuery, window, document );
