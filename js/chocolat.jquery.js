@@ -184,7 +184,7 @@
 			});
 			$(window).off('resize').on('resize', function(){
 				that.tool_debounce(100, function(){
-					fitting = that.fit(that.settings.images[that.settings.setIndex].height, that.settings.images[that.settings.setIndex].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
+					fitting = that.fit(that.settings.images[that.settings.currentImage].height, that.settings.images[that.settings.currentImage].width, $(window).height(), $(window).width(), that.getOutMarginH(), that.getOutMarginW());
 					that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150);
 				});
 			});
