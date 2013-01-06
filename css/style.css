@@ -44,7 +44,7 @@ a{
 	display:none;
 }
 #container{
-	position:absolute;
+	position:fixed;
 	width:0px;
 	height:0px;
 	left:50%;
@@ -79,15 +79,20 @@ a{
 	position:absolute;
 	top:-40px;
 	width:100%;
+	line-height:40px;
 	height:40px;
-	background:blue;
+	font-size:12px;
 }
 #bottom{
 	position:absolute;
 	bottom:-40px;
 	width:100%;
+	line-height:40px;
 	height:40px;
-	background:blue;
+	font-size:12px;
+}
+#close{
+	display:none;
 }
 
 /*make it with js

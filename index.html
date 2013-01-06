@@ -8,33 +8,23 @@
         <title></title>
 		<script>
 		$(function(){
-			$('#example1 a').Chocolat();
-			$('#example2 a').Chocolat();
+			$('#example1 a').Chocolat({setTitle:'fou'});
 		});
 		</script>
     </head>
     <body>
 	<p id="example1">
-		<a href="img/1.jpg" title="Rose" rel="title1">
+		<a href="img/1.jpg" title="Rose">
 			<img width="100" src="" alt="sd1"/>
 		</a>
-		<a href="img/1.jpg" title="Black">
+		<a href="img/2.jpg" title="Black">
 			<img width="100" src=""  alt="sd2"/>
 		</a>
 		<a href="img/1.jpg" title="Orange">
 			<img width="100" src="" alt="sd3"/>
 		</a>
 	</p>
-	<p id="example2">
-		<a href="img/2.jpg" title="Rose" rel="title2">
-			<img width="100" src=""  alt="sd1"/>
-		</a>
-		<a href="img/2.jpg" title="Black">
-			<img width="100" src=""  alt="sd2"/>
-		</a>
-		<a href="img/2.jpg" title="Orange">
-			<img width="100" src="" alt="sd3"/>
-		</a>
-	</p>
+	<ul id="links"></ul>
+	<div id="cont" style="width:600px;height:600px;position:relative;border:1px solid brown;margin-left:100px;"></div>
     </body>
 </html>
