@@ -12,7 +12,6 @@ html, body, div, span{
 }
 body {
 	line-height: 1;
-	background:silver;
 }
 ol, ul {
 	list-style: none;
@@ -63,7 +62,7 @@ a{
 	height:100%;
 	padding-right:50px;
 	cursor:pointer;
-	border-left:2px solid red;
+	background:url(../images/left.png) 4% 50% no-repeat;
 }
 #chocolat-container #chocolat-right{
 	position:absolute;
@@ -71,8 +70,9 @@ a{
 	width:50%;
 	height:100%;
 	padding-left:50px;
-	border-right:2px solid red;
 	cursor:pointer;
+	background:url(../images/right.png) 96% 50% no-repeat;
+
 }
 #chocolat-container #chocolat-top{
 	position:absolute;
@@ -91,5 +91,19 @@ a{
 	font-size:12px;
 }
 #chocolat-container #chocolat-close{
-	display:none;
+	width:40px;
+	height:40px;
+	cursor:pointer;
+	float:left;
+	background:url(../images/close.png) 0% center no-repeat;
+}
+#chocolat-container #chocolat-fullscreen{
+	width:40px;
+	height:40px;
+	cursor:pointer;
+	float:right;
+	background:url(../images/zoomin.png) 100% center no-repeat;
+}
+#chocolat-container #chocolat-pagination{
+	float:right;
 }

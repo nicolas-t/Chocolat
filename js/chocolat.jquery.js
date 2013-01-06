@@ -2,15 +2,15 @@
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
-			container:  	 window,
+			container:  	 '#cont',
 			next: 			 '#chocolat-right',
 			prev: 			 '#chocolat-left',
 			displayAsALink:  true,
 			linksContainer:	 '#links',
 			setIndex:		 0,
 			setTitle:		 '',
-			fullWindow:      true,
-			fullScreen:      true,
+			fullWindow:      false,
+			fullScreen:      false,
 			linkImages:		 true,
 			currentImage:	 0,
 			overlayOpacity : 0.5,
@@ -35,7 +35,7 @@
 		init: function() {
 			this.markup();
 			this.events();
-			$('#chocolat-overlay, #chocolat-close').fadeTo(800, stg.overlayOpacity)
+			$('#chocolat-overlay').fadeTo(800, stg.overlayOpacity)
 			stg.lastImage = stg.images.length - 1;
 			this.load(stg.currentImage);
 		}, 
@@ -164,7 +164,7 @@
 			<div id="chocolat-container">\
 				<img src="" id="chocolat-img" alt=""/>\
 				<div id="chocolat-top">\
-					<span id="chocolat-close">close</span>\
+					<span id="chocolat-close"></span>\
 				</div>\
 				<div id="chocolat-left"></div>\
 				<div id="chocolat-right"></div>\
@@ -174,7 +174,7 @@
 				</div>\
 			</div>');
 			if(this.settings.fullScreen){
-				$('#chocolat-top').prepend('<span id="chocolat-fullscreen">fullscreen</span>');
+				$('#chocolat-top').prepend('<span id="chocolat-fullscreen"></span>');
 			}
 			if(this.settings.fullScreen !== window){
 				$('#chocolat-overlay, #chocolat-container').css('position','absolute');
