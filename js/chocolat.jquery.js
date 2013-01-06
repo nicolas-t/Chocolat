@@ -3,8 +3,8 @@
 	var calls = 0;
 	var defaults = {
 			container:  	 window,
-			next: 			 '#right',
-			prev: 			 '#left',
+			next: 			 '#chocolat-right',
+			prev: 			 '#chocolat-left',
 			displayAsALink:  true,
 			linksContainer:	 '#links',
 			setIndex:		 0,
@@ -35,7 +35,7 @@
 		init: function() {
 			this.markup();
 			this.events();
-			$('#overlay, #close').fadeTo(800, stg.overlayOpacity)
+			$('#chocolat-overlay, #chocolat-close').fadeTo(800, stg.overlayOpacity)
 			stg.lastImage = stg.images.length - 1;
 			this.load(stg.currentImage);
 		}, 
@@ -46,14 +46,14 @@
 			imgLoader.src = stg.images[i].src;
 		},
 		load: function(i) {
-			stg.timer = setTimeout(function(){$('#loader').fadeIn();},400);
+			stg.timer = setTimeout(function(){$('#chocolat-loader').fadeIn();},400);
 			this.preload(i,this.place);
 		},
 		place: function(i, imgLoader) {
 			stg.currentImage = i;
 			that.description();
 			that.pagination();
-			$('#img').fadeTo(200,0, function(){
+			$('#chocolat-img').fadeTo(200,0, function(){
 				that.storeImgSize(imgLoader, i);
 				fitting = that.fit(stg.images[i].height, stg.images[i].width, $(stg.container).height(), $(stg.container).width(), that.getOutMarginH(), that.getOutMarginW());
 				that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150, that.appear(i));
@@ -62,8 +62,8 @@
 		},
 		appear:function(i){
 			clearTimeout(stg.timer);
-			$('#loader').stop().fadeOut(300, function(){
-				$('#img').attr('src', stg.images[i].src).fadeTo(400,1);
+			$('#chocolat-loader').stop().fadeOut(300, function(){
+				$('#chocolat-img').attr('src', stg.images[i].src).fadeTo(400,1);
 			});
 		},
 		fit: function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW){ 
@@ -96,7 +96,7 @@
 		},
 		center: function(width, height, left, top, duration, callback) {
 			callback = this.tool_optFuncParam(callback);
-			$('#container').animate({
+			$('#chocolat-container').animate({
 				'width':width,
 				'height':height,
 				'left':left,
@@ -111,23 +111,23 @@
 		arrows: function() {
 			if(stg.linkImages){
 				if(stg.currentImage == stg.lastImage){
-					$('#right').fadeOut(300);
+					$('#chocolat-right').fadeOut(300);
 				}
 				else{
-					$('#right').fadeIn(300);
+					$('#chocolat-right').fadeIn(300);
 				}
 				if(stg.currentImage == 0){
-					$('#left').fadeOut(300);
+					$('#chocolat-left').fadeOut(300);
 				}
 				else{
-					$('#left').fadeIn(300);
+					$('#chocolat-left').fadeIn(300);
 				}
 			}else{
-				$('#left, #right').css('display','none');
+				$('#chocolat-left, #chocolat-right').css('display','none');
 			}
 		},
 		description : function(){
-			$('#description').fadeTo(200, 0, function(){
+			$('#chocolat-description').fadeTo(200, 0, function(){
 				$(this).html(stg.images[stg.currentImage].title).fadeTo(400,1);
 			});
 		},
@@ -135,7 +135,7 @@
 			var last = stg.lastImage + 1;
 			var position = stg.currentImage + 1;
 			var separator = (stg.setTitle == '') ? '' : stg.separator1;
-			$('#pagination').fadeTo(200, 0, function(){
+			$('#chocolat-pagination').fadeTo(200, 0, function(){
 				$(this).html(stg.setTitle + ' ' + separator + ' ' + position + stg.separator2 + last).fadeTo(400,1);
 			});
 		},
@@ -146,38 +146,38 @@
 			}
 		},
 		close:function(){
-			$('#overlay, #loader, #container').fadeOut(200, function(){
+			$('#chocolat-overlay, #chocolat-loader, #chocolat-container').fadeOut(200, function(){
 				$(this).remove();
 			});
 		},
 		getOutMarginW: function(el, options) {
-			return ($('#left').outerWidth() - $('#left').width()) + ($('#right').outerWidth() - $('#right').width());
+			return ($('#chocolat-left').outerWidth() - $('#chocolat-left').width()) + ($('#chocolat-right').outerWidth() - $('#chocolat-right').width());
 		},
 		getOutMarginH: function(el, options) {
-			return $('#top').outerHeight() + $('#bottom').outerHeight();
+			return $('#chocolat-top').outerHeight() + $('#chocolat-bottom').outerHeight();
 		},
 		markup: function(){
 			var container = ( typeof stg.container === 'object') ? 'body' : stg.container;
 			$(container).append('\
-			<div id="overlay"></div>\
-			<div id="loader"></div>\
-			<div id="container">\
-				<img src="" id="img" alt=""/>\
-				<div id="top">\
-					<span id="close">close</span>\
+			<div id="chocolat-overlay"></div>\
+			<div id="chocolat-loader"></div>\
+			<div id="chocolat-container">\
+				<img src="" id="chocolat-img" alt=""/>\
+				<div id="chocolat-top">\
+					<span id="chocolat-close">close</span>\
 				</div>\
-				<div id="left"></div>\
-				<div id="right"></div>\
-				<div id="bottom">\
-					<span id="description"></span>\
-					<span id="pagination"></span>\
+				<div id="chocolat-left"></div>\
+				<div id="chocolat-right"></div>\
+				<div id="chocolat-bottom">\
+					<span id="chocolat-description"></span>\
+					<span id="chocolat-pagination"></span>\
 				</div>\
 			</div>');
 			if(this.settings.fullScreen){
-				$('#top').prepend('<span id="fullscreen">fullscreen</span>');
+				$('#chocolat-top').prepend('<span id="chocolat-fullscreen">fullscreen</span>');
 			}
 			if(this.settings.fullScreen !== window){
-				$('#overlay, #container').css('position','absolute');
+				$('#chocolat-overlay, #chocolat-container').css('position','absolute');
 			}
 		},
 		openFullScreen:function(){
@@ -214,10 +214,10 @@
 			$(stg.prev).off('click').on('click', function(){
 				that.change(-1);	
 			});
-			$('#overlay, #close').off('click').on('click', function(){
+			$('#chocolat-overlay, #chocolat-close').off('click').on('click', function(){
 				that.close();	
 			});
-			$('#fullscreen').off('click').on('click', function(){
+			$('#chocolat-fullscreen').off('click').on('click', function(){
 				that.openFullScreen();	
 			});
 			$(window).off('resize').on('resize', function(){
@@ -252,9 +252,9 @@
 		
 		//attach init event, not the best code written so far
 		if(settings.displayAsALink){
-			$(settings.linksContainer).append('<li><a href="#" id="Choco_numsetIndex_'+settings.setIndex+'" class="Choco_link">'+settings.setTitle+'</a></li>');
+			$(settings.linksContainer).append('<li><a href="#" id="chocolat-numsetIndex_'+settings.setIndex+'" class="chocolat-link">'+settings.setTitle+'</a></li>');
 			$(this).remove();
-			$('#Choco_numsetIndex_'+settings.setIndex).off('click').on('click', function(event){
+			$('#chocolat-numsetIndex_'+settings.setIndex).off('click').on('click', function(event){
 				event.preventDefault();
 				$.data(this, 'plugin_' + pluginName, new Plugin( this, $.extend(settings, {currentImage : 0})));
 			});
