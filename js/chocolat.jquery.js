@@ -2,26 +2,26 @@
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
-			container:  		window,
-			next: 			 	'#chocolat-right',
-			prev: 			 	'#chocolat-left',
-			displayAsALink:  	false,
-			linksContainer:	 	'#links',
-			setIndex:		 	0,
-			setTitle:		 	'',
-			fullWindow:      	false,
-			fullScreen:      	false,
-			linkImages:			true,
-			currentImage:	 	0,
-			overlayOpacity : 	0.5,
-			separator1    : 	'|',
-			separator2    : 	'/',
-			timer: 				false,
-			timerDebounce:		false,
-			lastImage: 			false,
-			elems : 			{},
-			images :			[]
-		};
+		linksContainer:		window,
+		next:				'#chocolat-right',
+		prev:				'#chocolat-left',
+		displayAsALink:		false,
+		linksContainer:		'#links',
+		setIndex:			0,
+		setTitle:			'',
+		fullWindow:			false,
+		fullScreen:			false,
+		linkImages:			true,
+		currentImage:		0,
+		overlayOpacity:		0.5,
+		separator1:			'|',
+		separator2:			'/',
+		timer:				false,
+		timerDebounce:		false,
+		lastImage:			false,
+		elems:				{},
+		images:				[]
+	};
 		
 	function Plugin( element, settings ) {
 		that = this;
