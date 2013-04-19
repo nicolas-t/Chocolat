@@ -2,34 +2,34 @@
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
-		linksContainer:		window,
-		next:				'#chocolat-right',
-		prev:				'#chocolat-left',
-		displayAsALink:		false,
-		linksContainer:		'#links',
-		setIndex:			0,
-		setTitle:			'',
-		fullWindow:			false,
-		fullScreen:			false,
-		linkImages:			true,
-		currentImage:		0,
-		overlayOpacity:		0.5,
-		separator1:			'|',
-		separator2:			'/',
-		timer:				false,
-		timerDebounce:		false,
-		lastImage:			false,
-		elems:				{},
-		images:				[]
+		linksContainer :  window,
+		next           :  '#chocolat-right',
+		prev           :  '#chocolat-left',
+		displayAsALink :  false,
+		linksContainer :  '#links',
+		setIndex       :  0,
+		setTitle       :  '',
+		fullWindow     :  false,
+		fullScreen     :  false,
+		linkImages     :  true,
+		currentImage   :  0,
+		overlayOpacity :  0.5,
+		separator1     :  '|',
+		separator2     :  '/',
+		timer          :  false,
+		timerDebounce  :  false,
+		lastImage      :  false,
+		elems          :  {},
+		images         :  []
 	};
-		
+
 	function Plugin( element, settings ) {
-		that = this;
-		this.element = element;
-		this.settings = settings;
-		stg = this.settings;
+		that           = this;
+		this.element   = element;
+		this.settings  = settings;
+		stg            = this.settings;
 		this._defaults = defaults;
-		this._name = pluginName;
+		this._name     = pluginName;
 		this.init();
 	}
 	Plugin.prototype = {
@@ -41,10 +41,10 @@
 			this.load(stg.currentImage);
 		}, 
 		preload: function(i, callback) {
-			callback = this.tool_optFuncParam(callback);
-			imgLoader = new Image();
+			callback         = this.tool_optFuncParam(callback);
+			imgLoader        = new Image();
 			imgLoader.onload = callback(i, imgLoader);
-			imgLoader.src = stg.images[i].src;
+			imgLoader.src    = stg.images[i].src;
 		},
 		load: function(i) {
 			stg.timer = setTimeout(function(){stg.elems.loader.fadeIn();},400);
@@ -93,19 +93,19 @@
 				height=imgHeight;
 			}
 			return {
-				'height' :height,
-				'width' : width,
-				'top' : (holderHeight - height)/2,
-				'left' : (holderWidth - width)/2
+				'height' : height,
+				'width'  : width,
+				'top'    : (holderHeight - height)/2,
+				'left'   : (holderWidth - width)/2
 			}
 		},
 		center: function(width, height, left, top, duration, callback) {
 			callback = this.tool_optFuncParam(callback);
 			stg.elems.content.animate({
-				'width':width,
-				'height':height,
-				'left':left,
-				'top':top
+				'width'  :width,
+				'height' :height,
+				'left'   :left,
+				'top'    :top
 			},duration,callback()).css('overflow', 'visible');
 		},
 		change: function(signe) {
@@ -147,7 +147,7 @@
 		storeImgSize: function(img, i) {
 			if(!stg.images[i].height || !stg.images[i].width){
 				stg.images[i].height = img.height;
-				stg.images[i].width = img.width;
+				stg.images[i].width  = img.width;
 			}
 		},
 		close:function(){
@@ -304,10 +304,10 @@
 		// store images of the set
 		this.each(function () {
 			img.push({
-				title : $(this).attr('title'),
-				src : $(this).attr('href'),
+				title  : $(this).attr('title'),
+				src    : $(this).attr('href'),
 				height : false,
-				width : false
+				width  : false
 			})
 		});
 		settings = $.extend({}, defaults, options, {setIndex:calls, images : img} );
@@ -318,8 +318,8 @@
 			}).appendTo(settings.linksContainer);
 
 			var link = $('<a/>',{
-				'id' : 'chocolat-numsetIndex_'+settings.setIndex,
-				'href' : '#',
+				'id'    : 'chocolat-numsetIndex_'+settings.setIndex,
+				'href'  : '#',
 				'class' : 'chocolat-link'
 			})
 			.html(settings.setTitle)
