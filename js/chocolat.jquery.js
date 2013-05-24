@@ -2,7 +2,7 @@
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
-		linksContainer :  window,
+		container      :  window,
 		next           :  '#chocolat-right',
 		prev           :  '#chocolat-left',
 		displayAsALink :  false,
