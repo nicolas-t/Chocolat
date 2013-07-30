@@ -1,4 +1,5 @@
-﻿See branch 0.4 for development of the new version
+﻿See branch 0.4 for development of the new version :  
+https://github.com/nicolas-t/Chocolat/tree/V0.4
 -----------
 
 ##Chocolat
