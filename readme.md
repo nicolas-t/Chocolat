@@ -1,4 +1,9 @@
-﻿##Chocolat
+﻿##Contribute
+-----------  
+You are viewing the branch v0.4 of chocolat, it's an under development branch of the plugin.  
+Feel free to contribute by forking then making a pull request.  
+
+##Chocolat
 -----------
 Chocolat is a simple `jQuery` lightbox plugin
 
