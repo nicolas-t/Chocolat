@@ -12,26 +12,26 @@
 	var calls = 0;
 	$.fn.Chocolat = function(settings) {
 		settings = $.extend({
-			container:					$('body'),
-			displayAsALink:				false,
-			linkImages:					true,
-			linksContainer:				'Choco_links_container',				
-			overlayOpacity:				0.9,
-			overlayColor:				'#fff',
-			fadeInOverlayduration:		500,
-			fadeInImageduration:		500,
-			fadeOutImageduration:		500,
-			vache:						true,					
-			separator1:					' | ',						
-			separator2:					'/',						
-			leftImg:					'images/left.gif',	
-			rightImg:					'images/right.gif',	
-			closeImg:					'images/close.gif',		
-			loadingImg:					'images/loading.gif',		
-			currentImage:				0,						
-			setIndex:					0,
-			setTitle:					'',
-			lastImage:					0
+			container             : $('body'),
+			displayAsALink        : false,
+			linkImages            : true,
+			linksContainer        : 'Choco_links_container',				
+			overlayOpacity        : 0.9,
+			overlayColor          : '#fff',
+			fadeInOverlayduration : 500,
+			fadeInImageduration   : 500,
+			fadeOutImageduration  : 500,
+			vache                 : true,					
+			separator1            : ' | ',						
+			separator2            : '/',						
+			leftImg               : 'images/left.gif',	
+			rightImg              : 'images/right.gif',	
+			closeImg              : 'images/close.gif',		
+			loadingImg            : 'images/loading.gif',		
+			currentImage          : 0,						
+			setIndex              : 0,
+			setTitle              : '',
+			lastImage             : 0
 		},settings);
 		
 		calls++;
@@ -45,11 +45,15 @@
 			}
 			$(this).each(function() {
 				images[settings.setIndex]['displayAsALink'] = settings.displayAsALink;
-				images[settings.setIndex][index] = [];
-				images[settings.setIndex][index]['adress'] = isSet($(this).attr('href'), ' ');
+				images[settings.setIndex][index]            = [];
+				images[settings.setIndex][index]['adress']  = isSet($(this).attr('href'), ' ');
 				images[settings.setIndex][index]['caption'] = isSet($(this).attr('title'), ' ');
 				if(!settings.displayAsALink){
-					$(this).unbind('click').bind('click', {id: settings.setIndex, nom : settings.setTitle, i : index}, _initialise);
+					$(this).unbind('click').bind('click', {
+						id  : settings.setIndex,
+						nom : settings.setTitle,
+						i   : index
+					}, _initialise);
 				}
 			})
 		});
@@ -74,9 +78,9 @@
 		function _initialise(event) {
 			
 			settings.currentImage = event.data.i;
-			settings.setIndex = event.data.id;
-			settings.setTitle = event.data.nom;
-			settings.lastImage = images[settings.setIndex].length - 1;
+			settings.setIndex     = event.data.id;
+			settings.setTitle     = event.data.nom;
+			settings.lastImage    = images[settings.setIndex].length - 1;
 			showChocolat();
 			return false;
 		}
@@ -133,7 +137,12 @@
 		function showChocolat(){	
 			_interface();
 			load(settings.currentImage, false);
-			$('#Choco_overlay').css({'background-color' : settings.overlayColor, 'opacity' : settings.overlayOpacity}).fadeIn(settings.fadeInOverlayduration);
+			$('#Choco_overlay')
+				.css({
+					'background-color' : settings.overlayColor,
+					'opacity'          : settings.overlayOpacity
+				})
+				.fadeIn(settings.fadeInOverlayduration);
 			$('#Choco_content').fadeIn(settings.fadeInImageduration,function(){});
 			
 		}
@@ -170,18 +179,18 @@
 				$('#Choco_container_photo, #Choco_content, #Choco_bigImage').stop(true,false).css({'overflow':'visible'});
 				$('#Choco_bigImage').animate({
 					'height' : hauteur_image+'px',
-					'width' : largeur_image+'px'
+					'width'  : largeur_image+'px'
 				},settings.fadeInImageduration);
 			}
 			$('#Choco_container_photo').animate({
 					'height' : hauteur_image,
-					'width' : largeur_image
+					'width'  : largeur_image
 			},settings.fadeInImageduration);
 			$('#Choco_content').animate({
-				'height' : hauteur_image,
-				'width' : largeur_image,
+				'height'     : hauteur_image,
+				'width'      : largeur_image,
 				'marginLeft' : -largeur_image/2,
-				'marginTop' : -(hauteur_image)/2
+				'marginTop'  : -(hauteur_image)/2
 			},settings.fadeInImageduration, 'swing', function(){
 				$('#Choco_bigImage').fadeTo(settings.fadeInImageduration, 1).height(hauteur_image).width(largeur_image);
 				if(!resize)
@@ -237,18 +246,18 @@
 		}
 		function iWantThePerfectImageSize(himg,limg){
 			//28% = 14% + 14% margin
-			var lblock = limg + (limg*28/100);
+			var lblock             = limg + (limg*28/100);
 			var heightDescAndClose = $('#Choco_container_description').height()+$('#Choco_close').height();
-			var hblock = himg + heightDescAndClose;
-			var k = limg/himg;
-			var kk = himg/limg;
+			var hblock             = himg + heightDescAndClose;
+			var k                  = limg/himg;
+			var kk                 = himg/limg;
 			if(settings.container.get(0).nodeName.toLowerCase() == 'body'){
 				windowHeight = $(window).height();
-				windowWidth = $(window).width();
+				windowWidth  = $(window).width();
 			}
 			else{
 				windowHeight = settings.container.height();
-				windowWidth = settings.container.width();
+				windowWidth  = settings.container.width();
 			}
 			notFitting = true;
 				while (notFitting){
