@@ -3,12 +3,15 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/style.css" />
-		<script type="text/javascript" src="js/jquery1.8.3.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="js/chocolat.jquery.js"></script>
         <title></title>
 		<script>
 		$(function(){
-			$('#example1 a').Chocolat({setTitle:'fou'});
+			$('#example1 a').Chocolat({
+				setTitle : 'fou',
+				loop     : true
+			});
 		});
 		</script>
     </head>
