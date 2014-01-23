@@ -19,17 +19,20 @@ ol, ul {
 a{
 	text-decoration:none;
 }
-#chocolat-overlay{
+.chocolat-overlay{
 	height:100%;
 	width:100%;
 	position:fixed;
 	left:0;
 	top:0;
-	z-index:10 !important;
+	z-index:10;
 	background-color:#fff;
 	display:none;
 }
-#chocolat-loader{
+body.chocolat-open>.chocolat-overlay{
+	z-index:15;
+}
+.chocolat-loader{
 	height:32px;
 	width:32px;
 	position:fixed;
@@ -37,25 +40,31 @@ a{
 	top:50%	;
 	margin-left:-32px;
 	margin-top:-32px;
-	z-index:11 !important;
+	z-index:11;
 	background:url(../images/loader.gif);
 	display:none;
 }
-#chocolat-container{
+body.chocolat-open>.chocolat-loader{
+	z-index:16;
+}
+.chocolat-container{
 	position:fixed;
 	width:0px;
 	height:0px;
 	left:50%;
 	top:50%;
-	z-index:12;
+	z-index:14;
 }
-#chocolat-container #chocolat-img{
+body.chocolat-open>.chocolat-container{
+	z-index:17;
+}
+.chocolat-container .chocolat-img{
 	opacity:0;
 	position:absolute;
 	width:100%;
 	height:100%;
 }
-#chocolat-container #chocolat-left{
+.chocolat-container .chocolat-left{
 	position:absolute;
 	left:-50px;
 	width:50%;
@@ -64,7 +73,7 @@ a{
 	cursor:pointer;
 	background:url(../images/left.png) 4% 50% no-repeat;
 }
-#chocolat-container #chocolat-right{
+.chocolat-container .chocolat-right{
 	position:absolute;
 	right:-50px;
 	width:50%;
@@ -74,7 +83,7 @@ a{
 	background:url(../images/right.png) 96% 50% no-repeat;
 
 }
-#chocolat-container #chocolat-top{
+.chocolat-container .chocolat-top{
 	position:absolute;
 	top:-40px;
 	width:100%;
@@ -82,7 +91,27 @@ a{
 	height:40px;
 	font-size:12px;
 }
-#chocolat-container #chocolat-bottom{
+.chocolat-container .chocolat-close{
+	width:40px;
+	height:40px;
+	cursor:pointer;
+	float:left;
+	background:url(../images/close.png) 0% center no-repeat;
+}
+
+.chocolat-container .chocolat-fullscreen{
+	width:40px;
+	height:40px;
+	cursor:pointer;
+	float:right;
+	background:url(../images/zoomin.png) 100% center no-repeat;
+}
+html:-moz-full-screen .chocolat-container .chocolat-fullscreen,
+html:-webkit-full-screen .chocolat-container .chocolat-fullscreen,
+html:fullscreen .chocolat-container .chocolat-fullscreen{
+	display: none;
+}
+.chocolat-container .chocolat-bottom{
 	position:absolute;
 	bottom:-40px;
 	width:100%;
@@ -90,20 +119,6 @@ a{
 	height:40px;
 	font-size:12px;
 }
-#chocolat-container #chocolat-close{
-	width:40px;
-	height:40px;
-	cursor:pointer;
-	float:left;
-	background:url(../images/close.png) 0% center no-repeat;
-}
-#chocolat-container #chocolat-fullscreen{
-	width:40px;
-	height:40px;
-	cursor:pointer;
-	float:right;
-	background:url(../images/zoomin.png) 100% center no-repeat;
-}
-#chocolat-container #chocolat-pagination{
+.chocolat-container .chocolat-pagination{
 	float:right;
 }

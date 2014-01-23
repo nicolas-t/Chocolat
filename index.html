@@ -5,27 +5,55 @@
         <link rel="stylesheet" href="css/style.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="js/chocolat.jquery.js"></script>
-        <title></title>
+        <title>Chocolat</title>
 		<script>
 		$(function(){
-			$('#example1 a').Chocolat({
-				setTitle : 'fou',
-				loop     : true
-			});
+            $('#example1 a').Chocolat({
+                container : '#container1',
+            });
+
+            $('#example2 a').Chocolat({
+                container : '#container2',
+            });
+
+            $('#example3 a').Chocolat({
+                loop           : true,
+                fullWindow     : true,
+                overlayOpacity : 0.9
+            });
 		});
 		</script>
     </head>
     <body>
-	<p id="example1">
-		<a href="img/1.jpg" title="Rose">
-			<img width="100" src="" alt="sd1"/>
-		</a>
-		<a href="img/2.jpg" title="Black">
-			<img width="100" src=""  alt="sd2"/>
-		</a>
-		<a href="img/1.jpg" title="Orange">
-			<img width="100" src="" alt="sd3"/>
-		</a>
-	</p>
+    	<p id="example1">
+    		<a href="img/a.jpg" title="Rose">
+                A
+    		</a>
+    		<a href="img/b.jpg" title="Black">
+                B
+    		</a>
+    	</p>
+        
+        <p id="example2">
+            <a href="img/1.jpg" title="HO">
+                1
+            </a>
+            <a href="img/2.jpg" title="HAI">
+                2
+            </a>
+        </p>
+
+        <p id="example3">
+            <a href="img/c.jpg" title="foo">
+                C
+            </a>
+            <a href="img/d.jpg" title="bar">
+                D
+            </a>
+        </p>
+        <div id="container1" style="width: 600px; height: 400px;background: #E0E0E0;position: relative;"></div>
+        <br>
+        <div id="container2" style="width: 600px; height: 400px;background: #E0E0E0;position: relative;"></div>
     </body>
+
 </html>
