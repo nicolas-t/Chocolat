@@ -234,7 +234,7 @@
 			$(els).fadeOut(200, function(){
 				$(this).remove();
 			});
-			this.elems.realContainer.removeClass('chocolat-open');
+			this.elems.realContainer.removeClass('chocolat-open chocolat-mobile');
 
 			this.settings.initialized = false;
 		},
