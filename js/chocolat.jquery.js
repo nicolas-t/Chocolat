@@ -2,27 +2,28 @@
 	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
-		container      : window,
-		next           : '.chocolat-right',
-		prev           : '.chocolat-left',
-		displayAsALink : false,
-		linksContainer : '#links',
-		setIndex       : 0,
-		setTitle       : '',
-		fullWindow     : false,
-		fullScreen     : false,
-		linkImages     : true,
-		loop           : false,
-		currentImage   : 0,
-		overlayOpacity : 0.5,
-		separator1     : '|',
-		separator2     : '/',
-		timer          : false,
-		timerDebounce  : false,
-		lastImage      : false,
-		initialized    : false,
-		elems          : {},
-		images         : []
+		container         : window,
+		next              : '.chocolat-right',
+		prev              : '.chocolat-left',
+		displayAsALink    : false,
+		linksContainer    : '#links',
+		setIndex          : 0,
+		setTitle          : '',
+		fullWindow        : false,
+		fullScreen        : false,
+		linkImages        : true,
+		loop              : false,
+		currentImage      : 0,
+		overlayOpacity    : 0.5,
+		separator1        : '|',
+		separator2        : '/',
+		mobileBreakpoint  : 480,
+		timer             : false,
+		timerDebounce     : false,
+		lastImage         : false,
+		initialized       : false,
+		elems             : {},
+		images            : []
 	};
 
 	function Chocolat(settings) {
@@ -34,6 +35,7 @@
 	Chocolat.prototype = {
 		init: function(i) {
 			if(!this.settings.initialized){
+				this.setRealContainer();
 				this.markup();
 				this.events();
 				this.settings.lastImage   = this.settings.images.length - 1;
@@ -63,6 +65,8 @@
 			this.settings.currentImage = i;
 			this.description();
 			this.pagination();
+			this.breakpoint();
+
 			this.elems.img.fadeTo(200,0, function(){
 				that.storeImgSize(imgLoader, i);
 				fitting = that.fit(
@@ -204,6 +208,15 @@
 			});
 		},
 
+		breakpoint : function(){
+			if($(this.settings.container).width() < this.settings.mobileBreakpoint){
+				this.elems.realContainer.addClass('chocolat-mobile');
+			}
+			else{
+				this.elems.realContainer.removeClass('chocolat-mobile');
+			}
+		},
+
 		storeImgSize: function(img, i) {
 			if(!this.settings.images[i].height || !this.settings.images[i].width){
 				this.settings.images[i].height = img.height;
@@ -211,7 +224,7 @@
 			}
 		},
 
-		close:function(){
+		close : function(){
 			var els = [
 				this.elems.overlay[0],
 				this.elems.loader[0],
@@ -221,40 +234,38 @@
 			$(els).fadeOut(200, function(){
 				$(this).remove();
 			});
-			var container = this.containerSelector();
-			$(container).removeClass('chocolat-open');
+			this.elems.realContainer.removeClass('chocolat-open');
 
 			this.settings.initialized = false;
 		},
 
-		getOutMarginW: function(el, options) {
+		getOutMarginW : function(el, options) {
 			var left  = this.elems.left.outerWidth() - this.elems.left.width();
 			var right = this.elems.right.outerWidth() - this.elems.right.width();
 			return left + right;
 		},
 
-		getOutMarginH: function(el, options) {
+		getOutMarginH : function(el, options) {
 			return this.elems.top.outerHeight() + this.elems.bottom.outerHeight();
 		},
 
-		markup: function(){
-			var container = this.containerSelector();
-			$(container).addClass('chocolat-open');
+		markup : function(){
+			this.elems.realContainer.addClass('chocolat-open');
 
 			var that = this;
 
 			this.elems.overlay = $('<div/>',{
 				'class' : 'chocolat-overlay'
-			}).appendTo(container);
+			}).appendTo(this.elems.realContainer);
 
 			this.elems.loader = $('<div/>',{
 				'class' : 'chocolat-loader'
-			}).appendTo(container);
+			}).appendTo(this.elems.realContainer);
 
 			this.elems.content = $('<div/>',{
 				'class' : 'chocolat-container',
 				'id' : 'chocolat-container-' + this.settings.setIndex
-			}).appendTo(container);
+			}).appendTo(this.elems.realContainer);
 
 			this.elems.img = $('<img/>',{
 				'class' : 'chocolat-img',
@@ -342,13 +353,13 @@
 			$(document).off('keydown').on('keydown', function(e){
 				switch(e.keyCode){
 					case 37:
-					that.change(-1);
+						that.change(-1);
 					break;
 					case 39:
-					that.change(1);
+						that.change(1);
 					break;
 					case 27:
-					that.close();
+						that.close();
 					break;
 				};
 			});
@@ -374,7 +385,7 @@
 
 			$(window).on('resize', function(){
 				that.debounce(100, function(){
-
+					that.breakpoint();
 					fitting = that.fit(	
 						that.settings.images[that.settings.currentImage].height,
 						that.settings.images[that.settings.currentImage].width,
@@ -387,14 +398,18 @@
 				});
 			});
 		},
-		containerSelector : function(){
+
+		setRealContainer : function(){
+			// if container == window
+			// realContainer = body
 			if( typeof this.settings.container === 'object') { 
-			 	return 'body'
+			 	this.elems.realContainer = $('body');
 			}
 			else{
-				return this.settings.container;
+				this.elems.realContainer = $(this.settings.container);
 			} 
 		},
+
 		debounce: function(duration, callback) {
 			clearTimeout(this.settings.timerDebounce);
 			this.settings.timerDebounce = setTimeout(function(){

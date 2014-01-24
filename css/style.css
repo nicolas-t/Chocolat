@@ -29,9 +29,6 @@ a{
 	background-color:#fff;
 	display:none;
 }
-body.chocolat-open>.chocolat-overlay{
-	z-index:15;
-}
 .chocolat-loader{
 	height:32px;
 	width:32px;
@@ -44,9 +41,6 @@ body.chocolat-open>.chocolat-overlay{
 	background:url(../images/loader.gif);
 	display:none;
 }
-body.chocolat-open>.chocolat-loader{
-	z-index:16;
-}
 .chocolat-container{
 	position:fixed;
 	width:0px;
@@ -55,9 +49,17 @@ body.chocolat-open>.chocolat-loader{
 	top:50%;
 	z-index:14;
 }
+
+body.chocolat-open>.chocolat-overlay{
+	z-index:15;
+}
+body.chocolat-open>.chocolat-loader{
+	z-index:16;
+}
 body.chocolat-open>.chocolat-container{
 	z-index:17;
 }
+
 .chocolat-container .chocolat-img{
 	opacity:0;
 	position:absolute;
@@ -81,8 +83,19 @@ body.chocolat-open>.chocolat-container{
 	padding-left:50px;
 	cursor:pointer;
 	background:url(../images/right.png) 96% 50% no-repeat;
-
 }
+
+.chocolat-mobile .chocolat-container .chocolat-left{
+	left:0;
+	padding-right: 10px;
+	background:url(../images/left-mobile.png) 4% 96% no-repeat;
+}
+.chocolat-mobile .chocolat-container .chocolat-right{
+	right:0px;
+	padding-left: 10px;
+	background:url(../images/right-mobile.png) 96% 96% no-repeat;
+}
+
 .chocolat-container .chocolat-top{
 	position:absolute;
 	top:-40px;
