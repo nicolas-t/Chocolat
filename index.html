@@ -9,7 +9,9 @@
 		<script>
 		$(function(){
             $('#example1 a').Chocolat({
-                container : '#container1'
+                container : '#container1',
+                setTitle : 'photoset title',
+                displayAsALink : true
             });
 
             $('#example2 a').Chocolat({
@@ -25,6 +27,7 @@
 		</script>
     </head>
     <body>
+        <ul id="chocolat-links"></ul>
     	<p id="example1">
     		<a href="img/a.jpg" title="Rose">
                 A

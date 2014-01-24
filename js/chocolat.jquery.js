@@ -6,7 +6,7 @@
 		next              : '.chocolat-right',
 		prev              : '.chocolat-left',
 		displayAsALink    : false,
-		linksContainer    : '#links',
+		linksContainer    : '#chocolat-links',
 		setIndex          : 0,
 		setTitle          : '',
 		fullWindow        : false,
@@ -439,9 +439,7 @@
 		var instance = new Chocolat( $.extend(settings, {currentImage : 0}));
 
 		if(settings.displayAsALink){
-			var li = $('<li/>',{
-				'id' : 'chocolat-overlay'
-			}).appendTo(settings.linksContainer);
+			var li = $('<li/>').appendTo(settings.linksContainer);
 
 			var link = $('<a/>',{
 					'id'    : 'chocolat-numsetIndex_'+settings.setIndex,
