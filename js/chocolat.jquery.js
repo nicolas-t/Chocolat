@@ -35,7 +35,7 @@
 	Chocolat.prototype = {
 		init: function(i) {
 			if(!this.settings.initialized){
-				this.setRealContainer();
+				this.setDomContainer();
 				this.markup();
 				this.events();
 				this.settings.lastImage   = this.settings.images.length - 1;
@@ -210,10 +210,10 @@
 
 		breakpoint : function(){
 			if($(this.settings.container).width() < this.settings.mobileBreakpoint){
-				this.elems.realContainer.addClass('chocolat-mobile');
+				this.elems.domContainer.addClass('chocolat-mobile');
 			}
 			else{
-				this.elems.realContainer.removeClass('chocolat-mobile');
+				this.elems.domContainer.removeClass('chocolat-mobile');
 			}
 		},
 
@@ -234,7 +234,7 @@
 			$(els).fadeOut(200, function(){
 				$(this).remove();
 			});
-			this.elems.realContainer.removeClass('chocolat-open chocolat-mobile');
+			this.elems.domContainer.removeClass('chocolat-open chocolat-mobile');
 
 			this.settings.initialized = false;
 		},
@@ -250,22 +250,22 @@
 		},
 
 		markup : function(){
-			this.elems.realContainer.addClass('chocolat-open');
+			this.elems.domContainer.addClass('chocolat-open');
 
 			var that = this;
 
 			this.elems.overlay = $('<div/>',{
 				'class' : 'chocolat-overlay'
-			}).appendTo(this.elems.realContainer);
+			}).appendTo(this.elems.domContainer);
 
 			this.elems.loader = $('<div/>',{
 				'class' : 'chocolat-loader'
-			}).appendTo(this.elems.realContainer);
+			}).appendTo(this.elems.domContainer);
 
 			this.elems.content = $('<div/>',{
 				'class' : 'chocolat-container',
 				'id' : 'chocolat-container-' + this.settings.setIndex
-			}).appendTo(this.elems.realContainer);
+			}).appendTo(this.elems.domContainer);
 
 			this.elems.img = $('<img/>',{
 				'class' : 'chocolat-img',
@@ -399,14 +399,14 @@
 			});
 		},
 
-		setRealContainer : function(){
+		setDomContainer : function(){
 			// if container == window
-			// realContainer = body
+			// domContainer = body
 			if( typeof this.settings.container === 'object') { 
-			 	this.elems.realContainer = $('body');
+			 	this.elems.domContainer = $('body');
 			}
 			else{
-				this.elems.realContainer = $(this.settings.container);
+				this.elems.domContainer = $(this.settings.container);
 			} 
 		},
 
