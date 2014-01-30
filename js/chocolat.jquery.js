@@ -387,7 +387,7 @@
 			});
 
 			$(window).on('resize', function(){
-				that.debounce(100, function(){
+				that.debounce(50, function(){
 					that.breakpoint();
 					fitting = that.fit(	
 						that.settings.images[that.settings.currentImage].height,
