@@ -1,5 +1,4 @@
 ﻿;(function ( $, window, document, undefined ) {
-	var pluginName = 'Chocolat';
 	var calls = 0;
 	var defaults = {
 		container         : window,
@@ -9,12 +8,11 @@
 		linksContainer    : '#chocolat-links',
 		setIndex          : 0,
 		setTitle          : '',
-		fullWindow        : false,
+		fullWindow        : false, // false, 'fit', or 'cover'
 		fullScreen        : false,
 		linkImages        : true,
 		loop              : false,
 		currentImage      : 0,
-		overlayOpacity    : 0.5,
 		separator1        : '|',
 		separator2        : '/',
 		mobileBreakpoint  : 480,
@@ -22,16 +20,15 @@
 		timerDebounce     : false,
 		lastImage         : false,
 		initialized       : false,
-		elems             : {},
 		images            : []
 	};
 
 	function Chocolat(settings) {
 		this.settings  = settings;
 		this._defaults = defaults;
-		this._name     = pluginName;
 		this.elems     = {};
 	}
+
 	Chocolat.prototype = {
 		init: function(i) {
 			if(!this.settings.initialized){
@@ -52,7 +49,10 @@
 		},
 
 		load: function(i) {
-			this.elems.overlay.fadeTo(800, this.settings.overlayOpacity);
+			if(this.settings.fullScreen){
+				this.openFullScreen();
+			}
+			this.elems.overlay.fadeIn(800);
 			this.settings.timer = setTimeout(function(){
 				$.proxy(this.elems.loader.fadeIn(), this)
 			},400);
@@ -103,21 +103,35 @@
 		fit: function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW){ 
 			var holderGlobalWidth = holderWidth-holderOutMarginW; 
 			var holderGlobalHeight = holderHeight-holderOutMarginH; 
-			var holderRatio = (holderGlobalHeight / holderGlobalWidth ); 
+			var holderGlobalRatio = (holderGlobalHeight / holderGlobalWidth); 
+			var holderRatio = (holderHeight / holderWidth); 
 			var imgRatio = (imgHeight / imgWidth); 
-			
-			if(imgRatio>holderRatio) { 
-				height = holderGlobalHeight;
-				width = height / imgRatio;
-			} 
-			else { 
-				width = holderGlobalWidth;
-				height = width * imgRatio;
+
+			if(this.settings.fullWindow == 'cover'){
+				if(imgRatio<holderGlobalRatio) { 
+					height = holderGlobalHeight;
+					width = height / imgRatio;
+				} 
+				else { 
+					width = holderGlobalWidth;
+					height = width * imgRatio;
+				}
+				if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)){
+					width=imgWidth;
+					height=imgHeight;
+				}				
 			}
-			if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)){
-				width=imgWidth;
-				height=imgHeight;
+			else{
+				if(imgRatio>holderGlobalRatio) { 
+					height = holderGlobalHeight;
+					width = height / imgRatio;
+				} 
+				else { 
+					width = holderGlobalWidth;
+					height = width * imgRatio;
+				}
 			}
+
 			return {
 				'height' : height,
 				'width'  : width,
@@ -230,11 +244,14 @@
 				this.elems.loader[0],
 				this.elems.content[0]
 			];
+			var that = this;
 
 			$(els).fadeOut(200, function(){
 				$(this).remove();
+			}).promise().done(function () {
+				// not working on body
+				that.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
 			});
-			this.elems.domContainer.removeClass('chocolat-open chocolat-mobile');
 
 			this.settings.initialized = false;
 		},
@@ -251,7 +268,12 @@
 
 		markup : function(){
 			this.elems.domContainer.addClass('chocolat-open');
-
+			if(this.settings.fullWindow == 'cover'){
+				this.elems.domContainer.addClass('chocolat-cover');
+			}
+			if(this.settings.container !== window){
+				this.elems.domContainer.addClass('chocolat-in-container');
+			}
 			var that = this;
 
 			this.elems.overlay = $('<div/>',{
@@ -263,8 +285,8 @@
 			}).appendTo(this.elems.domContainer);
 
 			this.elems.content = $('<div/>',{
-				'class' : 'chocolat-container',
-				'id' : 'chocolat-container-' + this.settings.setIndex
+				'class' : 'chocolat-content',
+				'id' : 'chocolat-content-' + this.settings.setIndex
 			}).appendTo(this.elems.domContainer);
 
 			this.elems.img = $('<img/>',{
@@ -303,7 +325,7 @@
 			/* HTML MARKUP MEMO
 			<div class="chocolat-overlay"></div>
 			<div class="chocolat-loader"></div>
-			<div class="chocolat-container">
+			<div class="chocolat-content">
 				<img src="" class="chocolat-img" alt=""/>
 				<div class="chocolat-top">
 					<span class="chocolat-close"></span>
@@ -316,34 +338,18 @@
 				</div>
 			</div>
 			*/
-			
-			if(this.settings.fullScreen){
-				this.elems.fullscreen = $('<span/>',{
-					'class' : 'chocolat-fullscreen'
-				})
-				.off('click').on('click', function(){
-					that.openFullScreen();	
-				})
-				.appendTo(this.elems.top);
-			}
-			if(this.settings.container !== window){
-				$([this.elems.overlay[0], this.elems.content[0]])
-					.css('position','absolute');
-			}
 		},
 
 		openFullScreen:function(){
-			if(this.settings.fullScreen){
-				var docElm = document.documentElement;
-				if (docElm.requestFullscreen) {
-					docElm.requestFullscreen();
-				}
-				else if (docElm.mozRequestFullScreen) {
-					docElm.mozRequestFullScreen();
-				}
-				else if (docElm.webkitRequestFullScreen) {
-					docElm.webkitRequestFullScreen();
-				}
+			var docElm = document.documentElement;
+			if (docElm.requestFullscreen) {
+				docElm.requestFullscreen();
+			}
+			else if (docElm.mozRequestFullScreen) {
+				docElm.mozRequestFullScreen();
+			}
+			else if (docElm.webkitRequestFullScreen) {
+				docElm.webkitRequestFullScreen();
 			}
 		},
 
@@ -402,12 +408,15 @@
 		setDomContainer : function(){
 			// if container == window
 			// domContainer = body
+
+
 			if( typeof this.settings.container === 'object') { 
 			 	this.elems.domContainer = $('body');
 			}
 			else{
 				this.elems.domContainer = $(this.settings.container);
 			} 
+
 		},
 
 		debounce: function(duration, callback) {
@@ -422,7 +431,7 @@
 			else{return f;}
 		}
 	};
-	$.fn[pluginName] = function ( options ) {
+	$.fn['Chocolat'] = function ( options ) {
 		calls++;
 		img = [];
 

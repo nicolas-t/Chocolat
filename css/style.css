@@ -28,6 +28,7 @@ a{
 	z-index:10;
 	background-color:#fff;
 	display:none;
+	opacity: 0.8;
 }
 .chocolat-loader{
 	height:32px;
@@ -41,7 +42,7 @@ a{
 	background:url(../images/loader.gif);
 	display:none;
 }
-.chocolat-container{
+.chocolat-content{
 	position:fixed;
 	width:0px;
 	height:0px;
@@ -49,24 +50,31 @@ a{
 	top:50%;
 	z-index:14;
 }
-
+.chocolat-open{
+	overflow: hidden;
+}
 body.chocolat-open>.chocolat-overlay{
 	z-index:15;
 }
 body.chocolat-open>.chocolat-loader{
 	z-index:16;
 }
-body.chocolat-open>.chocolat-container{
+body.chocolat-open>.chocolat-content{
 	z-index:17;
 }
 
-.chocolat-container .chocolat-img{
+.chocolat-in-container .chocolat-content,
+.chocolat-in-container .chocolat-overlay{
+	position: absolute;
+}
+
+.chocolat-content .chocolat-img{
 	opacity:0;
 	position:absolute;
 	width:100%;
 	height:100%;
 }
-.chocolat-container .chocolat-left{
+.chocolat-content .chocolat-left{
 	position:absolute;
 	left:-50px;
 	width:50%;
@@ -75,7 +83,7 @@ body.chocolat-open>.chocolat-container{
 	cursor:pointer;
 	background:url(../images/left.png) 4% 50% no-repeat;
 }
-.chocolat-container .chocolat-right{
+.chocolat-content .chocolat-right{
 	position:absolute;
 	right:-50px;
 	width:50%;
@@ -85,18 +93,50 @@ body.chocolat-open>.chocolat-container{
 	background:url(../images/right.png) 96% 50% no-repeat;
 }
 
-.chocolat-mobile .chocolat-container .chocolat-left{
+.chocolat-mobile .chocolat-content .chocolat-left{
 	left:0;
 	padding-right: 10px;
 	background:url(../images/left-mobile.png) 4% 96% no-repeat;
 }
-.chocolat-mobile .chocolat-container .chocolat-right{
+.chocolat-mobile .chocolat-content .chocolat-right{
 	right:0px;
 	padding-left: 10px;
 	background:url(../images/right-mobile.png) 96% 96% no-repeat;
 }
 
-.chocolat-container .chocolat-top{
+
+/* compact mode */
+.chocolat-cover .chocolat-content .chocolat-left{
+	position: fixed;
+	height: 100%;
+	top: 0;
+	left:0;
+	padding-right: 0px;
+	background:url(../images/left-mobile.png) 4% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-right{
+	position: fixed;
+	height: 100%;
+	top: 0;
+	right:0px;
+	padding-left: 0px;
+	background:url(../images/right-mobile.png) 96% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-top{
+	top: 0;
+	left: 0;
+	position: fixed;
+}
+.chocolat-cover .chocolat-content .chocolat-bottom{
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	background: #fff;
+	opacity: 0.5;
+}
+/* end compact mode */
+
+.chocolat-content .chocolat-top{
 	position:absolute;
 	top:-40px;
 	width:100%;
@@ -104,27 +144,14 @@ body.chocolat-open>.chocolat-container{
 	height:40px;
 	font-size:12px;
 }
-.chocolat-container .chocolat-close{
+.chocolat-content .chocolat-close{
 	width:40px;
 	height:40px;
 	cursor:pointer;
 	float:left;
 	background:url(../images/close.png) 0% center no-repeat;
 }
-
-.chocolat-container .chocolat-fullscreen{
-	width:40px;
-	height:40px;
-	cursor:pointer;
-	float:right;
-	background:url(../images/zoomin.png) 100% center no-repeat;
-}
-html:-moz-full-screen .chocolat-container .chocolat-fullscreen,
-html:-webkit-full-screen .chocolat-container .chocolat-fullscreen,
-html:fullscreen .chocolat-container .chocolat-fullscreen{
-	display: none;
-}
-.chocolat-container .chocolat-bottom{
+.chocolat-content .chocolat-bottom{
 	position:absolute;
 	bottom:-40px;
 	width:100%;
@@ -132,6 +159,6 @@ html:fullscreen .chocolat-container .chocolat-fullscreen{
 	height:40px;
 	font-size:12px;
 }
-.chocolat-container .chocolat-pagination{
+.chocolat-content .chocolat-pagination{
 	float:right;
 }
