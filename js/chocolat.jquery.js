@@ -8,7 +8,7 @@
 		linksContainer    : '#chocolat-links',
 		setIndex          : 0,
 		setTitle          : '',
-		fullWindow        : false, // false, 'fit', or 'cover'
+		fullWindow        : false, // false, 'contain', or 'cover'
 		fullScreen        : false,
 		linkImages        : true,
 		loop              : false,
@@ -108,7 +108,18 @@
 			var imgRatio = (imgHeight / imgWidth); 
 
 			if(this.settings.fullWindow == 'cover'){
-				if(imgRatio<holderGlobalRatio) { 
+				if(imgRatio < holderRatio) { 
+					height = holderHeight;
+					width = height / imgRatio;
+
+				} 
+				else { 
+					width = holderWidth;
+					height = width * imgRatio;
+				}			
+			}
+			else{
+				if(imgRatio>holderGlobalRatio) { 
 					height = holderGlobalHeight;
 					width = height / imgRatio;
 				} 
@@ -119,16 +130,6 @@
 				if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)){
 					width=imgWidth;
 					height=imgHeight;
-				}				
-			}
-			else{
-				if(imgRatio>holderGlobalRatio) { 
-					height = holderGlobalHeight;
-					width = height / imgRatio;
-				} 
-				else { 
-					width = holderGlobalWidth;
-					height = width * imgRatio;
 				}
 			}
 
@@ -245,24 +246,20 @@
 				this.elems.content[0]
 			];
 			var that = this;
-
-			$(els).fadeOut(200, function(){
-				$(this).remove();
-			}).promise().done(function () {
-				// not working on body
+			$.when($(els).fadeOut(200)).then(function () {
 				that.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
 			});
 
 			this.settings.initialized = false;
 		},
 
-		getOutMarginW : function(el, options) {
+		getOutMarginW : function() {
 			var left  = this.elems.left.outerWidth() - this.elems.left.width();
 			var right = this.elems.right.outerWidth() - this.elems.right.width();
 			return left + right;
 		},
 
-		getOutMarginH : function(el, options) {
+		getOutMarginH : function() {
 			return this.elems.top.outerHeight() + this.elems.bottom.outerHeight();
 		},
 

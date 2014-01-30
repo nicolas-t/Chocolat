@@ -10,15 +10,7 @@ html, body, div, span{
 	font: inherit;
 	vertical-align: baseline;
 }
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-a{
-	text-decoration:none;
-}
+
 .chocolat-overlay{
 	height:100%;
 	width:100%;
@@ -96,45 +88,13 @@ body.chocolat-open>.chocolat-content{
 .chocolat-mobile .chocolat-content .chocolat-left{
 	left:0;
 	padding-right: 10px;
-	background:url(../images/left-mobile.png) 4% 96% no-repeat;
+	background:url(../images/left-compact.png) 4% 96% no-repeat;
 }
 .chocolat-mobile .chocolat-content .chocolat-right{
 	right:0px;
 	padding-left: 10px;
-	background:url(../images/right-mobile.png) 96% 96% no-repeat;
+	background:url(../images/right-compact.png) 96% 96% no-repeat;
 }
-
-
-/* compact mode */
-.chocolat-cover .chocolat-content .chocolat-left{
-	position: fixed;
-	height: 100%;
-	top: 0;
-	left:0;
-	padding-right: 0px;
-	background:url(../images/left-mobile.png) 4% 50% no-repeat;
-}
-.chocolat-cover .chocolat-content .chocolat-right{
-	position: fixed;
-	height: 100%;
-	top: 0;
-	right:0px;
-	padding-left: 0px;
-	background:url(../images/right-mobile.png) 96% 50% no-repeat;
-}
-.chocolat-cover .chocolat-content .chocolat-top{
-	top: 0;
-	left: 0;
-	position: fixed;
-}
-.chocolat-cover .chocolat-content .chocolat-bottom{
-	bottom: 0;
-	left: 0;
-	position: fixed;
-	background: #fff;
-	opacity: 0.5;
-}
-/* end compact mode */
 
 .chocolat-content .chocolat-top{
 	position:absolute;
@@ -161,4 +121,55 @@ body.chocolat-open>.chocolat-content{
 }
 .chocolat-content .chocolat-pagination{
 	float:right;
+	display: inline-block;
 }
+.chocolat-content .chocolat-description{
+	display: inline-block;
+}
+
+/* compact mode */
+.chocolat-cover .chocolat-content .chocolat-left{
+	position: fixed;
+	height: 100%;
+	top: 0;
+	left:0;
+	padding-right: 0px;
+	background:url(../images/left-compact.png) 0% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-right{
+	position: fixed;
+	height: 100%;
+	top: 0;
+	right:0px;
+	padding-left: 0px;
+	background:url(../images/right-compact.png) 100% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-top{
+	top: 0;
+	left: 0;
+	position: fixed;
+	z-index: 1;
+}
+.chocolat-cover .chocolat-content .chocolat-close{
+	width:30px;
+	height:30px;
+	cursor:pointer;
+	float:left;
+	background:url(../images/close-compact.png) 0% center no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-bottom{
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	background: rgba(255,255,255,0.75);
+	z-index: 1;
+}
+.chocolat-content .chocolat-pagination{
+	padding: 0 10px;
+}
+.chocolat-content .chocolat-description{
+	padding: 0 10px;
+}
+
+
+/* end compact mode */
