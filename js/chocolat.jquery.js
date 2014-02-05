@@ -447,6 +447,9 @@
             });
 
             $(window).on('resize', function() {
+                if(!that.settings.initialized){
+                    return;
+                }
                 that.debounce(50, function() {
                     that.breakpoint();
                     fitting = that.fit( 
