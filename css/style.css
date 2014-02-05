@@ -166,3 +166,6 @@ body.chocolat-open>.chocolat-content{
 .chocolat-in-container .chocolat-overlay{
 	position: absolute;
 }
+.chocolat-in-container{
+	position: relative;
+}

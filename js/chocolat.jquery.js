@@ -2,24 +2,24 @@
 	var calls = 0;
 	var defaults = {
 		container         : window,
-		displayAsALink    : false,
 		linksContainer    : '.chocolat-links',
 		imageSelector     : '.chocolat-image',
-		setIndex          : 0,
-		setTitle          : '',
 		fullWindow        : false, // false, 'contain', or 'cover'
 		fullScreen        : false,
-		linkImages        : true,
+		displayAsALink    : false,
 		loop              : false,
+		linkImages        : true,
+		setTitle          : '',
 		separator1        : '|',
 		separator2        : '/',
 		mobileBreakpoint  : 480,
-		timer             : false,
-		timerDebounce     : false,
-		currentImage      : false,
+		setIndex          : 0,
 		firstImage        : 0,
 		lastImage         : false,
+		currentImage      : false,
 		initialized       : false,
+		timer             : false,
+		timerDebounce     : false,
 		images            : []
 	};
 
@@ -56,7 +56,7 @@
 			});
 		}
 
-		//return API !
+		//return an API YEAH!
 		return {
 			open : function(i){
 				var i = i || 0;
@@ -75,6 +75,9 @@
 				that.change(-1);
 			},
 
+			goto : function(i){ // open alias
+				that.init(i);
+			},
 			current : function(){
 				return that.currentImage;
 			}
@@ -277,7 +280,6 @@
 						  + separator + ' ' 
 						  + position 
 						  + that.settings.separator2 
-						
 						  + last)
 					.fadeTo(400,1);
 			});
@@ -419,15 +421,13 @@
 					that.close();
 				}
 			});
-			$(this.elems.content)
-				.find('.chocolat-right')
+			$(this.elems.content).find('.chocolat-right')
 				.off('click')
 				.on('click', function() {
 					that.change(+1);	
 			});
 
-			$(this.elems.content)
-				.find('.chocolat-left')
+			$(this.elems.content).find('.chocolat-left')
 				.off('click')
 				.on('click', function() {
 					that.change(-1);	
@@ -458,7 +458,6 @@
 		setDomContainer : function() {
 			// if container == window
 			// domContainer = body
-
 
 			if(typeof this.settings.container === 'object') { 
 			 	this.elems.domContainer = $('body');
