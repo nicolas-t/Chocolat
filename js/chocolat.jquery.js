@@ -2,31 +2,83 @@
 	var calls = 0;
 	var defaults = {
 		container         : window,
-		next              : '.chocolat-right',
-		prev              : '.chocolat-left',
 		displayAsALink    : false,
-		linksContainer    : '#chocolat-links',
+		linksContainer    : '.chocolat-links',
+		imageSelector     : '.chocolat-image',
 		setIndex          : 0,
 		setTitle          : '',
 		fullWindow        : false, // false, 'contain', or 'cover'
 		fullScreen        : false,
 		linkImages        : true,
 		loop              : false,
-		currentImage      : 0,
 		separator1        : '|',
 		separator2        : '/',
 		mobileBreakpoint  : 480,
 		timer             : false,
 		timerDebounce     : false,
+		currentImage      : false,
+		firstImage        : 0,
 		lastImage         : false,
 		initialized       : false,
 		images            : []
 	};
 
-	function Chocolat(settings) {
+	function Chocolat(element, settings) {
+		var that = this;
+
 		this.settings  = settings;
 		this._defaults = defaults;
 		this.elems     = {};
+
+		element.find(this.settings.imageSelector).each(function () {
+			that.settings.images.push({
+				title  : $(this).attr('title'),
+				src    : $(this).attr('href'),
+				height : false,
+				width  : false
+			})
+		});
+
+		if(settings.displayAsALink){
+			this.createLink().off('click').on('click', function(e){
+				that.init(that.settings.firstImage);
+				e.preventDefault();
+			});
+
+			element.hide();
+		}
+		else{
+			element.find(this.settings.imageSelector).each(function (i) {
+				$(this).off('click').on('click', function(event){
+					that.init(i);
+					event.preventDefault();
+				});
+			});
+		}
+
+		//return API !
+		return {
+			open : function(i){
+				var i = i || 0;
+				that.init(i);
+			},
+			
+			close : function(){
+				that.close();
+			},
+			
+			next : function(){
+				that.change(1);
+			},
+
+			prev : function(){
+				that.change(-1);
+			},
+
+			current : function(){
+				return that.currentImage;
+			}
+		};
 	}
 
 	Chocolat.prototype = {
@@ -38,6 +90,7 @@
 				this.settings.lastImage   = this.settings.images.length - 1;
 				this.settings.initialized = true;
 			}
+
 			this.load(i);
 		}, 
 
@@ -49,10 +102,17 @@
 		},
 
 		load: function(i) {
+
 			if(this.settings.fullScreen){
 				this.openFullScreen();
 			}
+
+			if(this.settings.currentImage === i){
+				return;
+			}
+
 			this.elems.overlay.fadeIn(800);
+
 			this.settings.timer = setTimeout(function(){
 				$.proxy(this.elems.loader.fadeIn(), this)
 			},400);
@@ -318,26 +378,21 @@
 			this.elems.close = $('<span/>',{
 				'class' : 'chocolat-close'
 			}).appendTo(this.elems.top);
-
-			/* HTML MARKUP MEMO
-			<div class="chocolat-overlay"></div>
-			<div class="chocolat-loader"></div>
-			<div class="chocolat-content">
-				<img src="" class="chocolat-img" alt=""/>
-				<div class="chocolat-top">
-					<span class="chocolat-close"></span>
-				</div>
-				<div id="chocolat-left"></div>
-				<div class="chocolat-right"></div>
-				<div class="chocolat-bottom">
-					<span class="chocolat-description"></span>
-					<span class="chocolat-pagination"></span>
-				</div>
-			</div>
-			*/
 		},
 
-		openFullScreen:function(){
+		createLink : function(){
+			var li = $('<li/>').appendTo(this.settings.linksContainer);
+
+			return $('<a/>', {
+					'id'    : 'chocolat-set-'+this.settings.setIndex,
+					'class' : 'chocolat-link',
+					'href'  : '#'
+				})
+				.html(this.settings.setTitle)
+				.appendTo(li);
+		},
+
+		openFullScreen : function(){
 			var docElm = document.documentElement;
 			if (docElm.requestFullscreen) {
 				docElm.requestFullscreen();
@@ -354,27 +409,25 @@
 			var that = this;
 
 			$(document).off('keydown').on('keydown', function(e){
-				switch(e.keyCode){
-					case 37:
-						that.change(-1);
-					break;
-					case 39:
-						that.change(1);
-					break;
-					case 27:
-						that.close();
-					break;
-				};
+				if(e.keyCode == 37){
+					that.change(-1);
+				}
+				else if(e.keyCode == 39){
+					that.change(1);
+				}	
+				else if(e.keyCode == 27){
+					that.close();
+				}
 			});
 			$(this.elems.content)
-				.find(this.settings.next)
+				.find('.chocolat-right')
 				.off('click')
 				.on('click', function(){
 					that.change(+1);	
 			});
 
 			$(this.elems.content)
-				.find(this.settings.prev)
+				.find('.chocolat-left')
 				.off('click')
 				.on('click', function(){
 					that.change(-1);	
@@ -428,48 +481,19 @@
 			else{return f;}
 		}
 	};
+
 	$.fn['Chocolat'] = function ( options ) {
-		calls++;
-		img = [];
+		return this.each(function () {
 
-		this.each(function () {
-			img.push({
-				title  : $(this).attr('title'),
-				src    : $(this).attr('href'),
-				height : false,
-				width  : false
-			})
+			calls++;
+
+			var settings = $.extend(true, {}, defaults, options, {setIndex:calls} );
+
+			if ( !$.data(this, 'api-chocolat') ) {
+				$.data(this, 'api-chocolat',
+					new Chocolat($(this), settings)
+				);
+			}
 		});
-
-		var settings = $.extend({}, defaults, options, {setIndex:calls, images : img} );
-		var instance = new Chocolat( $.extend(settings, {currentImage : 0}));
-
-		if(settings.displayAsALink){
-			var li = $('<li/>').appendTo(settings.linksContainer);
-
-			var link = $('<a/>',{
-					'id'    : 'chocolat-numsetIndex_'+settings.setIndex,
-					'href'  : '#',
-					'class' : 'chocolat-link'
-				})
-				.html(settings.setTitle)
-				.off('click')
-				.on('click', function(event){
-					instance.init(instance.settings.currentImage);
-					event.preventDefault();
-				})
-				.appendTo(li);
-
-			$(this).remove();
-		}
-		else{
-			this.each(function (i) {
-				$(this).off('click').on('click', function(event){
-					instance.init(i);
-					event.preventDefault();
-				});
-			});
-		}
-		return this;
 	}
 })( jQuery, window, document );
