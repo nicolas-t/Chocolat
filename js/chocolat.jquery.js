@@ -318,7 +318,7 @@
             $.when($(els).fadeOut(200)).then(function () {
                 that.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
             });
-
+            this.settings.currentImage = false;
             this.settings.initialized = false;
         },
 
