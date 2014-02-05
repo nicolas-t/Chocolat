@@ -82,7 +82,7 @@
 	}
 
 	Chocolat.prototype = {
-		init: function(i) {
+		init : function(i) {
 			if(!this.settings.initialized){
 				this.setDomContainer();
 				this.markup();
@@ -94,14 +94,14 @@
 			this.load(i);
 		}, 
 
-		preload: function(i, callback) {
+		preload : function(i, callback) {
 			callback         = this.optFuncParam(callback);
 			imgLoader        = new Image();
 			imgLoader.onload = $.proxy(callback, this, i, imgLoader);
 			imgLoader.src    = this.settings.images[i].src;
 		},
 
-		load: function(i) {
+		load : function(i) {
 
 			if(this.settings.fullScreen){
 				this.openFullScreen();
@@ -119,7 +119,7 @@
 			this.preload(i,this.place);
 		},
 
-		place: function(i, imgLoader) {
+		place : function(i, imgLoader) {
 			var that = this;
 
 			this.settings.currentImage = i;
@@ -127,7 +127,7 @@
 			this.pagination();
 			this.breakpoint();
 
-			this.elems.img.fadeTo(200,0, function(){
+			this.elems.img.fadeTo(200,0, function() {
 				that.storeImgSize(imgLoader, i);
 				fitting = that.fit(
 					that.settings.images[i].height,
@@ -149,25 +149,25 @@
 			});
 		},
 
-		appear:function(i){
+		appear : function(i) {
 			var that = this;
 			clearTimeout(this.settings.timer);
 
-			this.elems.loader.stop().fadeOut(300, function(){
+			this.elems.loader.stop().fadeOut(300, function() {
 				that.elems.img
 					.attr('src', that.settings.images[i].src)
 					.fadeTo(400,1);
 			});
 		},
 
-		fit: function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW){ 
+		fit : function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW) { 
 			var holderGlobalWidth = holderWidth-holderOutMarginW; 
 			var holderGlobalHeight = holderHeight-holderOutMarginH; 
 			var holderGlobalRatio = (holderGlobalHeight / holderGlobalWidth); 
 			var holderRatio = (holderHeight / holderWidth); 
 			var imgRatio = (imgHeight / imgWidth); 
 
-			if(this.settings.fullWindow == 'cover'){
+			if(this.settings.fullWindow == 'cover') {
 				if(imgRatio < holderRatio) { 
 					height = holderHeight;
 					width = height / imgRatio;
@@ -178,7 +178,7 @@
 					height = width * imgRatio;
 				}			
 			}
-			else{
+			else {
 				if(imgRatio>holderGlobalRatio) { 
 					height = holderGlobalHeight;
 					width = height / imgRatio;
@@ -187,7 +187,7 @@
 					width = holderGlobalWidth;
 					height = width * imgRatio;
 				}
-				if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)){
+				if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)) {
 					width=imgWidth;
 					height=imgHeight;
 				}
@@ -201,7 +201,7 @@
 			}
 		},
 
-		center: function(width, height, left, top, duration, callback) {
+		center : function(width, height, left, top, duration, callback) {
 			callback = this.optFuncParam(callback);
 			this.elems.content.animate({
 				'width'  :width,
@@ -212,66 +212,66 @@
 			.css('overflow', 'visible');
 		},
 
-		change: function(signe) {
+		change : function(signe) {
 			var requestedImage = this.settings.currentImage + parseInt(signe);
-			if(requestedImage > this.settings.lastImage){
+			if(requestedImage > this.settings.lastImage) {
 				if(this.settings.loop){
 					this.load(0);
 				}
 			}
-			else if(requestedImage < 0){
-				if(this.settings.loop){
+			else if(requestedImage < 0) {
+				if(this.settings.loop) {
 					this.load(this.settings.lastImage);
 				}
 			}
-			else{
+			else {
 				this.load(requestedImage);
 			}
 		},
 
 		arrows: function() {
-			if(this.settings.loop){
+			if(this.settings.loop) {
 				$([this.elems.left[0],this.elems.right[0]])
 					.css('display','block');
 			}
-			else if(this.settings.linkImages){
+			else if(this.settings.linkImages) {
 				// right
-				if(this.settings.currentImage == this.settings.lastImage){
+				if(this.settings.currentImage == this.settings.lastImage) {
 					this.elems.right.fadeOut(300);
 				}
-				else{
+				else {
 					this.elems.right.fadeIn(300);
 				}
 				// left
-				if(this.settings.currentImage == 0){
+				if(this.settings.currentImage == 0) {
 					this.elems.left.fadeOut(300);
 				}
-				else{
+				else {
 					this.elems.left.fadeIn(300);
 				}
 			}
-			else{
+			else {
 				$([this.elems.left[0],this.elems.right[0]])
 					.css('display','none');
 			}
 		},
 
-		description : function(){
+		description : function() {
 			var that = this;
-			this.elems.description.fadeTo(200, 0, function(){
+			this.elems.description.fadeTo(200, 0, function() {
 				$(this)
 					.html(that.settings.images[that.settings.currentImage].title)
 					.fadeTo(400,1);
 			});
 		},
 
-		pagination : function(){
+		pagination : function() {
 			var that      = this;
 			var last      = this.settings.lastImage + 1;
 			var position  = this.settings.currentImage + 1;
 			var separator = (this.settings.setTitle == '') ? '' : this.settings.separator1;
 
-			this.elems.pagination.fadeTo(200, 0, function(){
+			this.elems.pagination.fadeTo(200, 0, function() {
 				$(this)
 					.html(that.settings.setTitle + ' ' 
 						  + separator + ' ' 
@@ -283,23 +283,23 @@
 			});
 		},
 
-		breakpoint : function(){
-			if($(this.settings.container).width() < this.settings.mobileBreakpoint){
+		breakpoint : function() {
+			if($(this.settings.container).width() < this.settings.mobileBreakpoint) {
 				this.elems.domContainer.addClass('chocolat-mobile');
 			}
-			else{
+			else {
 				this.elems.domContainer.removeClass('chocolat-mobile');
 			}
 		},
 
-		storeImgSize: function(img, i) {
+		storeImgSize : function(img, i) {
 			if(!this.settings.images[i].height || !this.settings.images[i].width){
 				this.settings.images[i].height = img.height;
 				this.settings.images[i].width  = img.width;
 			}
 		},
 
-		close : function(){
+		close : function() {
 			var els = [
 				this.elems.overlay[0],
 				this.elems.loader[0],
@@ -323,64 +323,64 @@
 			return this.elems.top.outerHeight() + this.elems.bottom.outerHeight();
 		},
 
-		markup : function(){
+		markup : function() {
 			this.elems.domContainer.addClass('chocolat-open');
-			if(this.settings.fullWindow == 'cover'){
+			if(this.settings.fullWindow == 'cover') {
 				this.elems.domContainer.addClass('chocolat-cover');
 			}
-			if(this.settings.container !== window){
+			if(this.settings.container !== window) {
 				this.elems.domContainer.addClass('chocolat-in-container');
 			}
 			var that = this;
 
-			this.elems.overlay = $('<div/>',{
+			this.elems.overlay = $('<div/>', {
 				'class' : 'chocolat-overlay'
 			}).appendTo(this.elems.domContainer);
 
-			this.elems.loader = $('<div/>',{
+			this.elems.loader = $('<div/>', {
 				'class' : 'chocolat-loader'
 			}).appendTo(this.elems.domContainer);
 
-			this.elems.content = $('<div/>',{
+			this.elems.content = $('<div/>', {
 				'class' : 'chocolat-content',
 				'id' : 'chocolat-content-' + this.settings.setIndex
 			}).appendTo(this.elems.domContainer);
 
-			this.elems.img = $('<img/>',{
+			this.elems.img = $('<img/>', {
 				'class' : 'chocolat-img',
 				'src' : ''
 			}).appendTo(this.elems.content);
 
-			this.elems.top = $('<div/>',{
+			this.elems.top = $('<div/>', {
 				'class' : 'chocolat-top'
 			}).appendTo(this.elems.content);
 
-			this.elems.left = $('<div/>',{
+			this.elems.left = $('<div/>', {
 				'class' : 'chocolat-left'
 			}).appendTo(this.elems.content);
 
-			this.elems.right = $('<div/>',{
+			this.elems.right = $('<div/>', {
 				'class' : 'chocolat-right'
 			}).appendTo(this.elems.content);
 
-			this.elems.bottom = $('<div/>',{
+			this.elems.bottom = $('<div/>', {
 				'class' : 'chocolat-bottom'
 			}).appendTo(this.elems.content);
 
-			this.elems.description = $('<span/>',{
+			this.elems.description = $('<span/>', {
 				'class' : 'chocolat-description'
 			}).appendTo(this.elems.bottom);
 
-			this.elems.pagination = $('<span/>',{
+			this.elems.pagination = $('<span/>', {
 				'class' : 'chocolat-pagination'
 			}).appendTo(this.elems.bottom);
 
-			this.elems.close = $('<span/>',{
+			this.elems.close = $('<span/>', {
 				'class' : 'chocolat-close'
 			}).appendTo(this.elems.top);
 		},
 
-		createLink : function(){
+		createLink : function() {
 			var li = $('<li/>').appendTo(this.settings.linksContainer);
 
 			return $('<a/>', {
@@ -392,7 +392,7 @@
 				.appendTo(li);
 		},
 
-		openFullScreen : function(){
+		openFullScreen : function() {
 			var docElm = document.documentElement;
 			if (docElm.requestFullscreen) {
 				docElm.requestFullscreen();
@@ -405,42 +405,42 @@
 			}
 		},
 
-		events : function(){
+		events : function() {
 			var that = this;
 
-			$(document).off('keydown').on('keydown', function(e){
-				if(e.keyCode == 37){
+			$(document).off('keydown').on('keydown', function(e) {
+				if(e.keyCode == 37) {
 					that.change(-1);
 				}
-				else if(e.keyCode == 39){
+				else if(e.keyCode == 39) {
 					that.change(1);
 				}	
-				else if(e.keyCode == 27){
+				else if(e.keyCode == 27) {
 					that.close();
 				}
 			});
 			$(this.elems.content)
 				.find('.chocolat-right')
 				.off('click')
-				.on('click', function(){
+				.on('click', function() {
 					that.change(+1);	
 			});
 
 			$(this.elems.content)
 				.find('.chocolat-left')
 				.off('click')
-				.on('click', function(){
+				.on('click', function() {
 					that.change(-1);	
 			});
 
 			$([this.elems.overlay[0], this.elems.close[0]])
 				.off('click')
-				.on('click', function(){
+				.on('click', function() {
 					that.close();
 			});
 
-			$(window).on('resize', function(){
-				that.debounce(50, function(){
+			$(window).on('resize', function() {
+				that.debounce(50, function() {
 					that.breakpoint();
 					fitting = that.fit(	
 						that.settings.images[that.settings.currentImage].height,
@@ -455,15 +455,15 @@
 			});
 		},
 
-		setDomContainer : function(){
+		setDomContainer : function() {
 			// if container == window
 			// domContainer = body
 
 
-			if( typeof this.settings.container === 'object') { 
+			if(typeof this.settings.container === 'object') { 
 			 	this.elems.domContainer = $('body');
 			}
-			else{
+			else {
 				this.elems.domContainer = $(this.settings.container);
 			} 
 
@@ -471,7 +471,7 @@
 
 		debounce: function(duration, callback) {
 			clearTimeout(this.settings.timerDebounce);
-			this.settings.timerDebounce = setTimeout(function(){
+			this.settings.timerDebounce = setTimeout(function() {
 				callback();
 			}, duration);
 		},
@@ -482,14 +482,14 @@
 		}
 	};
 
-	$.fn['Chocolat'] = function ( options ) {
-		return this.each(function () {
+	$.fn['Chocolat'] = function (options) {
+		return this.each(function() {
 
 			calls++;
 
 			var settings = $.extend(true, {}, defaults, options, {setIndex:calls} );
 
-			if ( !$.data(this, 'api-chocolat') ) {
+			if (!$.data(this, 'api-chocolat')) {
 				$.data(this, 'api-chocolat',
 					new Chocolat($(this), settings)
 				);
