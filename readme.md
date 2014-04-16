@@ -1,6 +1,6 @@
 ﻿The new version is finished, you can test it here : 
 -----------
-https://github.com/nicolas-t/Chocolat/tree/V0.4
+https://github.com/nicolas-t/Chocolat/
 -----------
 
 ##Chocolat
