@@ -1,6 +1,6 @@
 ﻿/*
 **      @author : Nicolas Turlais : nicolas-at-insipi.de
-**      @version : V0.4.2 - 16 April 2014
+**      @version : V0.4.3 - 16 April 2014
 **      @license : Licensed under CCAttribution-ShareAlike
 **      @website : http://chocolat.insipi.de
 **/
