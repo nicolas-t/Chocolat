@@ -3,7 +3,7 @@
   "version": "0.4.2",
   "main": [
     "css/chocolat.css",
-    "js/jquery.chocolat.js",
+    "js/jquery.chocolat.js"
   ],
   "license" : "CC-BY-2.0", 
   "dependencies": {
