@@ -49,6 +49,9 @@ Sets whether viewer will open and fill the whole page (`default`)  , or whether 
 Sets whether we can switch from one image to another, within the same call, without closing the viewer (`true`) , or if the images remain independent (`false`).
 Warning: if `LinkImage`: is `false` then `displayAsALink` must be worth `false` too. Otherwise we can only view the first image in the set.   
   
+**imageSelector :** `default : .chocolat-image`  
+Selector to find images in the parent element (on which chocolat is called) 
+  
 **displayAsALink :** `default:false`  
 Used to group images, from the same call, in a single link that replaces the html code links to the images (`true`). Otherwise (`false`) the html code is not changed and the images of the series may be called individually. In this case the links can be thumbnails or text.  
   
