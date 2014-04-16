@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="css/style.css" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/chocolat.jquery.js"></script>
+        <title>Chocolat</title>
+		<script>
+		$(function(){
+            var instance = $('#example1').Chocolat({
+                container      : '#container1',
+                setTitle       : 'photoset title',
+                fullWindow     : 'contain',
+                displayAsALink : true
+            }).data('api-chocolat');
+
+            $('#example2').Chocolat({
+                container : '#container2'
+            });
+
+            $('#example3').Chocolat({
+                loop           : true,
+                fullWindow     : 'cover',
+                overlayOpacity : 0.9
+            });
+            $('.api-test').on('click', function(){
+                console.log(instance.open(1));
+            })
+		});
+		</script>
+    </head>
+    <body>
+        <div class="api-test" style="font-size: 20px;">
+            TEST API
+        </div>
+
+        <ul class="chocolat-links"></ul>
+    	<p id="example1">
+    		<a class="chocolat-image" href="img/a.jpg" title="Rose">
+                A
+    		</a>
+    		<a class="chocolat-image" href="img/b.jpg" title="Black">
+                B
+    		</a>
+    	</p>
+        
+        <p id="example2">
+            <a class="chocolat-image" href="img/1.jpg" title="HO">
+                1
+            </a>
+            <a class="chocolat-image" href="img/2.jpg" title="HAI">
+                2
+            </a>
+        </p>
+
+        <p id="example3">
+            <a class="chocolat-image" href="img/c.jpg" title="foo">
+                C
+            </a>
+            <a class="chocolat-image" href="img/d.jpg" title="bar">
+                D
+            </a>
+        </p>
+        <div id="container1" style="width: 50%; height: 400px;background: #E0E0E0;"></div>
+        <br>
+        <div id="container2" style="width: 60%; height: 400px;background: #E0E0E0;"></div>
+    </body>
+
+</html>

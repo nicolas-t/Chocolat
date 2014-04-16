@@ -1,112 +1,169 @@
-body{
-	margin:0;
-	padding:0;
+/*
+    CSS RESET
+*/
+
+html, body, div, span{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
 }
-#Choco_overlay{
-	background: #fff;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-	height: 100%;
-	display:none;
-	padding:0;
-	margin:0;
+.chocolat-open{
+    overflow: hidden;
 }
-#Choco_content{
-	display:none;
-	width:800px;
-	height:600px;
-	z-index:1001;
-	position:fixed;
-	left:50%;
-	top:50%;
-	margin-left:-400px;
-	margin-top:-300px;
-	border-top:1px solid transparent;/*Yes, adjust image perfectly at the center of a box, don't know why.*/
+.chocolat-overlay{
+    height:100%;
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+    background-color:#fff;
+    display:none;
+    opacity: 0.8;
 }
-#Choco_left_arrow{
-	float:left;
-	background-image:url(../images/left.gif);
-	background-position:12%;
-	left:-14%;
+.chocolat-loader{
+    height:32px;
+    width:32px;
+    position:fixed;
+    left:50%;
+    top:50% ;
+    margin-left:-32px;
+    margin-top:-32px;
+    z-index:11;
+    background:url(../images/loader.gif);
+    display:none;
 }
-#Choco_right_arrow{
-	float:right;
-	background-image:url(../images/right.gif);
-	background-position:88%;
-	left:14%;
+.chocolat-content{
+    position:fixed;
+    width:0px;
+    height:0px;
+    left:50%;
+    top:50%;
+    z-index:14;
 }
-.Choco_arrows{
-	background-repeat:no-repeat;
-	display:none;
-	position:relative;
-	cursor:pointer;
-	width:49%;
-	top:-100%;
-	height:100%;
-	margin-top:-30px;
+
+.chocolat-content .chocolat-img{
+    opacity:0;
+    position:absolute;
+    width:100%;
+    height:100%;
 }
-#Choco_container_photo{
-	text-align:center;
-	width:800px;
-	height:600px;
-	/*background:url(../images/ajax-loader.gif) center center no-repeat;*/
+.chocolat-content .chocolat-left{
+    position:absolute;
+    left:-50px;
+    width:50%;
+    height:100%;
+    padding-right:50px;
+    cursor:pointer;
+    background:url(../images/left.png) 4% 50% no-repeat;
 }
-#Choco_container_description{
-	padding:0;
-	height:26px;
-	width:100%;
-	color:#505050;
-	font-family:Tahoma;
-	clear:both;
-	position:relative;
-	font-size:12px;
-	margin-top:-5px;
-	overflow:hidden;
-	visibility:hidden;
+.chocolat-content .chocolat-right{
+    position:absolute;
+    right:-50px;
+    width:50%;
+    height:100%;
+    padding-left:50px;
+    cursor:pointer;
+    background:url(../images/right.png) 96% 50% no-repeat;
 }
-#Choco_container_title{
-	float:left;
-	padding:5px;
+
+.chocolat-content .chocolat-top{
+    position:absolute;
+    top:-40px;
+    width:100%;
+    line-height:40px;
+    height:40px;
+    font-size:12px;
 }
-#Choco_container_via{
-	padding:5px;
-	float:right;
+.chocolat-content .chocolat-close{
+    width:40px;
+    height:40px;
+    cursor:pointer;
+    float:left;
+    background:url(../images/close.png) 0% center no-repeat;
 }
-#Choco_container_via a{
-	color:gray;
+.chocolat-content .chocolat-bottom{
+    position:absolute;
+    bottom:-40px;
+    width:100%;
+    line-height:40px;
+    height:40px;
+    font-size:12px;
 }
-#Choco_container_via a:hover{
-	color:white;
-	background:gray;
+.chocolat-content .chocolat-pagination{
+    float:right;
+    display: inline-block;
 }
-#Choco_close{
-	width:30px;
-	height:25px;
-	background-image:url(../images/close.gif);
-	background-repeat:no-repeat;
-	z-index:1002;
-	cursor:pointer;
-	margin-top:-20px;
-	display:none;
+.chocolat-content .chocolat-description{
+    display: inline-block;
 }
-#Choco_loading{
-	width:9px;
-	height:11px;
-	background-image:url(../images/loading.gif);
-	background-repeat:no-repeat;
-	z-index:1002;
-	cursor:pointer;
-	float:right;
-	margin-top:-20px;
-	display:none;
+
+/* compact view */
+.chocolat-cover .chocolat-content .chocolat-left,
+.chocolat-cover .chocolat-content .chocolat-right{
+    position: fixed;
+    height: 100%;
+    top: 0;
+    padding: 0px;
 }
-#Choco_bigImage{
-	display:none;
-	position:relative;
-	width:100%;
-	height:100%;
-	margin-top:-5px;
+.chocolat-cover .chocolat-content .chocolat-right{
+    right:0px;
+    background:url(../images/right-compact.png) 100% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-left{
+    left:0;
+    background:url(../images/left-compact.png) 0% 50% no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-top{
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
+}
+.chocolat-cover .chocolat-content .chocolat-close{
+    background:url(../images/close-compact.png) 0% center no-repeat;
+}
+.chocolat-cover .chocolat-content .chocolat-bottom{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    background: rgba(255,255,255,0.75);
+    z-index: 1;
+}
+.chocolat-cover .chocolat-content .chocolat-pagination,
+.chocolat-cover .chocolat-content .chocolat-description{
+    padding: 0 10px;
+}
+
+/* mobile view */
+.chocolat-mobile .chocolat-content .chocolat-left{
+    left:0;
+    padding-right: 10px;
+    background:url(../images/left-compact.png) 4% 96% no-repeat;
+}
+.chocolat-mobile .chocolat-content .chocolat-right{
+    right:0px;
+    padding-left: 10px;
+    background:url(../images/right-compact.png) 96% 96% no-repeat;
+}
+
+/* no container mode*/
+body.chocolat-open>.chocolat-overlay{
+    z-index:15;
+}
+body.chocolat-open>.chocolat-loader{
+    z-index:16;
+}
+body.chocolat-open>.chocolat-content{
+    z-index:17;
+}
+
+/* container mode*/
+.chocolat-in-container .chocolat-content,
+.chocolat-in-container .chocolat-overlay{
+    position: absolute;
+}
+.chocolat-in-container{
+    position: relative;
 }

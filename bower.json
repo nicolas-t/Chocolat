@@ -1,0 +1,20 @@
+{
+  "name": "chocolat",
+  "version": "0.4.1",
+  "main": [
+    "css/chocolat.css",
+    "js/jquery.chocolat.js",
+  ],
+  "license" : "CC-BY-2.0", 
+  "dependencies": {
+    "jquery": "1.11.0"
+  },
+  "authors": [
+    { "name": "Nicolas Turlais", "email": "nicolas@insipi.de"," homepage": "http://nicolasturlais.com" }
+  ],
+  "homepage" : "http://chocolat.insipi.de",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nicolas-t/Chocolat.git"
+  }
+}
