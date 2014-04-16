@@ -1,6 +1,6 @@
 ##Contribute
 -----------  
-You are viewing the branch v0.4 of chocolat, it's an under development branch of the plugin.  
+You are viewing the version 0.4.x of chocolat.  
 Feel free to contribute by forking then making a pull request.  
 
 ##Chocolat
@@ -9,7 +9,7 @@ Chocolat is a simple `jQuery` lightbox plugin
 
 #### Dependencies
 
-Except jQuery. https://github.com/jquery/jquery
+Except jQuery : https://github.com/jquery/jquery
 
 #### Compatibility
 recent browsers such as :
