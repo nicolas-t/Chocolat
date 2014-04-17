@@ -14,11 +14,7 @@ Except jQuery : https://github.com/jquery/jquery
 #### Compatibility
 recent browsers such as :
 IE 7+, Safari, Firefox & Chrome.
-
-##Demo
------------
-Dev version, clone it to see a demo  
-
+  
 ##Markup
 -----------
 ```html
