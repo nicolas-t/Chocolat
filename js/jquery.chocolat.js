@@ -66,7 +66,7 @@
         //return an API YEAH!
         return {
             open : function(i){
-                var i = i || 0;
+                i = i || 0;
                 that.init(i);
             },
             
@@ -124,7 +124,7 @@
             this.elems.overlay.fadeIn(800);
 
             this.settings.timer = setTimeout(function(){
-                $.proxy(this.elems.loader.fadeIn(), this)
+                $.proxy(this.elems.loader.fadeIn(), this);
             },400);
             this.preload(i,this.place);
         },
@@ -418,14 +418,16 @@
             var that = this;
 
             $(document).off('keydown').on('keydown', function(e) {
-                if(e.keyCode == 37) {
-                    that.change(-1);
-                }
-                else if(e.keyCode == 39) {
-                    that.change(1);
-                }   
-                else if(e.keyCode == 27) {
-                    that.close();
+                if (that.settings.initialized) {
+                    if(e.keyCode == 37) {
+                        that.change(-1);
+                    }
+                    else if(e.keyCode == 39) {
+                        that.change(1);
+                    }
+                    else if(e.keyCode == 27) {
+                        that.close();
+                    }
                 }
             });
             $(this.elems.content).find('.chocolat-right')
