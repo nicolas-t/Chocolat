@@ -124,7 +124,9 @@
             this.elems.overlay.fadeIn(800);
 
             this.settings.timer = setTimeout(function(){
-                $.proxy(this.elems.loader.fadeIn(), this);
+                if(typeof this.elems != 'undefined'){
+                    $.proxy(this.elems.loader.fadeIn(), this);
+                }
             },400);
             this.preload(i,this.place);
         },
