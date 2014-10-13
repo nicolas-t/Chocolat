@@ -83,7 +83,7 @@
             },
 
             goto : function(i){ // open alias
-                that.open(i);
+                this.open(i);
             },
             current : function(){
                 return that.currentImage;
