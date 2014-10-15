@@ -66,14 +66,14 @@
         //return an API YEAH!
         return {
             open : function(i){
-                i = i || 0;
+                i = parseInt(i) || 0;
                 that.init(i);
             },
-            
+
             close : function(){
                 that.close();
             },
-            
+
             next : function(){
                 that.change(1);
             },
@@ -83,7 +83,7 @@
             },
 
             goto : function(i){ // open alias
-                that.init(i);
+                this.open(i);
             },
             current : function(){
                 return that.currentImage;
@@ -102,7 +102,7 @@
             }
 
             this.load(i);
-        }, 
+        },
 
         preload : function(i, callback) {
             callback         = this.optFuncParam(callback);
@@ -172,30 +172,30 @@
             });
         },
 
-        fit : function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW) { 
-            var holderGlobalWidth = holderWidth-holderOutMarginW; 
-            var holderGlobalHeight = holderHeight-holderOutMarginH; 
-            var holderGlobalRatio = (holderGlobalHeight / holderGlobalWidth); 
-            var holderRatio = (holderHeight / holderWidth); 
-            var imgRatio = (imgHeight / imgWidth); 
+        fit : function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW) {
+            var holderGlobalWidth = holderWidth-holderOutMarginW;
+            var holderGlobalHeight = holderHeight-holderOutMarginH;
+            var holderGlobalRatio = (holderGlobalHeight / holderGlobalWidth);
+            var holderRatio = (holderHeight / holderWidth);
+            var imgRatio = (imgHeight / imgWidth);
 
             if(this.settings.fullWindow == 'cover') {
-                if(imgRatio < holderRatio) { 
+                if(imgRatio < holderRatio) {
                     height = holderHeight;
                     width = height / imgRatio;
 
-                } 
-                else { 
+                }
+                else {
                     width = holderWidth;
                     height = width * imgRatio;
-                }           
+                }
             }
             else {
-                if(imgRatio>holderGlobalRatio) { 
+                if(imgRatio>holderGlobalRatio) {
                     height = holderGlobalHeight;
                     width = height / imgRatio;
-                } 
-                else { 
+                }
+                else {
                     width = holderGlobalWidth;
                     height = width * imgRatio;
                 }
@@ -285,10 +285,10 @@
 
             this.elems.pagination.fadeTo(200, 0, function() {
                 $(this)
-                    .html(that.settings.setTitle + ' ' 
-                          + separator + ' ' 
-                          + position 
-                          + that.settings.separator2 
+                    .html(that.settings.setTitle + ' '
+                          + separator + ' '
+                          + position
+                          + that.settings.separator2
                           + last)
                     .fadeTo(400,1);
             });
@@ -435,13 +435,13 @@
             $(this.elems.content).find('.chocolat-right')
                 .off('click')
                 .on('click', function() {
-                    that.change(+1);    
+                    that.change(+1);
             });
 
             $(this.elems.content).find('.chocolat-left')
                 .off('click')
                 .on('click', function() {
-                    that.change(-1);    
+                    that.change(-1);
             });
 
             $([this.elems.overlay[0], this.elems.close[0]])
@@ -456,7 +456,7 @@
                 }
                 that.debounce(50, function() {
                     that.breakpoint();
-                    fitting = that.fit( 
+                    fitting = that.fit(
                         that.settings.images[that.settings.currentImage].height,
                         that.settings.images[that.settings.currentImage].width,
                         $(that.settings.container).height(),
@@ -473,12 +473,12 @@
             // if container == window
             // domContainer = body
 
-            if(typeof this.settings.container === 'object') { 
+            if(typeof this.settings.container === 'object') {
                 this.elems.domContainer = $('body');
             }
             else {
                 this.elems.domContainer = $(this.settings.container);
-            } 
+            }
 
         },
 
@@ -490,7 +490,7 @@
         },
 
         optFuncParam: function(f) {
-            if(!$.isFunction(f)){return function(){};} 
+            if(!$.isFunction(f)){return function(){};}
             else{return f;}
         }
     };
