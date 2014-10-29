@@ -419,7 +419,7 @@
         events : function() {
             var that = this;
 
-            $(document).off('keydown').on('keydown', function(e) {
+            $(document).off('keydown.chocolat').on('keydown.chocolat', function(e) {
                 if (that.settings.initialized) {
                     if(e.keyCode == 37) {
                         that.change(-1);
