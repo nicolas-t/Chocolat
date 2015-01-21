@@ -85,7 +85,7 @@ Text between the title of the set and its position within the set, does not matt
 **separator2 :**  `default : "/"`  
 Text between the number of the image and the number of images in the set, does not matter. 
   
-**image  :**  `default : 0`  
+**images  :**  `default : []`  
 Array of object representing the set images `[{title, src, height, width}, {}, ...]`  
    
 **setIndex  :**  `default : 0`   
