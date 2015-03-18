@@ -1,6 +1,6 @@
 ﻿/*
 **      @author : Nicolas Turlais : nicolas-at-insipi.de
-**      @version : V0.4.4 - 16 April 2014
+**      @version : V0.4.4 - 18 March 2015
 **      @license : Licensed under CCAttribution-ShareAlike
 **      @website : http://chocolat.insipi.de
 **/
@@ -112,7 +112,7 @@
         },
 
         load : function(i) {
-
+            var that = this;
             if(this.settings.fullScreen){
                 this.openFullScreen();
             }
@@ -122,13 +122,19 @@
             }
 
             this.elems.overlay.fadeIn(800);
-
             this.settings.timer = setTimeout(function(){
-                if(typeof this.elems != 'undefined'){
-                    $.proxy(this.elems.loader.fadeIn(), this);
+                if(typeof that.elems != 'undefined'){
+                    that.elems.img.fadeTo(200, 0);
+                    $.proxy(that.elems.loader.fadeIn(), that);
                 }
-            },400);
+            }, 400);
             this.preload(i,this.place);
+
+            var nextIndex = i + 1
+            if(typeof this.settings.images[nextIndex] != 'undefined'){
+                this.preload(nextIndex);
+            }
+            
         },
 
         place : function(i, imgLoader) {
