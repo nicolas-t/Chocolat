@@ -96,8 +96,7 @@
             },
         };
     }
-
-    Chocolat.prototype = {
+    $.extend(Chocolat.prototype, {
         init : function(i) {
             if(!this.settings.initialized){
                 this.setDomContainer();
@@ -525,6 +524,7 @@
                 });
             });
         },
+
         toggleZoom : function (e) {
             if(this.settings.initialZoomState === null){
                 this.settings.initialZoomState = this.settings.fullWindow
@@ -573,7 +573,7 @@
                 callback();
             }, duration);
         }
-    };
+    });
 
     $.fn['Chocolat'] = function (options) {
         return this.each(function() {
