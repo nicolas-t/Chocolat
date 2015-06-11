@@ -53,50 +53,10 @@
             });
         });
 
-        //return an API YEAH!
-        return {
-            open : function(i){
-                i = parseInt(i) || 0;
-                that.init(i);
-            },
-
-            close : function(){
-                that.close();
-            },
-
-            next : function(){
-                that.change(1);
-            },
-
-            prev : function(){
-                that.change(-1);
-            },
-
-            goto : function(i){ // open alias
-                that.open(i);
-            },
-            current : function(){
-                return that.settings.currentImage;
-            },
-
-            place : function(){
-                that.place(that.settings.currentImage, that.settings.duration);
-            },
-            
-            set : function(property, value){
-                return that.settings[property] = value;
-            },
-            
-            get : function(property){
-                return that.settings[property];
-            },
-            
-            getElem : function(name){
-                return that.elems[name];
-            },
-        };
+        return this
     }
     $.extend(Chocolat.prototype, {
+
         init : function(i) {
             if(!this.settings.initialized){
                 this.setDomContainer();
@@ -552,7 +512,6 @@
             this.settings.fullWindow = this.settings.initialZoomState
             this.settings.initialZoomState = null
             this.elems.img.css('margin',0)
-
         },
 
         setDomContainer : function() {
@@ -564,7 +523,6 @@
             else {
                 this.elems.domContainer = $(this.settings.container);
             }
-
         },
 
         debounce: function(duration, callback) {
@@ -572,6 +530,51 @@
             this.settings.timerDebounce = setTimeout(function() {
                 callback();
             }, duration);
+        },
+
+        api: function() {
+            var that = this
+            return {
+                open : function(i){
+                    i = parseInt(i) || 0;
+                    that.init(i);
+                },
+
+                close : function(){
+                    that.close();
+                },
+
+                next : function(){
+                    that.change(1);
+                },
+
+                prev : function(){
+                    that.change(-1);
+                },
+
+                goto : function(i){ // open alias
+                    that.open(i);
+                },
+                current : function(){
+                    return that.settings.currentImage;
+                },
+
+                place : function(){
+                    that.place(that.settings.currentImage, that.settings.duration);
+                },
+                
+                set : function(property, value){
+                    return that.settings[property] = value;
+                },
+                
+                get : function(property){
+                    return that.settings[property];
+                },
+                
+                getElem : function(name){
+                    return that.elems[name];
+                },
+            }
         }
     });
 
@@ -582,8 +585,8 @@
 
             var settings = $.extend(true, {}, defaults, options, {setIndex:calls} );
 
-            if (!$.data(this, 'api-chocolat')) {
-                $.data(this, 'api-chocolat',
+            if (!$.data(this, 'chocolat')) {
+                $.data(this, 'chocolat',
                     new Chocolat($(this), settings)
                 );
             }
