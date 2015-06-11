@@ -8,18 +8,18 @@
 ; (function($, window, document, undefined) {
     var calls = 0;
     var defaults = {
-        container         : window,
-        linksContainer    : '.chocolat-links',
+        container         : window, // window or jquery object or jquery selector, or element
         imageSelector     : '.chocolat-image',
-        fullWindow        : false, // false, 'contain', or 'cover'
+        className         : '',
+        fullWindow        : false, // false, 'contain', 'cover' or 'native'
+        initialZoomState  : null,
         fullScreen        : false,
-        displayAsALink    : false,
         loop              : false,
         linkImages        : true,
+        duration          : 300,
         setTitle          : '',
         separator1        : '|',
         separator2        : '/',
-        mobileBreakpoint  : 480,
         setIndex          : 0,
         firstImage        : 0,
         lastImage         : false,
@@ -46,22 +46,12 @@
             });
         });
 
-        if(settings.displayAsALink){
-            this.createLink().off('click').on('click', function(e){
-                that.init(that.settings.firstImage);
-                e.preventDefault();
+        element.find(this.settings.imageSelector).each(function (i) {
+            $(this).off('click').on('click', function(event){
+                that.init(i);
+                event.preventDefault();
             });
-
-            element.hide();
-        }
-        else{
-            element.find(this.settings.imageSelector).each(function (i) {
-                $(this).off('click').on('click', function(event){
-                    that.init(i);
-                    event.preventDefault();
-                });
-            });
-        }
+        });
 
         //return an API YEAH!
         return {
@@ -83,11 +73,27 @@
             },
 
             goto : function(i){ // open alias
-                this.open(i);
+                that.open(i);
             },
             current : function(){
-                return that.currentImage;
-            }
+                return that.settings.currentImage;
+            },
+
+            place : function(){
+                that.place(that.settings.currentImage, that.settings.duration);
+            },
+            
+            set : function(property, value){
+                return that.settings[property] = value;
+            },
+            
+            get : function(property){
+                return that.settings[property];
+            },
+            
+            getElem : function(name){
+                return that.elems[name];
+            },
         };
     }
 
@@ -104,11 +110,17 @@
             this.load(i);
         },
 
-        preload : function(i, callback) {
-            callback         = this.optFuncParam(callback);
-            imgLoader        = new Image();
-            imgLoader.onload = $.proxy(callback, this, i, imgLoader);
+        preload : function(i) {
+            var def = $.Deferred()
+
+            if(typeof this.settings.images[i] === 'undefined'){
+                return;
+            }
+            var imgLoader        = new Image();
+            imgLoader.onload = function() { def.resolve(imgLoader) };
             imgLoader.src    = this.settings.images[i].src;
+
+            return def
         },
 
         load : function(i) {
@@ -124,11 +136,25 @@
             this.elems.overlay.fadeIn(800);
             this.settings.timer = setTimeout(function(){
                 if(typeof that.elems != 'undefined'){
-                    that.elems.img.fadeTo(200, 0);
                     $.proxy(that.elems.loader.fadeIn(), that);
                 }
-            }, 400);
-            this.preload(i,this.place);
+            }, 800);
+
+            console.debug('load');
+
+            this.preload(i)
+                .then(function (imgLoader) {
+                    console.debug('preloaded');
+                    return that.place(i, imgLoader)
+                })
+                .then(function (imgLoader) {
+                    console.debug('placed');
+                    return that.appear(i)
+                })
+                .then(function (imgLoader) {
+                    console.debug('appeared');
+                   
+                })
 
             var nextIndex = i + 1
             if(typeof this.settings.images[nextIndex] != 'undefined'){
@@ -143,28 +169,31 @@
             this.settings.currentImage = i;
             this.description();
             this.pagination();
-            this.breakpoint();
+            this.arrows();
 
-            this.elems.img.fadeTo(200,0, function() {
-                that.storeImgSize(imgLoader, i);
-                fitting = that.fit(
-                    that.settings.images[i].height,
-                    that.settings.images[i].width,
-                    $(that.settings.container).height(),
-                    $(that.settings.container).width(),
-                    that.getOutMarginH(),
-                    that.getOutMarginW()
-                );
-                that.center(
-                    fitting.width,
-                    fitting.height,
-                    fitting.left,
-                    fitting.top,
-                    150,
-                    that.appear(i)
-                );
-                that.arrows();
-            });
+            this.storeImgSize(imgLoader, i);
+            fitting = this.fit(i, that.settings.container)
+
+            return this.center(
+                fitting.width,
+                fitting.height,
+                fitting.left,
+                fitting.top,
+                0
+            )
+        },
+
+        center : function(width, height, left, top, duration) {
+
+            return this.elems.content
+                .css('overflow', 'visible')
+                .animate({
+                    'width'  :width,
+                    'height' :height,
+                    'left'   :left,
+                    'top'    :top
+                }, duration)
+                .promise()
         },
 
         appear : function(i) {
@@ -174,27 +203,36 @@
             this.elems.loader.stop().fadeOut(300, function() {
                 that.elems.img
                     .attr('src', that.settings.images[i].src)
-                    .fadeTo(400,1);
             });
         },
 
-        fit : function(imgHeight, imgWidth, holderHeight, holderWidth, holderOutMarginH, holderOutMarginW) {
-            var holderGlobalWidth = holderWidth-holderOutMarginW;
+        fit : function(i, container) {
+            var imgHeight        = this.settings.images[i].height;
+            var imgWidth         = this.settings.images[i].width;
+            var holderHeight     = $(container).height();
+            var holderWidth      = $(container).width();
+            var holderOutMarginH = this.getOutMarginH();
+            var holderOutMarginW = this.getOutMarginW();
+
+            var holderGlobalWidth  = holderWidth-holderOutMarginW;
             var holderGlobalHeight = holderHeight-holderOutMarginH;
-            var holderGlobalRatio = (holderGlobalHeight / holderGlobalWidth);
-            var holderRatio = (holderHeight / holderWidth);
-            var imgRatio = (imgHeight / imgWidth);
+            var holderGlobalRatio  = (holderGlobalHeight / holderGlobalWidth);
+            var holderRatio        = (holderHeight / holderWidth);
+            var imgRatio           = (imgHeight / imgWidth);
 
             if(this.settings.fullWindow == 'cover') {
                 if(imgRatio < holderRatio) {
                     height = holderHeight;
                     width = height / imgRatio;
-
                 }
                 else {
                     width = holderWidth;
                     height = width * imgRatio;
                 }
+            }
+            else if(this.settings.fullWindow == 'native') {
+                height = imgHeight;
+                width = imgWidth;
             }
             else {
                 if(imgRatio>holderGlobalRatio) {
@@ -219,18 +257,8 @@
             }
         },
 
-        center : function(width, height, left, top, duration, callback) {
-            callback = this.optFuncParam(callback);
-            this.elems.content.animate({
-                'width'  :width,
-                'height' :height,
-                'left'   :left,
-                'top'    :top
-            }, duration, $.proxy(callback(), this))
-            .css('overflow', 'visible');
-        },
-
         change : function(signe) {
+            this.unZoom()
             var requestedImage = this.settings.currentImage + parseInt(signe);
             if(requestedImage > this.settings.lastImage) {
                 if(this.settings.loop){
@@ -250,37 +278,34 @@
         arrows: function() {
             if(this.settings.loop) {
                 $([this.elems.left[0],this.elems.right[0]])
-                    .css('display','block');
+                    .addClass('active');
             }
             else if(this.settings.linkImages) {
                 // right
                 if(this.settings.currentImage == this.settings.lastImage) {
-                    this.elems.right.fadeOut(300);
+                    this.elems.right.removeClass('active')
                 }
                 else {
-                    this.elems.right.fadeIn(300);
+                    this.elems.right.addClass('active');
                 }
                 // left
                 if(this.settings.currentImage == 0) {
-                    this.elems.left.fadeOut(300);
+                    this.elems.left.removeClass('active')
                 }
                 else {
-                    this.elems.left.fadeIn(300);
+                    this.elems.left.addClass('active');
                 }
             }
             else {
                 $([this.elems.left[0],this.elems.right[0]])
-                    .css('display','none');
+                    .removeClass('active')
             }
         },
 
         description : function() {
             var that = this;
-            this.elems.description.fadeTo(200, 0, function() {
-                $(this)
-                    .html(that.settings.images[that.settings.currentImage].title)
-                    .fadeTo(400,1);
-            });
+            this.elems.description
+                .html(that.settings.images[that.settings.currentImage].title)
         },
 
         pagination : function() {
@@ -289,27 +314,18 @@
             var position  = this.settings.currentImage + 1;
             var separator = (this.settings.setTitle == '') ? '' : this.settings.separator1;
 
-            this.elems.pagination.fadeTo(200, 0, function() {
-                $(this)
-                    .html(that.settings.setTitle + ' '
-                          + separator + ' '
-                          + position
-                          + that.settings.separator2
-                          + last)
-                    .fadeTo(400,1);
-            });
-        },
-
-        breakpoint : function() {
-            if($(this.settings.container).width() < this.settings.mobileBreakpoint) {
-                this.elems.domContainer.addClass('chocolat-mobile');
-            }
-            else {
-                this.elems.domContainer.removeClass('chocolat-mobile');
-            }
+            this.elems.pagination
+                .html(that.settings.setTitle + ' '
+                      + separator + ' '
+                      + position
+                      + that.settings.separator2
+                      + last)
         },
 
         storeImgSize : function(img, i) {
+            if(typeof img === 'undefined') {
+                return;
+            }
             if(!this.settings.images[i].height || !this.settings.images[i].width){
                 this.settings.images[i].height = img.height;
                 this.settings.images[i].width  = img.width;
@@ -320,7 +336,7 @@
             var els = [
                 this.elems.overlay[0],
                 this.elems.loader[0],
-                this.elems.content[0]
+                this.elems.wrapper[0]
             ];
             var that = this;
             $.when($(els).fadeOut(200)).then(function () {
@@ -331,8 +347,8 @@
         },
 
         getOutMarginW : function() {
-            var left  = this.elems.left.outerWidth() - this.elems.left.width();
-            var right = this.elems.right.outerWidth() - this.elems.right.width();
+            var left  = this.elems.left.outerWidth();
+            var right = this.elems.right.outerWidth();
             return left + right;
         },
 
@@ -341,7 +357,7 @@
         },
 
         markup : function() {
-            this.elems.domContainer.addClass('chocolat-open');
+            this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
             if(this.settings.fullWindow == 'cover') {
                 this.elems.domContainer.addClass('chocolat-cover');
             }
@@ -350,18 +366,22 @@
             }
             var that = this;
 
+            this.elems.wrapper = $('<div/>', {
+                'class' : 'chocolat-wrapper'
+            }).appendTo(this.elems.domContainer);
+
             this.elems.overlay = $('<div/>', {
                 'class' : 'chocolat-overlay'
-            }).appendTo(this.elems.domContainer);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.loader = $('<div/>', {
                 'class' : 'chocolat-loader'
-            }).appendTo(this.elems.domContainer);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.content = $('<div/>', {
                 'class' : 'chocolat-content',
                 'id' : 'chocolat-content-' + this.settings.setIndex
-            }).appendTo(this.elems.domContainer);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.img = $('<img/>', {
                 'class' : 'chocolat-img',
@@ -370,19 +390,19 @@
 
             this.elems.top = $('<div/>', {
                 'class' : 'chocolat-top'
-            }).appendTo(this.elems.content);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.left = $('<div/>', {
                 'class' : 'chocolat-left'
-            }).appendTo(this.elems.content);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.right = $('<div/>', {
                 'class' : 'chocolat-right'
-            }).appendTo(this.elems.content);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.bottom = $('<div/>', {
                 'class' : 'chocolat-bottom'
-            }).appendTo(this.elems.content);
+            }).appendTo(this.elems.wrapper);
 
             this.elems.description = $('<span/>', {
                 'class' : 'chocolat-description'
@@ -390,35 +410,23 @@
 
             this.elems.pagination = $('<span/>', {
                 'class' : 'chocolat-pagination'
-            }).appendTo(this.elems.bottom);
+            }).appendTo(this.elems.top);
 
             this.elems.close = $('<span/>', {
                 'class' : 'chocolat-close'
             }).appendTo(this.elems.top);
         },
 
-        createLink : function() {
-            var li = $('<li/>').appendTo(this.settings.linksContainer);
-
-            return $('<a/>', {
-                    'id'    : 'chocolat-set-'+this.settings.setIndex,
-                    'class' : 'chocolat-link',
-                    'href'  : '#'
-                })
-                .html(this.settings.setTitle)
-                .appendTo(li);
-        },
-
         openFullScreen : function() {
-            var docElm = document.documentElement;
-            if (docElm.requestFullscreen) {
-                docElm.requestFullscreen();
+            var wrapper = this.elems.wrapper[0];
+            if (wrapper.requestFullscreen) {
+                wrapper.requestFullscreen();
             }
-            else if (docElm.mozRequestFullScreen) {
-                docElm.mozRequestFullScreen();
+            else if (wrapper.mozRequestFullScreen) {
+                wrapper.mozRequestFullScreen();
             }
-            else if (docElm.webkitRequestFullScreen) {
-                docElm.webkitRequestFullScreen();
+            else if (wrapper.webkitRequestFullScreen) {
+                wrapper.webkitRequestFullScreen();
             }
         },
 
@@ -438,48 +446,119 @@
                     }
                 }
             });
-            $(this.elems.content).find('.chocolat-right')
-                .off('click')
-                .on('click', function() {
+            this.elems.wrapper.find('.chocolat-img')
+                .off('click.chocolat')
+                .on('click.chocolat', function(e) {
+                    var currentImage = that.settings.images[that.settings.currentImage];
+                    if(currentImage.width > $(that.elems.wrapper).width() || currentImage.height > $(that.elems.wrapper).height() ){
+                        that.toggleZoom(e);
+                    }
+            });
+
+            this.elems.wrapper.find('.chocolat-right')
+                .off('click.chocolat')
+                .on('click.chocolat', function() {
                     that.change(+1);
             });
 
-            $(this.elems.content).find('.chocolat-left')
-                .off('click')
-                .on('click', function() {
+            this.elems.wrapper.find('.chocolat-left')
+                .off('click.chocolat')
+                .on('click.chocolat', function() {
                     that.change(-1);
             });
 
             $([this.elems.overlay[0], this.elems.close[0]])
-                .off('click')
-                .on('click', function() {
+                .off('click.chocolat')
+                .on('click.chocolat', function() {
                     that.close();
             });
 
+            this.elems.wrapper.mousemove(function( e ) {
+                if(that.settings.initialZoomState === null) {
+                    return;
+                }
+                if(that.elems.img.is(':animated')) {
+                    return;
+                }
+
+                var pos = $(this).offset();
+                var height = $(this).height();
+                var width = $(this).width();
+
+                var currentImage = that.settings.images[that.settings.currentImage]
+                var imgWidth = currentImage.width;
+                var imgHeight = currentImage.height;
+
+                var coord = [e.pageX - width/2 - pos.left, e.pageY - height/2 - pos.top]
+
+                var mvtX = 0
+                if (imgWidth > width) {
+                    mvtX = coord[0] / (width / 2)
+                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX 
+                }
+
+                var mvtY = 0;
+                if (imgHeight > height) {
+                    mvtY = coord[1] / (height / 2)
+                    mvtY = ((imgHeight - height + 0) / 2) * mvtY   
+                }
+
+                var animation = {
+                    'margin-left': - mvtX + 'px',
+                    'margin-top': - mvtY + 'px'
+                }
+                if(typeof e.duration !== 'undefined') {
+                    $(that.elems.img).stop(false, true).animate(animation, e.duration)
+                }
+                else {
+                    $(that.elems.img).stop(false, true).css(animation);
+                }
+
+            });
             $(window).on('resize', function() {
                 if(!that.settings.initialized){
                     return;
                 }
                 that.debounce(50, function() {
-                    that.breakpoint();
-                    fitting = that.fit(
-                        that.settings.images[that.settings.currentImage].height,
-                        that.settings.images[that.settings.currentImage].width,
-                        $(that.settings.container).height(),
-                        $(that.settings.container).width(),
-                        that.getOutMarginH(),
-                        that.getOutMarginW()
-                    );
-                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 150);
+                    fitting = that.fit(that.settings.currentImage, that.settings.container)
+                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
                 });
             });
+        },
+        toggleZoom : function (e) {
+            if(this.settings.initialZoomState === null){
+                this.settings.initialZoomState = this.settings.fullWindow
+                this.settings.fullWindow = 'native';
+
+                var event = $.Event('mousemove');
+                event.pageX = e.pageX;
+                event.pageY = e.pageY;
+                event.duration = this.settings.duration;
+                this.elems.wrapper.trigger(event);
+            }
+            else{
+                this.settings.fullWindow = this.settings.initialZoomState
+                this.settings.initialZoomState = null
+                this.elems.img.animate({'margin': 0}, this.settings.duration)
+            }
+            fitting = this.fit(this.settings.currentImage, this.settings.container)
+            this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
+        },
+
+        unZoom : function (){
+            if(this.settings.initialZoomState === null){
+                return;
+            }
+            this.settings.fullWindow = this.settings.initialZoomState
+            this.settings.initialZoomState = null
+            this.elems.img.css('margin',0)
+
         },
 
         setDomContainer : function() {
             // if container == window
             // domContainer = body
-
-            if(typeof this.settings.container === 'object') {
+            if( this.settings.container === window) {
                 this.elems.domContainer = $('body');
             }
             else {
@@ -493,11 +572,6 @@
             this.settings.timerDebounce = setTimeout(function() {
                 callback();
             }, duration);
-        },
-
-        optFuncParam: function(f) {
-            if(!$.isFunction(f)){return function(){};}
-            else{return f;}
         }
     };
 

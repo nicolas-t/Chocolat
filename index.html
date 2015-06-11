@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="css/chocolat.css" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery.chocolat.js"></script>
+        <title>Chocolat — demo</title>
+		<script>
+		$(function(){
+
+            var inst = $('#example0').Chocolat({
+                loop : true,
+                container : $('#container'),
+                fullScreen: false
+            }).data('api-chocolat');
+
+            inst.open(2)
+
+		});
+		</script>
+    </head>
+    <body>
+        <div style="width: 299px;height: 500px;background: silver;margin-left: 250px;margin-top: 250px;" id="container"></div>
+        <div id="example0">
+            <a class="chocolat-image" href="demo-images/e.jpg" title="foo">
+                e
+            </a>
+            <a class="chocolat-image" href="demo-images/c.jpg" title="foo">
+                C
+            </a>
+            <a class="chocolat-image" href="demo-images/d.jpg" title="bar">
+                D
+            </a>
+        </div>
+    </body>
+
+</html>
