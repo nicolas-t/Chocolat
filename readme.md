@@ -97,13 +97,13 @@ Set index. yes.
 Call chocolat like this :  
 ```js
 $(document).ready(function(){
-    var instance = $('#example1').Chocolat().data('api-chocolat');
+    var instance = $('#example1').Chocolat().data('chocolat');
 });
 ```
 
 Then API calls can be made like this (open for exemple):  
 ```js
-instance.open();
+instance.api().open();
 ```
   
 ###### Methods
