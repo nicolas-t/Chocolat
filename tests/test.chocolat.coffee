@@ -7,37 +7,38 @@ chocolat = $('<div />').Chocolat({
         {src : 'images/chocolat-2.jpg', title : 'You can zoom in the image'}, 
         {src : 'images/chocolat-3.jpg', title : 'You can zoom in the image'},
     ],
-}).data('api-chocolat')
+}).data('chocolat')
+
 
 describe "Chocolat", ->
     describe "API", ->
         it "should have a open method", ->
-            expect(typeof chocolat.open).to.equal("function")
+            expect(typeof chocolat.api().open).to.equal("function")
 
         it "should have a close method", ->
-            expect(typeof chocolat.close).to.equal("function")
+            expect(typeof chocolat.api().close).to.equal("function")
 
         it "should have a next method", ->
-            expect(typeof chocolat.next).to.equal("function")
+            expect(typeof chocolat.api().next).to.equal("function")
 
         it "should have a prev method", ->
-            expect(typeof chocolat.prev).to.equal("function")
+            expect(typeof chocolat.api().prev).to.equal("function")
 
         it "should have a goto method", ->
-            expect(typeof chocolat.goto).to.equal("function")
+            expect(typeof chocolat.api().goto).to.equal("function")
 
         it "should have a current method", ->
-            expect(typeof chocolat.current).to.equal("function")
+            expect(typeof chocolat.api().current).to.equal("function")
 
         it "should have a place method", ->
-            expect(typeof chocolat.place).to.equal("function")
+            expect(typeof chocolat.api().place).to.equal("function")
 
         it "should have a set method", ->
-            expect(typeof chocolat.set).to.equal("function")
+            expect(typeof chocolat.api().set).to.equal("function")
 
         it "should have a get method", ->
-            expect(typeof chocolat.get).to.equal("function")
+            expect(typeof chocolat.api().get).to.equal("function")
 
         it "should have a getElem method", ->
-            expect(typeof chocolat.getElem).to.equal("function")
+            expect(typeof chocolat.api().getElem).to.equal("function")
 

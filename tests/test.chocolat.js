@@ -18,39 +18,39 @@
         title: 'You can zoom in the image'
       }
     ]
-  }).data('api-chocolat');
+  }).data('chocolat');
 
   describe("Chocolat", function() {
     return describe("API", function() {
       it("should have a open method", function() {
-        return expect(typeof chocolat.open).to.equal("function");
+        return expect(typeof chocolat.api().open).to.equal("function");
       });
       it("should have a close method", function() {
-        return expect(typeof chocolat.close).to.equal("function");
+        return expect(typeof chocolat.api().close).to.equal("function");
       });
       it("should have a next method", function() {
-        return expect(typeof chocolat.next).to.equal("function");
+        return expect(typeof chocolat.api().next).to.equal("function");
       });
       it("should have a prev method", function() {
-        return expect(typeof chocolat.prev).to.equal("function");
+        return expect(typeof chocolat.api().prev).to.equal("function");
       });
       it("should have a goto method", function() {
-        return expect(typeof chocolat.goto).to.equal("function");
+        return expect(typeof chocolat.api().goto).to.equal("function");
       });
       it("should have a current method", function() {
-        return expect(typeof chocolat.current).to.equal("function");
+        return expect(typeof chocolat.api().current).to.equal("function");
       });
       it("should have a place method", function() {
-        return expect(typeof chocolat.place).to.equal("function");
+        return expect(typeof chocolat.api().place).to.equal("function");
       });
       it("should have a set method", function() {
-        return expect(typeof chocolat.set).to.equal("function");
+        return expect(typeof chocolat.api().set).to.equal("function");
       });
       it("should have a get method", function() {
-        return expect(typeof chocolat.get).to.equal("function");
+        return expect(typeof chocolat.api().get).to.equal("function");
       });
       return it("should have a getElem method", function() {
-        return expect(typeof chocolat.getElem).to.equal("function");
+        return expect(typeof chocolat.api().getElem).to.equal("function");
       });
     });
   });

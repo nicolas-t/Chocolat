@@ -107,10 +107,11 @@
                     return that.place(i, imgLoader)
                 })
                 .then(function (imgLoader) {
-                    console.debug('placed');
+                    console.debug('placed', i);
                     return that.appear(i)
                 })
                 .then(function (imgLoader) {
+                    that.zoomable()
                     console.debug('appeared');
                    
                 })
@@ -217,7 +218,9 @@
         },
 
         change : function(signe) {
-            this.unZoom()
+            this.zoomOut(0)
+            this.zoomable()
+
             var requestedImage = this.settings.currentImage + parseInt(signe);
             if(requestedImage > this.settings.lastImage) {
                 if(this.settings.loop){
@@ -292,6 +295,12 @@
         },
 
         close : function() {
+
+            if (this.settings.fullscreenOpen) {
+                this.exitFullScreen();
+                return
+            }
+
             var els = [
                 this.elems.overlay[0],
                 this.elems.loader[0],
@@ -351,6 +360,10 @@
                 'class' : 'chocolat-top'
             }).appendTo(this.elems.wrapper);
 
+            this.elems.fullscreen = $('<span/>', {
+                'class' : 'chocolat-fullscreen'
+            }).appendTo(this.elems.top);
+
             this.elems.left = $('<div/>', {
                 'class' : 'chocolat-left'
             }).appendTo(this.elems.wrapper);
@@ -378,14 +391,39 @@
 
         openFullScreen : function() {
             var wrapper = this.elems.wrapper[0];
+
             if (wrapper.requestFullscreen) {
+                this.settings.fullscreenOpen = true;
                 wrapper.requestFullscreen();
             }
             else if (wrapper.mozRequestFullScreen) {
+                this.settings.fullscreenOpen = true;
                 wrapper.mozRequestFullScreen();
             }
             else if (wrapper.webkitRequestFullScreen) {
+                this.settings.fullscreenOpen = true;
                 wrapper.webkitRequestFullScreen();
+            }
+            else {
+                this.settings.fullscreenOpen = false;
+            }
+        },
+
+        exitFullScreen : function() {
+            if(document.exitFullscreen) {
+                document.exitFullscreen();
+                this.settings.fullscreenOpen = false;
+            }
+            else if(document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+                this.settings.fullscreenOpen = false;
+            }
+            else if(document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+                this.settings.fullscreenOpen = false;
+            }
+            else {
+                this.settings.fullscreenOpen = true;
             }
         },
 
@@ -405,14 +443,14 @@
                     }
                 }
             });
-            this.elems.wrapper.find('.chocolat-img')
-                .off('click.chocolat')
-                .on('click.chocolat', function(e) {
-                    var currentImage = that.settings.images[that.settings.currentImage];
-                    if(currentImage.width > $(that.elems.wrapper).width() || currentImage.height > $(that.elems.wrapper).height() ){
-                        that.toggleZoom(e);
-                    }
-            });
+            // this.elems.wrapper.find('.chocolat-img')
+            //     .off('click.chocolat')
+            //     .on('click.chocolat', function(e) {
+            //         var currentImage = that.settings.images[that.settings.currentImage];
+            //         if(currentImage.width > $(that.elems.wrapper).width() || currentImage.height > $(that.elems.wrapper).height() ){
+            //             that.toggleZoom(e);
+            //         }
+            // });
 
             this.elems.wrapper.find('.chocolat-right')
                 .off('click.chocolat')
@@ -430,6 +468,36 @@
                 .off('click.chocolat')
                 .on('click.chocolat', function() {
                     that.close();
+            });
+
+            this.elems.fullscreen
+                .off('click.chocolat')
+                .on('click.chocolat', function() {
+                    if (that.settings.fullscreenOpen) {
+                        that.exitFullScreen();
+                        return;
+                    }
+     
+                    that.openFullScreen();
+            });
+
+            if (that.settings.backgroundClose) {
+                this.elems.overlay
+                    .off('click.chocolat')
+                    .on('click.chocolat', function() {
+                        that.close();
+                });
+            }
+            this.elems.wrapper.find('.chocolat-img')
+                .off('click.chocolat')
+                .on('click.chocolat', function(e) {
+                    if(that.settings.initialZoomState === null && that.elems.domContainer.hasClass('chocolat-zoomable')){
+                        that.zoomIn(e)
+                    }
+                    else{
+                        that.zoomOut(e)
+                    }   
+
             });
 
             this.elems.wrapper.mousemove(function( e ) {
@@ -480,38 +548,57 @@
                 }
                 that.debounce(50, function() {
                     fitting = that.fit(that.settings.currentImage, that.settings.container)
-                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
+                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0)
+                    that.zoomable()
                 });
             });
         },
 
-        toggleZoom : function (e) {
-            if(this.settings.initialZoomState === null){
-                this.settings.initialZoomState = this.settings.fullWindow
-                this.settings.fullWindow = 'native';
+        zoomable : function () {
+            var currentImage = this.settings.images[this.settings.currentImage];
+            var wrapperWidth = this.elems.wrapper.width();
+            var wrapperHeight = this.elems.wrapper.height();
 
-                var event = $.Event('mousemove');
-                event.pageX = e.pageX;
-                event.pageY = e.pageY;
-                event.duration = this.settings.duration;
-                this.elems.wrapper.trigger(event);
+            var isImageZoomable = currentImage.width > wrapperWidth || currentImage.height > wrapperHeight
+            var isImageStretched = this.elems.img.width() > currentImage.width || this.elems.img.height() > currentImage.height
+
+
+            if(isImageZoomable && !isImageStretched){
+                this.elems.domContainer.addClass('chocolat-zoomable')
             }
-            else{
-                this.settings.fullWindow = this.settings.initialZoomState
-                this.settings.initialZoomState = null
-                this.elems.img.animate({'margin': 0}, this.settings.duration)
+            else {
+                this.elems.domContainer.removeClass('chocolat-zoomable')
             }
+        },
+
+        zoomIn : function (e) {
+            this.settings.initialZoomState = this.settings.fullWindow
+            this.settings.fullWindow = 'native';
+
+            var event = $.Event('mousemove');
+            event.pageX = e.pageX;
+            event.pageY = e.pageY;
+            event.duration = this.settings.duration;
+            this.elems.wrapper.trigger(event);
+
+            this.elems.domContainer.addClass('chocolat-zoomed')
             fitting = this.fit(this.settings.currentImage, this.settings.container)
             this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
         },
 
-        unZoom : function (){
+        zoomOut : function (e, duration) {
             if(this.settings.initialZoomState === null){
                 return;
             }
+            var duration = duration || this.settings.duration
+
             this.settings.fullWindow = this.settings.initialZoomState
             this.settings.initialZoomState = null
-            this.elems.img.css('margin',0)
+            this.elems.img.animate({'margin': 0}, duration)
+
+            this.elems.domContainer.removeClass('chocolat-zoomed')
+            fitting = this.fit(this.settings.currentImage, this.settings.container)
+            this.center(fitting.width, fitting.height, fitting.left, fitting.top, duration);
         },
 
         setDomContainer : function() {

@@ -8,6 +8,9 @@ html, body, div, span{
     border: 0;
     vertical-align: baseline;
 }
+.chocolat-zoomable.chocolat-zoomed .chocolat-img{
+    cursor : zoom-out;
+}
 .chocolat-open{
     overflow: hidden;
 }
@@ -29,6 +32,9 @@ html, body, div, span{
     left:0;
     top:0;
     z-index:16;
+}
+.chocolat-zoomable .chocolat-img{
+    cursor : zoom-in;
 }
 .chocolat-loader{
     height:32px;
@@ -118,6 +124,14 @@ html, body, div, span{
     float: left;
     display: inline-block;
     padding-left: 15px;
+}
+.chocolat-wrapper .chocolat-fullscreen{
+    width: 55px;
+    height: 55px;
+    background: url(../images/fullscreen.png) 50% 50% no-repeat;
+    display: block;
+    margin:auto;
+    cursor: pointer;
 }
 .chocolat-content .chocolat-description{
     display: inline-block;
