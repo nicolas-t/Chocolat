@@ -154,6 +154,92 @@ describe "Chocolat", ->
                 expect(spyOpen.calledOnce).to.be.true
             )
 
+    describe "Change image", ->
+        afterEach ->
+            chocolat = $('#example0').data('chocolat')
+
+            chocolat.elems.wrapper.remove()
+
+            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
+            chocolat.settings.currentImage = false;
+            chocolat.settings.initialized = false;
+
+            $('#example0').data('chocolat', null)
+
+        it "should go to next image", ->
+            chocolat = $('#example0').Chocolat().data('chocolat')
+
+            spyLoad = sinon.spy(chocolat, 'load')
+            spyChange = sinon.spy(chocolat, 'change')
+
+            chocolat.api().open().done( ->
+                expect(spyLoad.calledWithExactly(0)).to.be.true
+
+                chocolat.elems.right.click()
+
+                expect(spyLoad.calledWithExactly(1)).to.be.true
+
+                expect(spyChange.calledOnce).to.be.true
+                expect(spyChange.calledWithExactly(1)).to.be.true
+            )
+
+        it "should go to previous image", ->
+            chocolat = $('#example0').Chocolat().data('chocolat')
+
+            chocolat.api().open().done( ->
+
+                spyLoad = sinon.spy(chocolat, 'load')
+                spyChange = sinon.spy(chocolat, 'change')
+
+                chocolat.api().next().done( ->
+                    expect(spyLoad.calledWithExactly(1)).to.be.true
+
+                    chocolat.elems.left.click()
+
+                    expect(spyLoad.calledWithExactly(0)).to.be.true
+                    
+                    expect(spyChange.calledOnce).to.be.true
+                    expect(spyChange.calledWithExactly(-1)).to.be.true
+
+                    expect(chocolat.api().current()).to.equal(0)
+                )
+
+            )
+
+        it "should loop and go to last image", ->
+            chocolat = $('#example0').Chocolat({
+                loop : true
+            }).data('chocolat')
+
+            chocolat.api().open().done( ->
+                
+                spyLoad = sinon.spy(chocolat, 'load')
+
+                chocolat.api().prev().done( ->
+                    expect(spyLoad.calledWithExactly(chocolat.api().get('lastImage'))).to.be.true
+                    expect(chocolat.api().current()).to.equal(chocolat.api().get('lastImage'))
+                )
+
+            )
+
+        it "should loop and go to first image", ->
+            chocolat = $('#example0').Chocolat({
+                loop : true
+            }).data('chocolat')
+
+            lastImage = chocolat.settings.images.length - 1
+
+            chocolat.api().open(lastImage).done( ->
+                
+                spyLoad = sinon.spy(chocolat, 'load')
+                
+                chocolat.api().next().done( ->
+                    expect(spyLoad.calledWithExactly(0)).to.be.true
+                    expect(chocolat.api().current()).to.equal(0)
+                )
+
+            )
+
     describe "API", ->
 
         chocolat = $('<div />').Chocolat({

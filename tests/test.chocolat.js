@@ -139,6 +139,76 @@ describe("Chocolat", function() {
       });
     });
   });
+  describe("Change image", function() {
+    afterEach(function() {
+      var chocolat;
+      chocolat = $('#example0').data('chocolat');
+      chocolat.elems.wrapper.remove();
+      chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
+      chocolat.settings.currentImage = false;
+      chocolat.settings.initialized = false;
+      return $('#example0').data('chocolat', null);
+    });
+    it("should go to next image", function() {
+      var chocolat, spyChange, spyLoad;
+      chocolat = $('#example0').Chocolat().data('chocolat');
+      spyLoad = sinon.spy(chocolat, 'load');
+      spyChange = sinon.spy(chocolat, 'change');
+      return chocolat.api().open().done(function() {
+        expect(spyLoad.calledWithExactly(0)).to.be["true"];
+        chocolat.elems.right.click();
+        expect(spyLoad.calledWithExactly(1)).to.be["true"];
+        expect(spyChange.calledOnce).to.be["true"];
+        return expect(spyChange.calledWithExactly(1)).to.be["true"];
+      });
+    });
+    it("should go to previous image", function() {
+      var chocolat;
+      chocolat = $('#example0').Chocolat().data('chocolat');
+      return chocolat.api().open().done(function() {
+        var spyChange, spyLoad;
+        spyLoad = sinon.spy(chocolat, 'load');
+        spyChange = sinon.spy(chocolat, 'change');
+        return chocolat.api().next().done(function() {
+          expect(spyLoad.calledWithExactly(1)).to.be["true"];
+          chocolat.elems.left.click();
+          expect(spyLoad.calledWithExactly(0)).to.be["true"];
+          expect(spyChange.calledOnce).to.be["true"];
+          expect(spyChange.calledWithExactly(-1)).to.be["true"];
+          return expect(chocolat.api().current()).to.equal(0);
+        });
+      });
+    });
+    it("should loop and go to last image", function() {
+      var chocolat;
+      chocolat = $('#example0').Chocolat({
+        loop: true
+      }).data('chocolat');
+      return chocolat.api().open().done(function() {
+        var spyLoad;
+        spyLoad = sinon.spy(chocolat, 'load');
+        return chocolat.api().prev().done(function() {
+          expect(spyLoad.calledWithExactly(chocolat.api().get('lastImage'))).to.be["true"];
+          return expect(chocolat.api().current()).to.equal(chocolat.api().get('lastImage'));
+        });
+      });
+    });
+    return it("should loop and go to first image", function() {
+      var chocolat, lastImage;
+      chocolat = $('#example0').Chocolat({
+        loop: true
+      }).data('chocolat');
+      lastImage = chocolat.settings.images.length - 1;
+      return chocolat.api().open(lastImage).done(function() {
+        var spyLoad;
+        spyLoad = sinon.spy(chocolat, 'load');
+        return chocolat.api().next().done(function() {
+          expect(spyLoad.calledWithExactly(0)).to.be["true"];
+          return expect(chocolat.api().current()).to.equal(0);
+        });
+      });
+    });
+  });
   return describe("API", function() {
     var chocolat;
     chocolat = $('<div />').Chocolat({
