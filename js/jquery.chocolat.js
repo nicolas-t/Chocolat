@@ -223,16 +223,16 @@
             var requestedImage = this.settings.currentImage + parseInt(signe);
             if(requestedImage > this.settings.lastImage) {
                 if(this.settings.loop){
-                    this.load(0);
+                    return this.load(0);
                 }
             }
             else if(requestedImage < 0) {
                 if(this.settings.loop) {
-                    this.load(this.settings.lastImage);
+                    return this.load(this.settings.lastImage);
                 }
             }
             else {
-                this.load(requestedImage);
+                return this.load(requestedImage);
             }
         },
 
@@ -631,15 +631,15 @@
                 },
 
                 next : function(){
-                    that.change(1);
+                    return that.change(1);
                 },
 
                 prev : function(){
-                    that.change(-1);
+                    return that.change(-1);
                 },
 
                 goto : function(i){ // open alias
-                    that.open(i);
+                    return that.open(i);
                 },
                 current : function(){
                     return that.settings.currentImage;
