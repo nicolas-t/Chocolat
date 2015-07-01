@@ -66,7 +66,7 @@
                 this.settings.initialized = true;
             }
 
-            this.load(i);
+            return this.load(i);
         },
 
         preload : function(i) {
@@ -99,9 +99,7 @@
                 }
             }, 800);
 
-            console.debug('load');
-
-            this.preload(i)
+            var deferred = this.preload(i)
                 .then(function (imgLoader) {
                     console.debug('preloaded');
                     return that.place(i, imgLoader)
@@ -113,13 +111,14 @@
                 .then(function (imgLoader) {
                     that.zoomable()
                     console.debug('appeared');
-                   
                 })
 
             var nextIndex = i + 1
             if(typeof this.settings.images[nextIndex] != 'undefined'){
                 this.preload(nextIndex);
             }
+
+            return deferred;
             
         },
 
@@ -624,7 +623,7 @@
             return {
                 open : function(i){
                     i = parseInt(i) || 0;
-                    that.init(i);
+                    return that.init(i);
                 },
 
                 close : function(){
