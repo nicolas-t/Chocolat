@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "0.10"
 install:
+  - npm install phantomjs
+  - npm install mocha-phantomjs
   - npm install
 before_script:
   - phantomjs -version
