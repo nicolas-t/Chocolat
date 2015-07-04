@@ -8,5 +8,7 @@ install:
 before_script:
   - phantomjs --version
   - mocha-phantomjs --version
+  - gulp compile-coffee &
+  - sleep 5
 script:
   - mocha-phantomjs test/index.html

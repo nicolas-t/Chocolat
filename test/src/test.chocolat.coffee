@@ -21,7 +21,7 @@ describe "Chocolat", ->
 
             $('#example0').find('.chocolat-image').first().trigger('click')
 
-            expect(spyMarkup.calledOnce).to.be.false
+            expect(spyMarkup.calledOnce).to.be.true
             expect($('#container').find('.chocolat-wrapper').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-overlay').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-loader').length).to.equal(1)
