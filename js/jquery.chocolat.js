@@ -101,16 +101,13 @@
 
             var deferred = this.preload(i)
                 .then(function (imgLoader) {
-                    console.debug('preloaded');
                     return that.place(i, imgLoader)
                 })
                 .then(function (imgLoader) {
-                    console.debug('placed', i);
                     return that.appear(i)
                 })
                 .then(function (imgLoader) {
                     that.zoomable()
-                    console.debug('appeared');
                 })
 
             var nextIndex = i + 1
@@ -399,9 +396,13 @@
                 this.settings.fullscreenOpen = true;
                 wrapper.mozRequestFullScreen();
             }
-            else if (wrapper.webkitRequestFullScreen) {
+            else if (wrapper.webkitRequestFullscreen) {
                 this.settings.fullscreenOpen = true;
-                wrapper.webkitRequestFullScreen();
+                wrapper.webkitRequestFullscreen();
+            }
+            else if(wrapper.msRequestFullscreen) {
+                wrapper.msRequestFullscreen();
+                this.settings.fullscreenOpen = true;
             }
             else {
                 this.settings.fullscreenOpen = false;

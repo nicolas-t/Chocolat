@@ -1,0 +1,42 @@
+{
+  "name": "chocolat",
+  "version": "0.4.5",
+  "description": " Responsive jQuery Lightbox Plugin",
+  "main": [
+    "css/chocolat.css",
+    "js/jquery.chocolat.js"
+  ],
+    "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "jquery": "1.11.0"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.9.3",
+    "chai": "^3.0.0",
+    "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1",
+    "gulp-mocha-phantomjs": "^0.6.1",
+    "gulp-util": "^3.0.6"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas-t/Chocolat.git"
+  },
+  "keywords": [
+    "jquery",
+    "lightbox",
+    "plugin",
+    "responsive"
+  ],
+  "author": "Nicolas Turlais",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas-t/Chocolat/issues"
+  },
+  "homepage": "https://github.com/nicolas-t/Chocolat#readme"
+}

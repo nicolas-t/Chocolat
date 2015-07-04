@@ -1,5 +1,3 @@
-expect = chai.expect
-
 describe "Chocolat", ->
     describe "Opening", ->
         afterEach ->
@@ -38,7 +36,7 @@ describe "Chocolat", ->
             expect($('#container .chocolat-bottom').find('.chocolat-description').length).to.equal(1)
             expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(1)
 
-        it "should add css classes to parent when in container", ->
+        it "should add css classes to parent when in container", (done) ->
             chocolat = $('#example0').Chocolat({
                 container : $('#container'),
             }).data('chocolat')
@@ -47,9 +45,10 @@ describe "Chocolat", ->
                 expect($('#container').hasClass('chocolat-in-container')).to.be.true
                 expect($('#container').hasClass('chocolat-open')).to.be.true
                 # expect($('#container').hasClass('chocolat-zoomable')).to.be.true
+                done()
             )
 
-        it "should add css classes to body when full window", ->
+        it "should add css classes to body when full window", (done) ->
             chocolat = $('#example0').Chocolat({
                 fullWindow : 'cover'
             }).data('chocolat')
@@ -58,15 +57,17 @@ describe "Chocolat", ->
                 expect($('body').hasClass('chocolat-open')).to.be.true
                 expect($('body').hasClass('chocolat-' + chocolat.settings.fullWindow)).to.be.true
                 # expect($('#container').hasClass('chocolat-zoomable')).to.be.true
+                done()
             )
 
-        it "should add custom css classe", ->
+        it "should add custom css classe", (done) ->
             chocolat = $('#example0').Chocolat({
                 className : 'custom-class-name'
             }).data('chocolat')
 
             chocolat.api().open().done( ->
                 expect($('body').hasClass('custom-class-name')).to.be.true
+                done()
             )
 
         it "should call init function", ->
@@ -101,27 +102,46 @@ describe "Chocolat", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
 
-            chocolat.elems.wrapper.remove()
+            chocolat?.elems?.wrapper?.remove()
 
-            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat.settings.currentImage = false;
-            chocolat.settings.initialized = false;
+            chocolat?.elems?.domContainer?.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
+            chocolat?.settings.currentImage = false;
+            chocolat?.settings.initialized = false;
 
             $('#example0').data('chocolat', null)
 
-        it "should open fullscreen when clicking .fullscreen", ->
+        it "should open fullscreen when clicking .fullscreen", (done) ->
+
             chocolat = $('#example0').Chocolat().data('chocolat')
+
+            # test only if browser fullscreenAPI is available
+            if typeof Element.prototype.requestFullscreen == 'undefined' and
+            typeof Element.prototype.mozRequestFullScreen == 'undefined' and
+            typeof Element.prototype.webkitRequestFullscreen == 'undefined' and
+            typeof Element.prototype.msRequestFullscreen == 'undefined'
+                return done()
 
             spyOpen = sinon.spy(chocolat, 'openFullScreen')
 
             chocolat.api().open().done( ->
                 chocolat.elems.fullscreen.click()
                 expect(spyOpen.calledOnce).to.be.true
+                expect(chocolat.api().get('fullscreenOpen')).to.be.true
                 chocolat.elems.fullscreen.click()
-            )
+                expect(chocolat.api().get('fullscreenOpen')).to.be.false
+                done()
+            ) 
 
-        it "should close fullscreen when clicking .fullscreen twice", ->
+        it "should close fullscreen when clicking .fullscreen twice", (done) ->
+
             chocolat = $('#example0').Chocolat().data('chocolat')
+
+            # test only if browser fullscreenAPI is available
+            if typeof Element.prototype.requestFullscreen == 'undefined' and
+            typeof Element.prototype.mozRequestFullScreen == 'undefined' and
+            typeof Element.prototype.webkitRequestFullscreen == 'undefined' and
+            typeof Element.prototype.msRequestFullscreen == 'undefined'
+                return done()
 
             spyClose = sinon.spy(chocolat, 'exitFullScreen')
 
@@ -129,11 +149,20 @@ describe "Chocolat", ->
                 chocolat.elems.fullscreen.click()
                 chocolat.elems.fullscreen.click()
                 expect(spyClose.calledOnce).to.be.true
+
+                done()
             )
 
+        it "should close fullscreen when closing chocolat", (done) ->
 
-        it "should close fullscreen when closing chocolat", ->
             chocolat = $('#example0').Chocolat().data('chocolat')
+
+            # test only if browser fullscreenAPI is available
+            if typeof Element.prototype.requestFullscreen == 'undefined' and
+            typeof Element.prototype.mozRequestFullScreen == 'undefined' and
+            typeof Element.prototype.webkitRequestFullscreen == 'undefined' and
+            typeof Element.prototype.msRequestFullscreen == 'undefined'
+                return done()
 
             spyClose = sinon.spy(chocolat, 'exitFullScreen')
 
@@ -141,17 +170,26 @@ describe "Chocolat", ->
                 chocolat.elems.fullscreen.click()
                 chocolat.elems.close.click()
                 expect(spyClose.calledOnce).to.be.true
+                done()
             )
 
-        it "should open fullscreen directly", ->
+        it "should open fullscreen directly", (done) ->
             chocolat = $('#example0').Chocolat(
                 fullScreen: true
             ).data('chocolat')
+    
+            # test only if browser fullscreenAPI is available
+            if typeof Element.prototype.requestFullscreen == 'undefined' and
+            typeof Element.prototype.mozRequestFullScreen == 'undefined' and
+            typeof Element.prototype.webkitRequestFullscreen == 'undefined' and
+            typeof Element.prototype.msRequestFullscreen == 'undefined'
+                return done()
 
             spyOpen = sinon.spy(chocolat, 'openFullScreen')
 
             chocolat.api().open().done( ->
                 expect(spyOpen.calledOnce).to.be.true
+                done()
             )
 
     describe "Change image", ->
@@ -166,7 +204,7 @@ describe "Chocolat", ->
 
             $('#example0').data('chocolat', null)
 
-        it "should go to next image", ->
+        it "should go to next image", (done) ->
             chocolat = $('#example0').Chocolat().data('chocolat')
 
             spyLoad = sinon.spy(chocolat, 'load')
@@ -181,32 +219,39 @@ describe "Chocolat", ->
 
                 expect(spyChange.calledOnce).to.be.true
                 expect(spyChange.calledWithExactly(1)).to.be.true
+
+                done()
             )
 
-        it "should go to previous image", ->
+        it "should go to previous image", (done) ->
             chocolat = $('#example0').Chocolat().data('chocolat')
 
             chocolat.api().open().done( ->
-
                 spyLoad = sinon.spy(chocolat, 'load')
-                spyChange = sinon.spy(chocolat, 'change')
 
                 chocolat.api().next().done( ->
+
+
                     expect(spyLoad.calledWithExactly(1)).to.be.true
+                    spyChange = sinon.spy(chocolat, 'change')
 
-                    chocolat.elems.left.click()
+                    chocolat.api().prev().done( ->
+                        expect(spyLoad.calledWithExactly(0)).to.be.true
+                        
+                        expect(spyChange.calledOnce).to.be.true
+                        expect(spyChange.calledWithExactly(-1)).to.be.true
 
-                    expect(spyLoad.calledWithExactly(0)).to.be.true
-                    
-                    expect(spyChange.calledOnce).to.be.true
-                    expect(spyChange.calledWithExactly(-1)).to.be.true
+                        expect(chocolat.api().current()).to.equal(0)
 
-                    expect(chocolat.api().current()).to.equal(0)
+                        done()
+                    )
+
+
                 )
 
             )
 
-        it "should loop and go to last image", ->
+        it "should loop and go to last image", (done) ->
             chocolat = $('#example0').Chocolat({
                 loop : true
             }).data('chocolat')
@@ -218,11 +263,13 @@ describe "Chocolat", ->
                 chocolat.api().prev().done( ->
                     expect(spyLoad.calledWithExactly(chocolat.api().get('lastImage'))).to.be.true
                     expect(chocolat.api().current()).to.equal(chocolat.api().get('lastImage'))
+
+                    done()
                 )
 
             )
 
-        it "should loop and go to first image", ->
+        it "should loop and go to first image", (done) ->
             chocolat = $('#example0').Chocolat({
                 loop : true
             }).data('chocolat')
@@ -236,6 +283,8 @@ describe "Chocolat", ->
                 chocolat.api().next().done( ->
                     expect(spyLoad.calledWithExactly(0)).to.be.true
                     expect(chocolat.api().current()).to.equal(0)
+
+                    done()
                 )
 
             )
