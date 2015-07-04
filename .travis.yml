@@ -4,8 +4,8 @@ node_js:
 install:
   - npm install
 before_script:
-  - phantomjs —version
-  - mocha-phantomjs —version
+  - phantomjs -version
+  - mocha-phantomjs -version
 script:
   - mocha-phantomjs test/index.html
   - make test
