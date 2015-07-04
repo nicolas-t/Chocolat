@@ -17,7 +17,7 @@ describe("Chocolat", function() {
       }).data('chocolat');
       spyMarkup = sinon.spy(chocolat, 'markup');
       $('#example0').find('.chocolat-image').first().trigger('click');
-      expect(spyMarkup.calledOnce).to.be["true"];
+      expect(spyMarkup.calledOnce).to.be["false"];
       expect($('#container').find('.chocolat-wrapper').length).to.equal(1);
       expect($('#container .chocolat-wrapper').find('.chocolat-overlay').length).to.equal(1);
       expect($('#container .chocolat-wrapper').find('.chocolat-loader').length).to.equal(1);
