@@ -168,4 +168,4 @@ Set to the container when chocolat is zoomed
 ##Testing
 -----------
 To test, run `gulp test`, if you don't have all packages installed then run `npm install`  
-You can also simply open the page test/index.html
+Tests are written in `test/src/test.chocolat.coffee`
