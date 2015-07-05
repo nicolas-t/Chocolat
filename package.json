@@ -10,7 +10,7 @@
     "test": "test"
   },
   "dependencies": {
-    "jquery": "1.11.0"
+    "jquery": "~1.8.2"
   },
   "devDependencies": {
     "coffee-script": "^1.9.3",
