@@ -116,7 +116,7 @@
             }
 
             return deferred;
-            
+
         },
 
         place : function(i, imgLoader) {
@@ -477,7 +477,7 @@
                         that.exitFullScreen();
                         return;
                     }
-     
+
                     that.openFullScreen();
             });
 
@@ -496,7 +496,7 @@
                     }
                     else{
                         that.zoomOut(e)
-                    }   
+                    }
 
             });
 
@@ -521,13 +521,13 @@
                 var mvtX = 0
                 if (imgWidth > width) {
                     mvtX = coord[0] / (width / 2)
-                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX 
+                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX
                 }
 
                 var mvtY = 0;
                 if (imgHeight > height) {
                     mvtY = coord[1] / (height / 2)
-                    mvtY = ((imgHeight - height + 0) / 2) * mvtY   
+                    mvtY = ((imgHeight - height + 0) / 2) * mvtY
                 }
 
                 var animation = {
@@ -649,15 +649,15 @@
                 place : function(){
                     that.place(that.settings.currentImage, that.settings.duration);
                 },
-                
+
                 set : function(property, value){
                     return that.settings[property] = value;
                 },
-                
+
                 get : function(property){
                     return that.settings[property];
                 },
-                
+
                 getElem : function(name){
                     return that.elems[name];
                 },

@@ -1,11 +1,6 @@
-##Contribute
------------  
-You are viewing the version 0.4.x of chocolat.  
-Feel free to contribute by forking then making a pull request.  
-
-##Chocolat
+##Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat) 
 -----------
-Chocolat is a responsive `jQuery` lightbox plugin
+Chocolat is a responsive jQuery lightbox plugin
 
 #### Dependencies
 
@@ -56,7 +51,7 @@ Title of the set.
 Add a custom css class to the parent of the lightbox  
   
 **fullWindow :**  `default : false`  
-Can be `false`, `'contain'`, or `'cover'`.  
+Can be `false`, `'contain'`,  `'native'`, or `'cover'`.  
 `false` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's not streched, only displayed at native dimensions  
 `'contain'` :  if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's streched, to fit the window  
 `'cover'` :  the image cover the window, no white space are displayed. (only if container == window)  
@@ -165,7 +160,12 @@ Set to the container when chocolat is zoomable
 **.chocolat-zoomed  :**  
 Set to the container when chocolat is zoomed
 
+
+##Contributing
+-----------  
+You are viewing the version 0.4.5 of chocolat.  
+Feel free to contribute by forking then making a pull request.  
+
 ##Testing
------------
 To test, run `gulp test`, if you don't have all packages installed then run `npm install`  
 Tests are written in `test/src/test.chocolat.coffee`
