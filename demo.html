@@ -17,7 +17,6 @@
 
             var instance = $('#example1').Chocolat({
                 container      : '#container1',
-                setTitle       : 'photoset title',
                 fullWindow     : 'contain',
                 displayAsALink : true
             }).data('chocolat');
@@ -27,7 +26,7 @@
             });
 
             $('#example2').Chocolat({
-                container : '#container2'
+                fullWindow: 'contain'
             });
 
 
@@ -43,26 +42,23 @@
             Open in window, in cover mode (= no whitespace), looping : 
         </p>
         <div id="example0">
-            <a class="chocolat-image" href="demo-images/c.jpg" title="foo">
+            <a class="chocolat-image" href="demo-images/1.jpg" title="foo">
                 C
             </a>
-            <a class="chocolat-image" href="demo-images/d.jpg" title="bar">
+            <a class="chocolat-image" href="demo-images/2.jpg" title="bar">
                 D
             </a>
         </div>
 
         <p>
-            Display as a link and open in a container :  
+            Display in a container :  
         </p>
-        
-        <!-- 'Display as a link' container :  -->
-        <ul class="chocolat-links"></ul>
 
-    	<p id="example1">
-    		<a class="chocolat-image" href="demo-images/a.jpg" title="Rose">
+    	<p id="example1" data-chocolat-title="set title">
+    		<a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
                 A
     		</a>
-    		<a class="chocolat-image" href="demo-images/b.jpg" title="Black">
+    		<a class="chocolat-image" href="demo-images/4.jpg" title="Black">
                 B
     		</a>
     	</p>
@@ -76,20 +72,16 @@
         </div>
 
         <p>
-            Open in a container : 
+           Full window, contain: 
         </p>
         <div id="example2">
-            <a class="chocolat-image" href="demo-images/1.jpg" title="HO">
+            <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
                 1
             </a>
-            <a class="chocolat-image" href="demo-images/2.jpg" title="HAI">
+            <a class="chocolat-image" href="demo-images/6.jpg" title="HAI">
                 2
             </a>
         </div>
-        <!-- Container (notice the absolute width) :  -->
-        <div id="container2" style="width: 500px; height: 400px;background: #E0E0E0;"></div>
-
-
     </body>
 
 </html>

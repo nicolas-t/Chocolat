@@ -1,9 +1,9 @@
 ﻿/*
 **      @author : Nicolas Turlais : nicolas-at-insipi.de
-**      @version : V0.4.4 - 18 March 2015
+**      @version : V0.4.5 - 4th of July 2015
 **      @license : Licensed under CCAttribution-ShareAlike
 **      @website : http://chocolat.insipi.de
-**/
+*/
 
 ; (function($, window, document, undefined) {
     var calls = 0;
@@ -36,6 +36,10 @@
         this.settings  = settings;
         this._defaults = defaults;
         this.elems     = {};
+
+        if (!this.settings.setTitle && element.data('chocolat-title')) {
+            this.settings.setTitle = element.data('chocolat-title');
+        }
 
         element.find(this.settings.imageSelector).each(function () {
             that.settings.images.push({
@@ -75,7 +79,7 @@
             if(typeof this.settings.images[i] === 'undefined'){
                 return;
             }
-            var imgLoader        = new Image();
+            var imgLoader    = new Image();
             imgLoader.onload = function() { def.resolve(imgLoader) };
             imgLoader.src    = this.settings.images[i].src;
 
@@ -303,11 +307,13 @@
                 this.elems.wrapper[0]
             ];
             var that = this;
-            $.when($(els).fadeOut(200)).then(function () {
+            var def = $.when($(els).fadeOut(200)).done(function () {
                 that.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
             });
             this.settings.currentImage = false;
             this.settings.initialized = false;
+
+            return def;
         },
 
         getOutMarginW : function() {
@@ -378,7 +384,7 @@
 
             this.elems.pagination = $('<span/>', {
                 'class' : 'chocolat-pagination'
-            }).appendTo(this.elems.top);
+            }).appendTo(this.elems.bottom);
 
             this.elems.close = $('<span/>', {
                 'class' : 'chocolat-close'
@@ -461,13 +467,13 @@
             this.elems.wrapper.find('.chocolat-left')
                 .off('click.chocolat')
                 .on('click.chocolat', function() {
-                    that.change(-1);
+                    return that.change(-1);
             });
 
             $([this.elems.overlay[0], this.elems.close[0]])
                 .off('click.chocolat')
                 .on('click.chocolat', function() {
-                    that.close();
+                    return that.close();
             });
 
             this.elems.fullscreen
@@ -485,17 +491,17 @@
                 this.elems.overlay
                     .off('click.chocolat')
                     .on('click.chocolat', function() {
-                        that.close();
+                        return that.close();
                 });
             }
             this.elems.wrapper.find('.chocolat-img')
                 .off('click.chocolat')
                 .on('click.chocolat', function(e) {
                     if(that.settings.initialZoomState === null && that.elems.domContainer.hasClass('chocolat-zoomable')){
-                        that.zoomIn(e)
+                        return that.zoomIn(e)
                     }
                     else{
-                        that.zoomOut(e)
+                        return that.zoomOut(e)
                     }
 
             });
@@ -583,7 +589,7 @@
 
             this.elems.domContainer.addClass('chocolat-zoomed')
             fitting = this.fit(this.settings.currentImage, this.settings.container)
-            this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
+            return this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
         },
 
         zoomOut : function (e, duration) {
@@ -598,7 +604,7 @@
 
             this.elems.domContainer.removeClass('chocolat-zoomed')
             fitting = this.fit(this.settings.currentImage, this.settings.container)
-            this.center(fitting.width, fitting.height, fitting.left, fitting.top, duration);
+            return this.center(fitting.width, fitting.height, fitting.left, fitting.top, duration);
         },
 
         setDomContainer : function() {

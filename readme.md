@@ -13,12 +13,12 @@ IE 7+, Safari, Firefox & Chrome.
 ##Markup
 -----------
 ```html
-<div id="example1">
-    <a class="chocolat-image" href="img/a.jpg" title="image title a">
-        A
+<div id="example1" data-chocolat-title="Set title">
+    <a class="chocolat-image" href="img/a.jpg" title="image caption a">
+        A <!-- you can display a thumbnail here : <img src="thumb/a.jpg" /> -->
     </a>
-    <a class="chocolat-image" href="img/b.jpg" title="image title b">
-        B
+    <a class="chocolat-image" href="img/b.jpg" title="image caption b">
+        B <!-- you can display a thumbnail here : <img src="thumb/b.jpg" /> -->
     </a>
 </div>
 ```
@@ -45,7 +45,7 @@ Sets whether we can switch from one image to another, within the same call, with
 Warning: if `LinkImage`: is `false` then `displayAsALink` must be worth `false` too. Otherwise we can only view the first image in the set.   
   
 **setTitle :**  `default : ''`  
-Title of the set.  
+Title of the set. Can also be defined from the html, with the `data-chocolat-title` attribute  
   
 **className :**  `default : ''`  
 Add a custom css class to the parent of the lightbox  

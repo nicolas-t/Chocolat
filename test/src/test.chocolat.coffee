@@ -31,8 +31,8 @@ describe "Chocolat", ->
             expect($('#container .chocolat-wrapper').find('.chocolat-left').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-right').length).to.equal(1)
             expect($('#container .chocolat-top').find('.chocolat-fullscreen').length).to.equal(1)
-            expect($('#container .chocolat-top').find('.chocolat-pagination').length).to.equal(1)
             expect($('#container .chocolat-top').find('.chocolat-close').length).to.equal(1)
+            expect($('#container .chocolat-bottom').find('.chocolat-pagination').length).to.equal(1)
             expect($('#container .chocolat-bottom').find('.chocolat-description').length).to.equal(1)
             expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(1)
 

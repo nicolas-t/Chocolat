@@ -103,25 +103,32 @@ html, body, div, span{
     overflow: hidden;
     font-size:12px;
     z-index: 17;
+    background: rgba(255, 255, 255, 0.2);
 }
 .chocolat-wrapper .chocolat-close{
     width:50px;
     height:50px;
     cursor:pointer;
-    float:right;
+    position: absolute;
+    top: 0;
+    right: 0;
     background:url(../images/close.png) 50% 50% no-repeat;
 }
 .chocolat-wrapper .chocolat-bottom{
     position:absolute;
-    bottom:-40px;
-    width:100%;
+    bottom:0;
+    left: 0;
+    right: 0;
     line-height:40px;
     height:40px;
     font-size:12px;
     z-index: 17;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: rgba(255, 255, 255, 0.2);
 }
 .chocolat-wrapper .chocolat-pagination{
-    float: left;
+    float: right;
     display: inline-block;
     padding-left: 15px;
 }
