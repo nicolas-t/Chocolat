@@ -32,6 +32,7 @@ html, body, div, span{
     left:0;
     top:0;
     z-index:16;
+    color: #fff;
 }
 .chocolat-zoomable .chocolat-img{
     cursor : zoom-in;
@@ -55,6 +56,7 @@ html, body, div, span{
     left:50%;
     top:50%;
     z-index:14;
+    text-align: left;
 }
 
 .chocolat-content .chocolat-img{
@@ -101,9 +103,7 @@ html, body, div, span{
     line-height:50px;
     height:50px;
     overflow: hidden;
-    font-size:12px;
     z-index: 17;
-    background: rgba(255, 255, 255, 0.2);
 }
 .chocolat-wrapper .chocolat-close{
     width:50px;
@@ -119,29 +119,41 @@ html, body, div, span{
     bottom:0;
     left: 0;
     right: 0;
-    line-height:40px;
-    height:40px;
+    line-height:50px;
+    height:50px;
     font-size:12px;
     z-index: 17;
-    padding-left: 5px;
-    padding-right: 5px;
-    background: rgba(255, 255, 255, 0.2);
+    padding-left: 15px;
+    padding-right: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    text-align: right;
+}
+.chocolat-wrapper .chocolat-set-title{
+    display: inline-block;
+    padding-right: 15px;
+    line-height: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 .chocolat-wrapper .chocolat-pagination{
     float: right;
     display: inline-block;
     padding-left: 15px;
+    padding-right: 15px;
+    margin-right: 15px;
+    /*border-right: 1px solid rgba(255, 255, 255, 0.2);*/
 }
 .chocolat-wrapper .chocolat-fullscreen{
-    width: 55px;
-    height: 55px;
+    width: 16px;
+    height: 50px;
     background: url(../images/fullscreen.png) 50% 50% no-repeat;
     display: block;
     margin:auto;
     cursor: pointer;
+    float: right;
 }
-.chocolat-content .chocolat-description{
+.chocolat-wrapper .chocolat-description{
     display: inline-block;
+    float: left;
 }
 
 /* compact view */
@@ -202,3 +214,22 @@ body.chocolat-open>.chocolat-content{
 .chocolat-in-container{
     position: relative;
 }
+
+/* uncomment to hide controls when zoomed-in*/
+/*
+.chocolat-zoomable .chocolat-top,
+.chocolat-zoomable .chocolat-bottom,
+.chocolat-zoomable .chocolat-right,
+.chocolat-zoomable .chocolat-left {
+    transition: opacity .3s ease, visibility 0s .3s;
+   opacity: 1;
+}
+
+.chocolat-zoomable.chocolat-zoomed .chocolat-top,
+.chocolat-zoomable.chocolat-zoomed .chocolat-bottom,
+.chocolat-zoomable.chocolat-zoomed .chocolat-right,
+.chocolat-zoomable.chocolat-zoomed .chocolat-left {
+    visibility: hidden;
+    opacity: 0;
+}
+*/

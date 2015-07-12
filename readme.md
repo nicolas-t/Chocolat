@@ -73,9 +73,6 @@ Index of the image that you want to start the series.
 **lastImage  :**  `default : 0`  
 Index of the image that you want to end the series.  
   
-**separator1 :**  `default : '|'`  
-Text between the title of the set and its position within the set, does not matter.
-  
 **separator2 :**  `default : '/'`  
 Text between the number of the image and the number of images in the set, does not matter. 
   
@@ -163,7 +160,7 @@ Set to the container when chocolat is zoomed
 
 ##Contributing
 -----------  
-You are viewing the version 0.4.5 of chocolat.  
+You are viewing the version 0.4.6 of chocolat.  
 Feel free to contribute by forking then making a pull request.  
 
 ##Testing

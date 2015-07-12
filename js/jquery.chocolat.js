@@ -1,6 +1,6 @@
 ﻿/*
 **      @author : Nicolas Turlais : nicolas-at-insipi.de
-**      @version : V0.4.5 - 4th of July 2015
+**      @version : V0.4.6 - 4th of July 2015
 **      @license : Licensed under CCAttribution-ShareAlike
 **      @website : http://chocolat.insipi.de
 */
@@ -18,7 +18,6 @@
         linkImages        : true,
         duration          : 300,
         setTitle          : '',
-        separator1        : '|',
         separator2        : '/',
         setIndex          : 0,
         firstImage        : 0,
@@ -274,12 +273,9 @@
             var that      = this;
             var last      = this.settings.lastImage + 1;
             var position  = this.settings.currentImage + 1;
-            var separator = (this.settings.setTitle == '') ? '' : this.settings.separator1;
 
             this.elems.pagination
-                .html(that.settings.setTitle + ' '
-                      + separator + ' '
-                      + position
+                .html(position + ' '
                       + that.settings.separator2
                       + last)
         },
@@ -362,10 +358,6 @@
                 'class' : 'chocolat-top'
             }).appendTo(this.elems.wrapper);
 
-            this.elems.fullscreen = $('<span/>', {
-                'class' : 'chocolat-fullscreen'
-            }).appendTo(this.elems.top);
-
             this.elems.left = $('<div/>', {
                 'class' : 'chocolat-left'
             }).appendTo(this.elems.wrapper);
@@ -378,12 +370,21 @@
                 'class' : 'chocolat-bottom'
             }).appendTo(this.elems.wrapper);
 
+            this.elems.fullscreen = $('<span/>', {
+                'class' : 'chocolat-fullscreen'
+            }).appendTo(this.elems.bottom);
+
             this.elems.description = $('<span/>', {
                 'class' : 'chocolat-description'
             }).appendTo(this.elems.bottom);
 
             this.elems.pagination = $('<span/>', {
                 'class' : 'chocolat-pagination'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.setTitle = $('<span/>', {
+                'class' : 'chocolat-set-title',
+                'html' : this.settings.setTitle
             }).appendTo(this.elems.bottom);
 
             this.elems.close = $('<span/>', {
@@ -634,7 +635,7 @@
                 },
 
                 close : function(){
-                    that.close();
+                    return that.close();
                 },
 
                 next : function(){
@@ -653,7 +654,7 @@
                 },
 
                 place : function(){
-                    that.place(that.settings.currentImage, that.settings.duration);
+                    return that.place(that.settings.currentImage, that.settings.duration);
                 },
 
                 set : function(property, value){

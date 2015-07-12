@@ -5,34 +5,209 @@
         <link rel="stylesheet" href="css/chocolat.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="js/jquery.chocolat.js"></script>
+        <style>
+            body {
+                text-align: center;
+            }
+            h2 {
+                padding-top:20px;
+                font-size: 14px;
+                font-weight: normal;
+                border-top:1px solid #eeeeee;
+            }
+        </style>
         <title>Chocolat — demo</title>
 		<script>
-		$(function(){
+    		$(function(){
+                $('#example0').Chocolat({
+                    fullWindow: 'contain'
+                });
 
-            var inst = $('#example0').Chocolat({
-                loop : true,
-                container : $('#container'),
-                fullScreen: false
-            }).data('chocolat');
+                $('#example1').Chocolat({
+                    loop           : true,
+                    fullWindow     : 'cover',
+                    overlayOpacity : 0.9
+                });
 
-            inst.api().open(2)
+                $('#example2').Chocolat({
+                    container      : '#container1',
+                    fullWindow     : 'contain',
+                    loop           : true,
+                })
 
-		});
+                $('#example3').Chocolat({
+                    container      : '#container2',
+                    fullWindow     : 'cover',
+                })
+    		});
 		</script>
     </head>
     <body>
-        <div style="width: 299px;height: 500px;background: silver;margin-left: 250px;margin-top: 250px;" id="container"></div>
+        <div style="text-align: center;background: #E8E8E8; padding: 10px;margin-bottom: 10px;">
+            <a href="https://github.com/nicolas-t/Chocolat"> on github</a>
+        </div>
+
+        <h2>
+           Full window, contain: 
+        </h2>
         <div id="example0">
-            <a class="chocolat-image" href="demo-images/e.jpg" title="foo">
-                e
+            <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
+                1
             </a>
-            <a class="chocolat-image" href="demo-images/c.jpg" title="foo">
+            <a class="chocolat-image" href="demo-images/6.jpg" title="HAI">
+                2
+            </a>
+            <a class="chocolat-image" href="demo-images/3.jpg" title="IO">
+                3
+            </a>
+        </div>
+
+        <h2>
+            Full window, cover, looping : 
+        </h2>
+        <div id="example1">
+            <a class="chocolat-image" href="demo-images/1.jpg" title="foo">
                 C
             </a>
-            <a class="chocolat-image" href="demo-images/d.jpg" title="bar">
+            <a class="chocolat-image" href="demo-images/2.jpg" title="bar">
                 D
             </a>
         </div>
+
+        <h2>
+            Display in a container, looping :  
+        </h2>
+
+    	<div id="example2" data-chocolat-title="set title">
+    		<a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+                A
+    		</a>
+    		<a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+                B
+    		</a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+                C
+            </a>
+    	</div>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container1" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+
+        <h2>
+            Display in a container, cover, with thumbnails :  
+        </h2>
+
+        <div id="example3" data-chocolat-title="set title">
+            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+                <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+                <img src="demo-images/4.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+                <img src="demo-images/5.jpg" style="width:75px; height:50px" alt="">
+            </a>
+        </div>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container2" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+
+        <h2>
+            API use, in container, see code source <br>
+            Open console to have details abouts events
+        </h2>
+
+        <a class="api-open" href="#">Open</a> then try <br>
+        <a class="api-next" href="#">Next</a>
+        <a class="api-prev" href="#">Prev</a>
+        <br>
+        <a class="api-cover" href="#">Enter cover mode</a> / 
+        <a class="api-contain" href="#">Enter contain mode</a>
+
+        <br>
+        <br>
+        <a class="api-close" href="#">Close</a>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container3" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+
+        <script>
+            $(function(){
+                var instance = $('#container3').Chocolat({
+                    setTitle : 'set title',
+                    loop: true,
+                    images : [
+                        {src : 'demo-images/1.jpg', title : 'caption 1'},
+                        {src : 'demo-images/6.jpg', title : 'caption 2'}, 
+                        {src : 'demo-images/8.jpg', title : 'caption 3'},
+                    ],
+                    fullWindow : 'contain',
+                    container : '#container3'
+                }).data('chocolat');
+
+                $('.api-open').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('open start');
+                    var def = instance.api().open()
+
+                    def.done(function(){
+                        console.debug('open done');
+                    })
+                })
+                $('.api-close').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('close start');
+                    var def = instance.api().close()
+
+                    def.done(function(){
+                        console.debug('close done');
+                    })
+                })
+                $('.api-prev').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('prev start');
+                    var def = instance.api().prev()
+
+                    def.done(function(){
+                        console.debug('prev done');
+                    })
+                })
+                $('.api-next').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('next start');
+                    var def = instance.api().next()
+
+                    def.done(function(){
+                        console.debug('next done');
+                    })
+                })
+
+                $('.api-cover').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('cover mode start')
+                    instance.api().set('fullWindow', 'cover')
+                    var def = instance.api().place()
+
+                    def.done(function(){
+                        console.debug('cover mode done')
+                    })
+                })
+
+                $('.api-contain').on('click', function(e) {
+                    e.preventDefault()
+
+                    console.debug('contain mode start')
+                    instance.api().set('fullWindow', 'contain')
+                    var def = instance.api().place()
+
+                    def.done(function(){
+                        console.debug('contain mode done')
+                    })
+                })
+            });
+        </script>
     </body>
 
 </html>
