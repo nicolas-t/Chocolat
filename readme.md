@@ -54,7 +54,7 @@ Add a custom css class to the parent of the lightbox
 Can be `false`, `'contain'`,  `'native'`, or `'cover'`.  
 `false` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's not streched, only displayed at native dimensions  
 `'contain'` :  if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's streched, to fit the window  
-`'cover'` :  the image cover the window, no white space are displayed. (only if container == window)  
+`'cover'` :  the image cover the window, no white space are displayed.  
 more informations & exemple about contain/cover : https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Scaling_background_images  
 `'native'` :  the image is never streched nor shrinked, always displayed at native dimensions   
   
