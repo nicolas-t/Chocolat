@@ -1,6 +1,7 @@
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 coffee = require 'gulp-coffee'
+bump = require 'gulp-bump'
 mochaPhantomJS = require('gulp-mocha-phantomjs')
 
 gulp.task 'compile-coffee', ->
@@ -19,6 +20,11 @@ gulp.task 'default', [
     'compile-coffee'
     'watch'
 ]
+
+gulp.task 'bump', ->
+    gulp.src(['./package.json', './bower.json'])
+    .pipe(bump())
+    .pipe gulp.dest('./')
 
 gulp.task 'test', [
     'compile-coffee'

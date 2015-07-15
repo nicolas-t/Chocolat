@@ -1,11 +1,11 @@
 {
   "name": "chocolat",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "main": [
     "css/chocolat.css",
     "js/jquery.chocolat.js"
   ],
-  "license" : "CC-BY-2.0", 
+  "license": "CC-BY-2.0",
   "dependencies": {
     "jquery": "~1.8.2"
   },
@@ -18,9 +18,13 @@
     "gulp-util": "^3.0.6"
   },
   "authors": [
-    { "name": "Nicolas Turlais", "email": "nicolas@insipi.de"," homepage": "http://nicolasturlais.com" }
+    {
+      "name": "Nicolas Turlais",
+      "email": "nicolas@insipi.de",
+      " homepage": "http://nicolasturlais.com"
+    }
   ],
-  "homepage" : "http://chocolat.insipi.de",
+  "homepage": "http://chocolat.insipi.de",
   "repository": {
     "type": "git",
     "url": "git://github.com/nicolas-t/Chocolat.git"
