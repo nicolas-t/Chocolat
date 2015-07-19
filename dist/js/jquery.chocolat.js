@@ -326,7 +326,8 @@
             var that = this;
 
             this.elems.wrapper = $('<div/>', {
-                'class' : 'chocolat-wrapper'
+                'class' : 'chocolat-wrapper',
+                'id' : 'chocolat-content-' + this.settings.setIndex
             }).appendTo(this.elems.domContainer);
 
             this.elems.overlay = $('<div/>', {
@@ -339,7 +340,6 @@
 
             this.elems.content = $('<div/>', {
                 'class' : 'chocolat-content',
-                'id' : 'chocolat-content-' + this.settings.setIndex
             }).appendTo(this.elems.wrapper);
 
             this.elems.img = $('<img/>', {
