@@ -8,12 +8,19 @@
         <style>
             body {
                 text-align: center;
+                font-family: Arial;
+                font-size: 12px;
             }
             h2 {
                 padding-top:20px;
                 font-size: 14px;
                 font-weight: normal;
                 border-top:1px solid #eeeeee;
+            }
+            a {
+                border:0;
+                color: #2645FF;
+                text-decoration: none;
             }
         </style>
         <title>Chocolat — demo</title>
@@ -75,6 +82,24 @@
         </div>
 
         <h2>
+            Display in a container, cover, with thumbnails :  
+        </h2>
+
+        <div id="example3" data-chocolat-title="set title">
+            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+                <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+                <img src="demo-images/4.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+                <img src="demo-images/5.jpg" style="width:75px; height:50px" alt="">
+            </a>
+        </div>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container2" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+
+        <h2>
             Display in a container, looping :  
         </h2>
 
@@ -92,23 +117,6 @@
         <!-- Container (notice the relative width) :  -->
         <div id="container1" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
 
-        <h2>
-            Display in a container, cover, with thumbnails :  
-        </h2>
-
-        <div id="example3" data-chocolat-title="set title">
-            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
-                <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
-            </a>
-            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
-                <img src="demo-images/4.jpg" style="width:75px; height:50px" alt="">
-            </a>
-            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
-                <img src="demo-images/5.jpg" style="width:75px; height:50px" alt="">
-            </a>
-        </div>
-        <!-- Container (notice the relative width) :  -->
-        <div id="container2" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
 
         <h2>
             API use, in container, see code source <br>

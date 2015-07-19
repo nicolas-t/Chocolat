@@ -306,13 +306,13 @@
         },
 
         getOutMarginW : function() {
-            var left  = this.elems.left.outerWidth();
-            var right = this.elems.right.outerWidth();
+            var left  = this.elems.left.outerWidth(true);
+            var right = this.elems.right.outerWidth(true);
             return left + right;
         },
 
         getOutMarginH : function() {
-            return this.elems.top.outerHeight() + this.elems.bottom.outerHeight();
+            return this.elems.top.outerHeight(true) + this.elems.bottom.outerHeight(true);
         },
 
         markup : function() {

@@ -104,6 +104,7 @@ html, body, div, span{
     height:50px;
     overflow: hidden;
     z-index: 17;
+    margin-bottom: 10px;
 }
 .chocolat-wrapper .chocolat-close{
     width:50px;
@@ -119,14 +120,15 @@ html, body, div, span{
     bottom:0;
     left: 0;
     right: 0;
-    line-height:50px;
-    height:50px;
+    line-height:40px;
+    height:40px;
     font-size:12px;
     z-index: 17;
     padding-left: 15px;
     padding-right: 15px;
     background: rgba(0, 0, 0, 0.2);
     text-align: right;
+    margin-top: 10px;
 }
 .chocolat-wrapper .chocolat-set-title{
     display: inline-block;
@@ -144,7 +146,7 @@ html, body, div, span{
 }
 .chocolat-wrapper .chocolat-fullscreen{
     width: 16px;
-    height: 50px;
+    height: 40px;
     background: url(../images/fullscreen.png) 50% 50% no-repeat;
     display: block;
     margin:auto;
