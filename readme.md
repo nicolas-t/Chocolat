@@ -1,6 +1,7 @@
 ##Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat) 
 -----------
-Chocolat is a responsive jQuery lightbox plugin
+Chocolat is a responsive jQuery lightbox plugin  
+What you are looking for is in the `/dist/` folder`. 
 
 #### Dependencies
 

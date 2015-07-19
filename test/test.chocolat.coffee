@@ -232,7 +232,6 @@ describe "Chocolat", ->
 
                 chocolat.api().next().done( ->
 
-
                     expect(spyLoad.calledWithExactly(1)).to.be.true
                     spyChange = sinon.spy(chocolat, 'change')
 
@@ -246,8 +245,6 @@ describe "Chocolat", ->
 
                         done()
                     )
-
-
                 )
 
             )
@@ -295,9 +292,9 @@ describe "Chocolat", ->
         chocolat = $('<div />').Chocolat({
             backgroundClose: false,
             images         : [
-                {src : '../images/chocolat-1.jpg', title : 'You can zoom in the image'},
-                {src : '../images/chocolat-2.jpg', title : 'You can zoom in the image'}, 
-                {src : '../images/chocolat-3.jpg', title : 'You can zoom in the image'},
+                {src : '../dist/demo-images/1.jpg', title : 'You can zoom in the image'},
+                {src : '../dist/demo-images/2.jpg', title : 'You can zoom in the image'}, 
+                {src : '../dist/demo-images/3.jpg', title : 'You can zoom in the image'},
             ],
         }).data('chocolat')
 

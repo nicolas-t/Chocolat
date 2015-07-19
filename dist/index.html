@@ -2,9 +2,9 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="css/chocolat.css" />
+        <link rel="stylesheet" href="./css/chocolat.css" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="js/jquery.chocolat.js"></script>
+        <script type="text/javascript" src="./js/jquery.chocolat.js"></script>
         <style>
             body {
                 text-align: center;
@@ -145,65 +145,65 @@
                 $('.api-open').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('open start');
+                    console.log('open start');
                     var def = instance.api().open()
 
                     def.done(function(){
-                        console.debug('open done');
+                        console.log('open done');
                     })
                 })
                 $('.api-close').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('close start');
+                    console.log('close start');
                     var def = instance.api().close()
 
                     def.done(function(){
-                        console.debug('close done');
+                        console.log('close done');
                     })
                 })
                 $('.api-prev').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('prev start');
+                    console.log('prev start');
                     var def = instance.api().prev()
 
                     def.done(function(){
-                        console.debug('prev done');
+                        console.log('prev done');
                     })
                 })
                 $('.api-next').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('next start');
+                    console.log('next start');
                     var def = instance.api().next()
 
                     def.done(function(){
-                        console.debug('next done');
+                        console.log('next done');
                     })
                 })
 
                 $('.api-cover').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('cover mode start')
+                    console.log('cover mode start')
                     instance.api().set('fullWindow', 'cover')
                     var def = instance.api().place()
 
                     def.done(function(){
-                        console.debug('cover mode done')
+                        console.log('cover mode done')
                     })
                 })
 
                 $('.api-contain').on('click', function(e) {
                     e.preventDefault()
 
-                    console.debug('contain mode start')
+                    console.log('contain mode start')
                     instance.api().set('fullWindow', 'contain')
                     var def = instance.api().place()
 
                     def.done(function(){
-                        console.debug('contain mode done')
+                        console.log('contain mode done')
                     })
                 })
             });

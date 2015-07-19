@@ -2,8 +2,8 @@
   "name": "chocolat",
   "version": "0.4.7",
   "main": [
-    "css/chocolat.css",
-    "js/jquery.chocolat.js"
+    "dist/css/chocolat.css",
+    "dist/js/jquery.chocolat.js"
   ],
   "license": "CC-BY-2.0",
   "dependencies": {

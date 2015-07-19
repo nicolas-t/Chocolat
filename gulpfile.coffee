@@ -1,33 +1,58 @@
 gulp = require 'gulp'
 gutil = require 'gulp-util'
+rename = require('gulp-rename');
+uglify = require 'gulp-uglify'
 coffee = require 'gulp-coffee'
 bump = require 'gulp-bump'
-mochaPhantomJS = require('gulp-mocha-phantomjs')
+mochaPhantomJS = require 'gulp-mocha-phantomjs'
 
 gulp.task 'compile-coffee', ->
-    gulp.src './test/src/*.coffee'
+    gulp.src './test/*.coffee'
         .pipe coffee({bare: true}).on('error', gutil.log)
         .pipe gulp.dest './test/'
-
-gulp.task 'watch',->
-    gulp.watch(['./test/src/*.coffee'], ['compile-coffee', 'testing'])
 
 gulp.task 'testing', ->
     gulp.src('./test/index.html')
     .pipe(mochaPhantomJS());
 
-gulp.task 'default', [
-    'compile-coffee'
-    'watch'
-]
+gulp.task 'build-js', ->
+    gulp.src('./src/js/jquery.chocolat.js')
+    .pipe gulp.dest('./dist/js/')
+    .pipe(rename('jquery.chocolat.min.js'))
+    .pipe(uglify())
+    .pipe gulp.dest('./dist/js/')
+
+gulp.task 'build-css', ->
+    gulp.src('./src/css/chocolat.css')
+    .pipe gulp.dest('./dist/css/')
+
+gulp.task 'build-images', ->
+    gulp.src('./src/images/*')
+    .pipe gulp.dest('./dist/images/')
 
 gulp.task 'bump', ->
     gulp.src(['./package.json', './bower.json'])
     .pipe(bump())
     .pipe gulp.dest('./')
 
+gulp.task 'watch-test',->
+    gulp.watch(['./test/*.coffee', './src/js/*.js', './src/css/*.css'], ['build', 'compile-coffee', 'testing'])
+
+gulp.task 'watch-src',->
+    gulp.watch(['./src/js/*.js', './src/css/*.css'], ['build-js', 'build-css'])
+
 gulp.task 'test', [
+    'build'
     'compile-coffee'
     'testing'
-    'watch'
+    'watch-test'
+]
+gulp.task 'build', [
+    'build-js'
+    'build-css'
+    'build-images'
+]
+gulp.task 'default', [
+    'build'
+    'watch-src'
 ]

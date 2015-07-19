@@ -1,11 +1,4 @@
-﻿/*
-**      @author : Nicolas Turlais : nicolas-at-insipi.de
-**      @version : V0.4.6 - 4th of July 2015
-**      @license : Licensed under CCAttribution-ShareAlike
-**      @website : http://chocolat.insipi.de
-*/
-
-; (function($, window, document, undefined) {
+﻿; (function($, window, document, undefined) {
     var calls = 0;
     var defaults = {
         container         : window, // window or jquery object or jquery selector, or element
