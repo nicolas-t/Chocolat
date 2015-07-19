@@ -1,7 +1,7 @@
 ##Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat) 
 -----------
 Chocolat is a responsive jQuery lightbox plugin  
-What you are looking for is in the `/dist/` folder`. 
+What you are looking for is in the `/dist/` folder. 
 
 #### Dependencies
 
@@ -161,8 +161,8 @@ Set to the container when chocolat is zoomed
 
 ##Contributing
 -----------  
-You are viewing the version 0.4.6 of chocolat.  
 Feel free to contribute by forking then making a pull request.  
+Edit files in the `/src/` folder, run `gulp` to copy/minify into the `/dist/` folder and to watch for changes. 
 
 ##Testing
 To test, run `gulp test`, if you don't have all packages installed then run `npm install`  
