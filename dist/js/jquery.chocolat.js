@@ -49,12 +49,12 @@
             });
         });
 
-        return this
+        return this;
     }
     $.extend(Chocolat.prototype, {
 
         init : function(i) {
-            if(!this.settings.initialized){
+            if (!this.settings.initialized) {
                 this.setDomContainer();
                 this.markup();
                 this.events();
@@ -66,48 +66,48 @@
         },
 
         preload : function(i) {
-            var def = $.Deferred()
+            var def = $.Deferred();
 
-            if(typeof this.settings.images[i] === 'undefined'){
+            if (typeof this.settings.images[i] === 'undefined') {
                 return;
             }
             var imgLoader    = new Image();
-            imgLoader.onload = function() { def.resolve(imgLoader) };
+            imgLoader.onload = function() { def.resolve(imgLoader); };
             imgLoader.src    = this.settings.images[i].src;
 
-            return def
+            return def;
         },
 
         load : function(i) {
             var that = this;
-            if(this.settings.fullScreen){
+            if (this.settings.fullScreen) {
                 this.openFullScreen();
             }
 
-            if(this.settings.currentImage === i){
+            if (this.settings.currentImage === i) {
                 return;
             }
 
             this.elems.overlay.fadeIn(800);
             this.settings.timer = setTimeout(function(){
-                if(typeof that.elems != 'undefined'){
+                if (typeof that.elems != 'undefined') {
                     $.proxy(that.elems.loader.fadeIn(), that);
                 }
             }, 800);
 
             var deferred = this.preload(i)
                 .then(function (imgLoader) {
-                    return that.place(i, imgLoader)
+                    return that.place(i, imgLoader);
                 })
                 .then(function (imgLoader) {
-                    return that.appear(i)
+                    return that.appear(i);
                 })
                 .then(function (imgLoader) {
-                    that.zoomable()
-                })
+                    that.zoomable();
+                });
 
-            var nextIndex = i + 1
-            if(typeof this.settings.images[nextIndex] != 'undefined'){
+            var nextIndex = i + 1;
+            if (typeof this.settings.images[nextIndex] != 'undefined') {
                 this.preload(nextIndex);
             }
 
@@ -117,6 +117,7 @@
 
         place : function(i, imgLoader) {
             var that = this;
+            var fitting;
 
             this.settings.currentImage = i;
             this.description();
@@ -124,7 +125,7 @@
             this.arrows();
 
             this.storeImgSize(imgLoader, i);
-            fitting = this.fit(i, that.settings.container)
+            fitting = this.fit(i, that.settings.container);
 
             return this.center(
                 fitting.width,
@@ -132,7 +133,7 @@
                 fitting.left,
                 fitting.top,
                 0
-            )
+            );
         },
 
         center : function(width, height, left, top, duration) {
@@ -145,7 +146,7 @@
                     'left'   :left,
                     'top'    :top
                 }, duration)
-                .promise()
+                .promise();
         },
 
         appear : function(i) {
@@ -154,11 +155,14 @@
 
             this.elems.loader.stop().fadeOut(300, function() {
                 that.elems.img
-                    .attr('src', that.settings.images[i].src)
+                    .attr('src', that.settings.images[i].src);
             });
         },
 
         fit : function(i, container) {
+            var height;
+            var width;
+
             var imgHeight        = this.settings.images[i].height;
             var imgWidth         = this.settings.images[i].width;
             var holderHeight     = $(container).height();
@@ -172,8 +176,8 @@
             var holderRatio        = (holderHeight / holderWidth);
             var imgRatio           = (imgHeight / imgWidth);
 
-            if(this.settings.imageSize == 'cover') {
-                if(imgRatio < holderRatio) {
+            if (this.settings.imageSize == 'cover') {
+                if (imgRatio < holderRatio) {
                     height = holderHeight;
                     width = height / imgRatio;
                 }
@@ -182,12 +186,12 @@
                     height = width * imgRatio;
                 }
             }
-            else if(this.settings.imageSize == 'native') {
+            else if (this.settings.imageSize == 'native') {
                 height = imgHeight;
                 width = imgWidth;
             }
             else {
-                if(imgRatio>holderGlobalRatio) {
+                if (imgRatio>holderGlobalRatio) {
                     height = holderGlobalHeight;
                     width = height / imgRatio;
                 }
@@ -195,7 +199,7 @@
                     width = holderGlobalWidth;
                     height = width * imgRatio;
                 }
-                if(this.settings.imageSize === 'default' && (width >= imgWidth || height >= imgHeight)) {
+                if (this.settings.imageSize === 'default' && (width >= imgWidth || height >= imgHeight)) {
                     width = imgWidth;
                     height = imgHeight;
                 }
@@ -206,21 +210,21 @@
                 'width'  : width,
                 'top'    : (holderHeight - height)/2,
                 'left'   : (holderWidth - width)/2
-            }
+            };
         },
 
         change : function(signe) {
-            this.zoomOut(0)
-            this.zoomable()
+            this.zoomOut(0);
+            this.zoomable();
 
             var requestedImage = this.settings.currentImage + parseInt(signe);
-            if(requestedImage > this.settings.lastImage) {
-                if(this.settings.loop){
+            if (requestedImage > this.settings.lastImage) {
+                if (this.settings.loop) {
                     return this.load(0);
                 }
             }
-            else if(requestedImage < 0) {
-                if(this.settings.loop) {
+            else if (requestedImage < 0) {
+                if (this.settings.loop) {
                     return this.load(this.settings.lastImage);
                 }
             }
@@ -230,21 +234,21 @@
         },
 
         arrows: function() {
-            if(this.settings.loop) {
+            if (this.settings.loop) {
                 $([this.elems.left[0],this.elems.right[0]])
                     .addClass('active');
             }
-            else if(this.settings.linkImages) {
+            else if (this.settings.linkImages) {
                 // right
-                if(this.settings.currentImage == this.settings.lastImage) {
-                    this.elems.right.removeClass('active')
+                if (this.settings.currentImage == this.settings.lastImage) {
+                    this.elems.right.removeClass('active');
                 }
                 else {
                     this.elems.right.addClass('active');
                 }
                 // left
-                if(this.settings.currentImage == 0) {
-                    this.elems.left.removeClass('active')
+                if (this.settings.currentImage === 0) {
+                    this.elems.left.removeClass('active');
                 }
                 else {
                     this.elems.left.addClass('active');
@@ -252,14 +256,14 @@
             }
             else {
                 $([this.elems.left[0],this.elems.right[0]])
-                    .removeClass('active')
+                    .removeClass('active');
             }
         },
 
         description : function() {
             var that = this;
             this.elems.description
-                .html(that.settings.images[that.settings.currentImage].title)
+                .html(that.settings.images[that.settings.currentImage].title);
         },
 
         pagination : function() {
@@ -268,16 +272,14 @@
             var position  = this.settings.currentImage + 1;
 
             this.elems.pagination
-                .html(position + ' '
-                      + that.settings.separator2
-                      + last)
+                .html(position + ' ' + that.settings.separator2 + last);
         },
 
         storeImgSize : function(img, i) {
-            if(typeof img === 'undefined') {
+            if (typeof img === 'undefined') {
                 return;
             }
-            if(!this.settings.images[i].height || !this.settings.images[i].width){
+            if (!this.settings.images[i].height || !this.settings.images[i].width) {
                 this.settings.images[i].height = img.height;
                 this.settings.images[i].width  = img.width;
             }
@@ -287,7 +289,7 @@
 
             if (this.settings.fullscreenOpen) {
                 this.exitFullScreen();
-                return
+                return;
             }
 
             var els = [
@@ -317,13 +319,12 @@
 
         markup : function() {
             this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
-            if(this.settings.imageSize == 'cover') {
+            if (this.settings.imageSize == 'cover') {
                 this.elems.domContainer.addClass('chocolat-cover');
             }
-            if(this.settings.container !== window) {
+            if (this.settings.container !== window) {
                 this.elems.domContainer.addClass('chocolat-in-container');
             }
-            var that = this;
 
             this.elems.wrapper = $('<div/>', {
                 'class' : 'chocolat-wrapper',
@@ -400,7 +401,7 @@
                 this.settings.fullscreenOpen = true;
                 wrapper.webkitRequestFullscreen();
             }
-            else if(wrapper.msRequestFullscreen) {
+            else if (wrapper.msRequestFullscreen) {
                 wrapper.msRequestFullscreen();
                 this.settings.fullscreenOpen = true;
             }
@@ -410,15 +411,15 @@
         },
 
         exitFullScreen : function() {
-            if(document.exitFullscreen) {
+            if (document.exitFullscreen) {
                 document.exitFullscreen();
                 this.settings.fullscreenOpen = false;
             }
-            else if(document.mozCancelFullScreen) {
+            else if (document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
                 this.settings.fullscreenOpen = false;
             }
-            else if(document.webkitExitFullscreen) {
+            else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
                 this.settings.fullscreenOpen = false;
             }
@@ -432,13 +433,13 @@
 
             $(document).off('keydown.chocolat').on('keydown.chocolat', function(e) {
                 if (that.settings.initialized) {
-                    if(e.keyCode == 37) {
+                    if (e.keyCode == 37) {
                         that.change(-1);
                     }
-                    else if(e.keyCode == 39) {
+                    else if (e.keyCode == 39) {
                         that.change(1);
                     }
-                    else if(e.keyCode == 27) {
+                    else if (e.keyCode == 27) {
                         that.close();
                     }
                 }
@@ -491,20 +492,20 @@
             this.elems.wrapper.find('.chocolat-img')
                 .off('click.chocolat')
                 .on('click.chocolat', function(e) {
-                    if(that.settings.initialZoomState === null && that.elems.domContainer.hasClass('chocolat-zoomable')){
-                        return that.zoomIn(e)
+                    if (that.settings.initialZoomState === null && that.elems.domContainer.hasClass('chocolat-zoomable')) {
+                        return that.zoomIn(e);
                     }
-                    else{
-                        return that.zoomOut(e)
+                    else {
+                        return that.zoomOut(e);
                     }
 
             });
 
             this.elems.wrapper.mousemove(function( e ) {
-                if(that.settings.initialZoomState === null) {
+                if (that.settings.initialZoomState === null) {
                     return;
                 }
-                if(that.elems.img.is(':animated')) {
+                if (that.elems.img.is(':animated')) {
                     return;
                 }
 
@@ -512,30 +513,30 @@
                 var height = $(this).height();
                 var width = $(this).width();
 
-                var currentImage = that.settings.images[that.settings.currentImage]
+                var currentImage = that.settings.images[that.settings.currentImage];
                 var imgWidth = currentImage.width;
                 var imgHeight = currentImage.height;
 
-                var coord = [e.pageX - width/2 - pos.left, e.pageY - height/2 - pos.top]
+                var coord = [e.pageX - width/2 - pos.left, e.pageY - height/2 - pos.top];
 
-                var mvtX = 0
+                var mvtX = 0;
                 if (imgWidth > width) {
-                    mvtX = coord[0] / (width / 2)
-                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX
+                    mvtX = coord[0] / (width / 2);
+                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX;
                 }
 
                 var mvtY = 0;
                 if (imgHeight > height) {
-                    mvtY = coord[1] / (height / 2)
-                    mvtY = ((imgHeight - height + 0) / 2) * mvtY
+                    mvtY = coord[1] / (height / 2);
+                    mvtY = ((imgHeight - height + 0) / 2) * mvtY;
                 }
 
                 var animation = {
                     'margin-left': - mvtX + 'px',
                     'margin-top': - mvtY + 'px'
-                }
-                if(typeof e.duration !== 'undefined') {
-                    $(that.elems.img).stop(false, true).animate(animation, e.duration)
+                };
+                if (typeof e.duration !== 'undefined') {
+                    $(that.elems.img).stop(false, true).animate(animation, e.duration);
                 }
                 else {
                     $(that.elems.img).stop(false, true).css(animation);
@@ -543,13 +544,13 @@
 
             });
             $(window).on('resize', function() {
-                if(!that.settings.initialized){
+                if (!that.settings.initialized) {
                     return;
                 }
                 that.debounce(50, function() {
-                    fitting = that.fit(that.settings.currentImage, that.settings.container)
-                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0)
-                    that.zoomable()
+                    fitting = that.fit(that.settings.currentImage, that.settings.container);
+                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
+                    that.zoomable();
                 });
             });
         },
@@ -559,20 +560,20 @@
             var wrapperWidth = this.elems.wrapper.width();
             var wrapperHeight = this.elems.wrapper.height();
 
-            var isImageZoomable = currentImage.width > wrapperWidth || currentImage.height > wrapperHeight
-            var isImageStretched = this.elems.img.width() > currentImage.width || this.elems.img.height() > currentImage.height
+            var isImageZoomable = currentImage.width > wrapperWidth || currentImage.height > wrapperHeight;
+            var isImageStretched = this.elems.img.width() > currentImage.width || this.elems.img.height() > currentImage.height;
 
 
-            if(isImageZoomable && !isImageStretched){
-                this.elems.domContainer.addClass('chocolat-zoomable')
+            if (isImageZoomable && !isImageStretched) {
+                this.elems.domContainer.addClass('chocolat-zoomable');
             }
             else {
-                this.elems.domContainer.removeClass('chocolat-zoomable')
+                this.elems.domContainer.removeClass('chocolat-zoomable');
             }
         },
 
         zoomIn : function (e) {
-            this.settings.initialZoomState = this.settings.imageSize
+            this.settings.initialZoomState = this.settings.imageSize;
             this.settings.imageSize = 'native';
 
             var event = $.Event('mousemove');
@@ -581,30 +582,30 @@
             event.duration = this.settings.duration;
             this.elems.wrapper.trigger(event);
 
-            this.elems.domContainer.addClass('chocolat-zoomed')
-            fitting = this.fit(this.settings.currentImage, this.settings.container)
+            this.elems.domContainer.addClass('chocolat-zoomed');
+            fitting = this.fit(this.settings.currentImage, this.settings.container);
             return this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
         },
 
         zoomOut : function (e, duration) {
-            if(this.settings.initialZoomState === null){
+            if (this.settings.initialZoomState === null) {
                 return;
             }
-            var duration = duration || this.settings.duration
+            duration = duration || this.settings.duration;
 
-            this.settings.imageSize = this.settings.initialZoomState
-            this.settings.initialZoomState = null
-            this.elems.img.animate({'margin': 0}, duration)
+            this.settings.imageSize = this.settings.initialZoomState;
+            this.settings.initialZoomState = null;
+            this.elems.img.animate({'margin': 0}, duration);
 
-            this.elems.domContainer.removeClass('chocolat-zoomed')
-            fitting = this.fit(this.settings.currentImage, this.settings.container)
+            this.elems.domContainer.removeClass('chocolat-zoomed');
+            fitting = this.fit(this.settings.currentImage, this.settings.container);
             return this.center(fitting.width, fitting.height, fitting.left, fitting.top, duration);
         },
 
         setDomContainer : function() {
             // if container == window
             // domContainer = body
-            if( this.settings.container === window) {
+            if ( this.settings.container === window) {
                 this.elems.domContainer = $('body');
             }
             else {
@@ -620,7 +621,7 @@
         },
 
         api: function() {
-            var that = this
+            var that = this;
             return {
                 open : function(i){
                     i = parseInt(i) || 0;
@@ -651,7 +652,8 @@
                 },
 
                 set : function(property, value){
-                    return that.settings[property] = value;
+                    that.settings[property] = value;
+                    return value;
                 },
 
                 get : function(property){
@@ -661,11 +663,11 @@
                 getElem : function(name){
                     return that.elems[name];
                 },
-            }
+            };
         }
     });
 
-    $.fn['Chocolat'] = function (options) {
+    $.fn.Chocolat = function (options) {
         return this.each(function() {
 
             calls++;
@@ -678,5 +680,5 @@
                 );
             }
         });
-    }
+    };
 })( jQuery, window, document );
