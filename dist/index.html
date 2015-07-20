@@ -27,24 +27,24 @@
         <script>
             $(function(){
                 $('#example0').Chocolat({
-                    fullWindow: 'contain'
+                    imageSize: 'contain'
                 });
 
                 $('#example1').Chocolat({
                     loop           : true,
-                    fullWindow     : 'cover',
+                    imageSize     : 'cover',
                     overlayOpacity : 0.9
                 });
 
                 $('#example2').Chocolat({
                     container      : '#container1',
-                    fullWindow     : 'contain',
+                    imageSize     : 'contain',
                     loop           : true,
                 })
 
                 $('#example3').Chocolat({
                     container      : '#container2',
-                    fullWindow     : 'cover',
+                    imageSize     : 'cover',
                 })
             });
         </script>
@@ -146,7 +146,7 @@
                         {src : 'demo-images/6.jpg', title : 'caption 2'}, 
                         {src : 'demo-images/8.jpg', title : 'caption 3'},
                     ],
-                    fullWindow : 'contain',
+                    imageSize : 'contain',
                     container : '#container3'
                 }).data('chocolat');
 
@@ -195,7 +195,7 @@
                     e.preventDefault()
 
                     console.log('cover mode start')
-                    instance.api().set('fullWindow', 'cover')
+                    instance.api().set('imageSize', 'cover')
                     var def = instance.api().place()
 
                     def.done(function(){
@@ -207,7 +207,7 @@
                     e.preventDefault()
 
                     console.log('contain mode start')
-                    instance.api().set('fullWindow', 'contain')
+                    instance.api().set('imageSize', 'contain')
                     var def = instance.api().place()
 
                     def.done(function(){

@@ -4,7 +4,7 @@
         container         : window, // window or jquery object or jquery selector, or element
         imageSelector     : '.chocolat-image',
         className         : '',
-        fullWindow        : false, // false, 'contain', 'cover' or 'native'
+        imageSize         : 'default', // 'default', 'contain', 'cover' or 'native'
         initialZoomState  : null,
         fullScreen        : false,
         loop              : false,
@@ -172,7 +172,7 @@
             var holderRatio        = (holderHeight / holderWidth);
             var imgRatio           = (imgHeight / imgWidth);
 
-            if(this.settings.fullWindow == 'cover') {
+            if(this.settings.imageSize == 'cover') {
                 if(imgRatio < holderRatio) {
                     height = holderHeight;
                     width = height / imgRatio;
@@ -182,7 +182,7 @@
                     height = width * imgRatio;
                 }
             }
-            else if(this.settings.fullWindow == 'native') {
+            else if(this.settings.imageSize == 'native') {
                 height = imgHeight;
                 width = imgWidth;
             }
@@ -195,9 +195,9 @@
                     width = holderGlobalWidth;
                     height = width * imgRatio;
                 }
-                if(!this.settings.fullWindow && (width >= imgWidth || height >= imgHeight)) {
-                    width=imgWidth;
-                    height=imgHeight;
+                if(this.settings.imageSize === 'default' && (width >= imgWidth || height >= imgHeight)) {
+                    width = imgWidth;
+                    height = imgHeight;
                 }
             }
 
@@ -317,7 +317,7 @@
 
         markup : function() {
             this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
-            if(this.settings.fullWindow == 'cover') {
+            if(this.settings.imageSize == 'cover') {
                 this.elems.domContainer.addClass('chocolat-cover');
             }
             if(this.settings.container !== window) {
@@ -572,8 +572,8 @@
         },
 
         zoomIn : function (e) {
-            this.settings.initialZoomState = this.settings.fullWindow
-            this.settings.fullWindow = 'native';
+            this.settings.initialZoomState = this.settings.imageSize
+            this.settings.imageSize = 'native';
 
             var event = $.Event('mousemove');
             event.pageX = e.pageX;
@@ -592,7 +592,7 @@
             }
             var duration = duration || this.settings.duration
 
-            this.settings.fullWindow = this.settings.initialZoomState
+            this.settings.imageSize = this.settings.initialZoomState
             this.settings.initialZoomState = null
             this.elems.img.animate({'margin': 0}, duration)
 

@@ -51,12 +51,12 @@ describe "Chocolat", ->
 
         it "should add css classes to body when full window", (done) ->
             chocolat = $('#example0').Chocolat({
-                fullWindow : 'cover'
+                imageSize : 'cover'
             }).data('chocolat')
 
             chocolat.api().open().done( ->
                 expect($('body').hasClass('chocolat-open')).to.be.true
-                expect($('body').hasClass('chocolat-' + chocolat.settings.fullWindow)).to.be.true
+                expect($('body').hasClass('chocolat-' + chocolat.settings.imageSize)).to.be.true
                 # expect($('#container').hasClass('chocolat-zoomable')).to.be.true
                 done()
             )
@@ -287,7 +287,7 @@ describe "Chocolat", ->
 
             )
 
-    describe "FullWindow cover", ->
+    describe "imageSize cover", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
 
@@ -300,17 +300,17 @@ describe "Chocolat", ->
             $('#example0').data('chocolat', null)
 
         it "should add class chocolat-cover to parent", (done) ->
-            chocolat = $('#example0').Chocolat({fullWindow: 'cover'}).data('chocolat')
+            chocolat = $('#example0').Chocolat({imageSize: 'cover'}).data('chocolat')
 
             chocolat.api().open().done( ->
-                expect(chocolat.api().get('fullWindow')).to.equal('cover')
+                expect(chocolat.api().get('imageSize')).to.equal('cover')
                 expect(chocolat.api().getElem('domContainer').hasClass('chocolat-cover')).to.be.true
                 done()
             )
 
         it "should have shortest side of the container equal to shortest side to the image in container", (done) ->
             chocolat = $('#example0').Chocolat({
-                fullWindow: 'cover'
+                imageSize: 'cover'
                 container: '#container'
             }).data('chocolat')
 
@@ -340,7 +340,7 @@ describe "Chocolat", ->
 
         it "should have shortest side of the container equal to shortest side to the image in window", (done) ->
             chocolat = $('#example0').Chocolat({
-                fullWindow: 'cover'
+                imageSize: 'cover'
             }).data('chocolat')
 
             chocolat.api().open().done( ->

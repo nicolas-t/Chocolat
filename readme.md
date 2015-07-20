@@ -33,8 +33,9 @@ $(document).ready(function(){
 ##Documentation
 -----------
 
-### Parameters
-**container : ** `default:window`  
+### Parameters  
+
+**container :** `default:window`  
 Sets whether viewer will open and fill the whole page (`default`)  , or whether it should open in a particular block of the page. For example ` #container2`  in this case the height and width of the block must be defined.  
 values can be : window, selector, jQuery element, or a node  
   
@@ -51,9 +52,9 @@ Title of the set. Can also be defined from the html, with the `data-chocolat-tit
 **className :**  `default : ''`  
 Add a custom css class to the parent of the lightbox  
   
-**fullWindow :**  `default : false`  
-Can be `false`, `'contain'`,  `'native'`, or `'cover'`.  
-`false` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's not streched, only displayed at native dimensions  
+**imageSize :**  `default : 'default'`  
+Can be `'default'`, `'contain'`,  `'native'`, or `'cover'`.  
+`default` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's not streched, only displayed at native dimensions  
 `'contain'` :  if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's streched, to fit the window  
 `'cover'` :  the image cover the window, no white space are displayed.  
 more informations & exemple about contain/cover : https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Scaling_background_images  
@@ -150,7 +151,7 @@ Set to the container when its width is inferior to `480px` (or `mobileBreakpoint
 Set to the container when chocolat is open in a block (`container != window`)  
   
 **.chocolat-cover  :**  
-Set to the container when chocolat `fullWindow` is set to `'cover'`
+Set to the container when chocolat `imageSize` is set to `'cover'`
   
 **.chocolat-zoomable  :**  
 Set to the container when chocolat is zoomable
