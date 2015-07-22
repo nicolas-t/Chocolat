@@ -191,7 +191,7 @@
                 width = imgWidth;
             }
             else {
-                if (imgRatio>holderGlobalRatio) {
+                if (imgRatio > holderGlobalRatio) {
                     height = holderGlobalHeight;
                     width = height / imgRatio;
                 }

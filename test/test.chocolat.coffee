@@ -131,7 +131,7 @@ describe "Chocolat", ->
                 chocolat.elems.fullscreen.click()
                 expect(chocolat.api().get('fullscreenOpen')).to.be.false
                 done()
-            ) 
+            )
 
         it "should close fullscreen when clicking .fullscreen twice", (done) ->
 
@@ -178,7 +178,7 @@ describe "Chocolat", ->
             chocolat = $('#example0').Chocolat(
                 fullScreen: true
             ).data('chocolat')
-    
+
             # test only if browser fullscreenAPI is available
             if typeof Element.prototype.requestFullscreen == 'undefined' and
             typeof Element.prototype.mozRequestFullScreen == 'undefined' and
@@ -237,7 +237,7 @@ describe "Chocolat", ->
 
                     chocolat.api().prev().done( ->
                         expect(spyLoad.calledWithExactly(0)).to.be.true
-                        
+
                         expect(spyChange.calledOnce).to.be.true
                         expect(spyChange.calledWithExactly(-1)).to.be.true
 
@@ -255,7 +255,7 @@ describe "Chocolat", ->
             }).data('chocolat')
 
             chocolat.api().open().done( ->
-                
+
                 spyLoad = sinon.spy(chocolat, 'load')
 
                 chocolat.api().prev().done( ->
@@ -275,9 +275,9 @@ describe "Chocolat", ->
             lastImage = chocolat.settings.images.length - 1
 
             chocolat.api().open(lastImage).done( ->
-                
+
                 spyLoad = sinon.spy(chocolat, 'load')
-                
+
                 chocolat.api().next().done( ->
                     expect(spyLoad.calledWithExactly(0)).to.be.true
                     expect(chocolat.api().current()).to.equal(0)
@@ -287,7 +287,7 @@ describe "Chocolat", ->
 
             )
 
-    describe "imageSize cover", ->
+    describe "ImageSize cover", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
 
@@ -308,24 +308,24 @@ describe "Chocolat", ->
                 done()
             )
 
-        it "should have shortest side of the container equal to shortest side to the image in container", (done) ->
+        it "should have 'shortest' side of the container equal to 'shortest' side to the image in container", (done) ->
             chocolat = $('#example0').Chocolat({
                 imageSize: 'cover'
                 container: '#container'
             }).data('chocolat')
 
             chocolat.api().open().done( ->
-                imgWidth = chocolat.api().getElem('img').width()
-                imgHeight = chocolat.api().getElem('img').height()
-                
-                containerWidth = $(chocolat.api().get('container')).width()
-                containerHeight = $(chocolat.api().get('container')).height()
-
-                imgRatio = imgHeight/imgWidth
-                containerRatio = containerHeight/containerWidth
+                {
+                    imgWidth,
+                    imgHeight,
+                    containerWidth,
+                    containerHeight,
+                    imgRatio,
+                    containerRatio
+                } = getExpectedDimensions(chocolat)
 
                 if imgRatio < containerRatio
-                    targetWidth = imgHeight / imgRatio 
+                    targetWidth = imgHeight / imgRatio
                     # 1px delta, because of rounded values
                     expect(imgWidth).to.be.closeTo(targetWidth, 1)
                     expect(imgHeight).to.equal(containerHeight)
@@ -334,27 +334,27 @@ describe "Chocolat", ->
                     # 1px delta, because of rounded values
                     expect(imgWidth).to.be.closeTo(targetHeight, 1)
                     expect(imgWidth).to.equal(containerWidth)
-               
+
                 done()
             )
 
-        it "should have shortest side of the container equal to shortest side to the image in window", (done) ->
+        it "should have 'shortest' side of the container equal to 'shortest' side to the image in window", (done) ->
             chocolat = $('#example0').Chocolat({
                 imageSize: 'cover'
             }).data('chocolat')
 
             chocolat.api().open().done( ->
-                imgWidth = chocolat.api().getElem('img').width()
-                imgHeight = chocolat.api().getElem('img').height()
-                
-                containerWidth = $(chocolat.api().get('container')).width()
-                containerHeight = $(chocolat.api().get('container')).height()
-
-                imgRatio = imgHeight/imgWidth
-                containerRatio = containerHeight/containerWidth
+                {
+                    imgWidth,
+                    imgHeight,
+                    containerWidth,
+                    containerHeight,
+                    imgRatio,
+                    containerRatio
+                } = getExpectedDimensions(chocolat)
 
                 if imgRatio < containerRatio
-                    targetWidth = imgHeight / imgRatio 
+                    targetWidth = imgHeight / imgRatio
                     # 1px delta, because of rounded values
                     expect(imgWidth).to.be.closeTo(targetWidth, 1)
                     expect(imgHeight).to.equal(containerHeight)
@@ -363,23 +363,131 @@ describe "Chocolat", ->
                     # 1px delta, because of rounded values
                     expect(imgWidth).to.be.closeTo(targetHeight, 1)
                     expect(imgWidth).to.equal(containerWidth)
-               
+
                 done()
             )
 
         it "should center the image", (done) ->
-            chocolat = $('#example0').Chocolat().data('chocolat')
+            chocolat = $('#example0').Chocolat({
+                imageSize: 'cover'
+            }).data('chocolat')
 
             chocolat.api().open().done( ->
+                {imgWidth, imgHeight, containerWidth, containerHeight} = getExpectedDimensions(chocolat)
+
                 $content = chocolat.api().getElem('content')
 
-                imgWidth = chocolat.api().getElem('img').width()
-                imgHeight = chocolat.api().getElem('img').height()
-                
-                containerWidth = $(chocolat.api().get('container')).width()
-                containerHeight = $(chocolat.api().get('container')).height()
+                top = parseInt($content.css('top'), 10)
+                left = parseInt($content.css('left'), 10)
 
-                top = parseInt($content.css('top'), 10) 
+                targetTop = (containerHeight - imgHeight) / 2
+                targetLeft = (containerWidth - imgWidth) / 2
+
+                # 1px delta, because of rounded values
+                expect(top).to.be.closeTo(targetTop , 1)
+                expect(left).to.be.closeTo(targetLeft, 1)
+
+                done()
+            )
+
+    describe "ImageSize contain", ->
+        afterEach ->
+            chocolat = $('#example0').data('chocolat')
+
+            chocolat.elems.wrapper.remove()
+
+            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
+            chocolat.settings.currentImage = false;
+            chocolat.settings.initialized = false;
+
+            $('#example0').data('chocolat', null)
+
+        it "should have 'longest' side of the container equal to 'longest' side to the image in container", (done) ->
+            chocolat = $('#example0').Chocolat({
+                imageSize: 'contain'
+                container: '#container'
+            }).data('chocolat')
+
+            chocolat.api().open().done( ->
+                {
+                    imgWidth,
+                    imgHeight,
+                    containerWidth,
+                    containerHeight,
+                    containerPaddedWidth,
+                    containerPaddedHeight,
+                    imgRatio,
+                    containerRatio,
+                    containerPaddedRatio
+                } = getExpectedDimensions(chocolat)
+
+                if imgRatio > containerPaddedRatio
+                    targetWidth = containerPaddedHeight / imgRatio;
+                    # 1px delta, because of rounded values
+                    expect(imgWidth).to.be.closeTo(targetWidth, 1)
+                    expect(imgHeight).to.equal(containerPaddedHeight)
+                else
+                    targetHeight = containerPaddedWidth * imgRatio;
+                    # 1px delta, because of rounded values
+                    expect(imgHeight).to.be.closeTo(targetHeight, 1)
+                    expect(imgWidth).to.equal(containerPaddedWidth)
+
+                done()
+            )
+
+        it "should have 'longest' side of the container equal to 'longest' side to the image in window", (done) ->
+            chocolat = $('#example0').Chocolat({
+                imageSize: 'contain'
+            }).data('chocolat')
+
+            chocolat.api().open().done( ->
+                {
+                    imgWidth,
+                    imgHeight,
+                    containerWidth,
+                    containerHeight,
+                    containerPaddedWidth,
+                    containerPaddedHeight,
+                    imgRatio,
+                    containerRatio,
+                    containerPaddedRatio
+                } = getExpectedDimensions(chocolat)
+
+                if imgRatio > containerPaddedRatio
+                    targetWidth = containerPaddedHeight / imgRatio;
+                    # 1px delta, because of rounded values
+                    expect(imgWidth).to.be.closeTo(targetWidth, 1)
+                    expect(imgHeight).to.equal(containerPaddedHeight)
+                else
+                    targetHeight = containerPaddedWidth * imgRatio;
+                    # 1px delta, because of rounded values
+                    expect(imgHeight).to.be.closeTo(targetHeight, 1)
+                    expect(imgWidth).to.equal(containerPaddedWidth)
+
+                done()
+            )
+
+        it "should center the image", (done) ->
+            chocolat = $('#example0').Chocolat({
+                imageSize: 'contain'
+            }).data('chocolat')
+
+            chocolat.api().open().done( ->
+                {
+                    imgWidth,
+                    imgHeight,
+                    containerWidth,
+                    containerHeight,
+                    containerPaddedWidth,
+                    containerPaddedHeight,
+                    imgRatio,
+                    containerRatio,
+                    containerPaddedRatio
+                } = getExpectedDimensions(chocolat)
+
+                $content = chocolat.api().getElem('content')
+
+                top = parseInt($content.css('top'), 10)
                 left = parseInt($content.css('left'), 10)
 
                 targetTop = (containerHeight - imgHeight) / 2
@@ -398,7 +506,7 @@ describe "Chocolat", ->
             backgroundClose: false,
             images         : [
                 {src : '../dist/demo-images/1.jpg', title : 'You can zoom in the image'},
-                {src : '../dist/demo-images/2.jpg', title : 'You can zoom in the image'}, 
+                {src : '../dist/demo-images/2.jpg', title : 'You can zoom in the image'},
                 {src : '../dist/demo-images/3.jpg', title : 'You can zoom in the image'},
             ],
         }).data('chocolat')
@@ -433,3 +541,36 @@ describe "Chocolat", ->
         it "should have a getElem method", ->
             expect(typeof chocolat.api().getElem).to.equal("function")
 
+# function used to calculate image dimensions
+# in order to be compared with what chocolat is really displaying
+getExpectedDimensions = (chocolat) ->
+
+    imgWidth = chocolat.api().getElem('img').width()
+    imgHeight = chocolat.api().getElem('img').height()
+
+    containerWidth = $(chocolat.api().get('container')).width()
+    containerHeight = $(chocolat.api().get('container')).height()
+
+    containerOutMarginH = chocolat.api().getElem('top').outerHeight(true) + chocolat.api().getElem('bottom').outerHeight(true)
+    containerOutMarginW = chocolat.api().getElem('left').outerWidth(true) + chocolat.api().getElem('right').outerWidth(true)
+
+    containerPaddedWidth = containerWidth - containerOutMarginW
+    containerPaddedHeight = containerHeight - containerOutMarginH
+
+    imgRatio = imgHeight/imgWidth
+    containerRatio = containerHeight/containerWidth
+    containerPaddedRatio = containerPaddedHeight/containerPaddedWidth
+
+    return {
+        imgWidth: imgWidth
+        imgHeight: imgHeight
+        containerWidth: containerWidth
+        containerHeight: containerHeight
+        containerOutMarginH: containerOutMarginH
+        containerOutMarginW: containerOutMarginW
+        containerPaddedWidth: containerPaddedWidth
+        containerPaddedHeight: containerPaddedHeight
+        imgRatio: imgRatio
+        containerRatio: containerRatio
+        containerPaddedRatio: containerPaddedRatio
+    }

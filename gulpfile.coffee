@@ -42,7 +42,7 @@ gulp.task 'bump', ->
     .pipe gulp.dest('./')
 
 gulp.task 'watch-test',->
-    gulp.watch(['./test/*.coffee', './src/js/*.js', './src/css/*.css'], ['build', 'lint', 'compile-coffee', 'testing'])
+    gulp.watch(['./test/*.coffee', './src/js/*.js', './src/css/*.css'], ['test'])
 
 gulp.task 'watch-src',->
     gulp.watch(['./src/js/*.js', './src/css/*.css'], ['build-js', 'build-css'])
