@@ -5,7 +5,7 @@ What you are looking for is in the `/dist/` folder.
 
 #### Dependencies
 
-It excepts jQuery to work (either 1.x or 2.x): https://github.com/jquery/jquery
+It expects jQuery to work (either 1.x or 2.x): https://github.com/jquery/jquery
 
 #### Compatibility
 recent browsers such as :
