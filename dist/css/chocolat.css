@@ -1,13 +1,3 @@
-/*
-    CSS RESET
-*/
-
-html, body, div, span{
-    margin: 0;
-    padding: 0;
-    border: 0;
-    vertical-align: baseline;
-}
 .chocolat-zoomable.chocolat-zoomed .chocolat-img{
     cursor : zoom-out;
 }
