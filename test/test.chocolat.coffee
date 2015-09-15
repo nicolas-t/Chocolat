@@ -2,14 +2,7 @@ describe "Chocolat", ->
     describe "Opening", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
-
-            chocolat.elems.wrapper.remove()
-
-            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat.settings.currentImage = false;
-            chocolat.settings.initialized = false;
-
-            $('#example0').data('chocolat', null)
+            chocolat.api().destroy()
 
         it "should call markup function and create markup", ->
             chocolat = $('#example0').Chocolat({
@@ -99,17 +92,59 @@ describe "Chocolat", ->
             expect(spyLoad.calledOnce).to.be.true
             expect(spyLoad.calledWithExactly(0)).to.be.true
 
+    describe "Destroy method", ->
+        afterEach ->
+            chocolat = $('#example0').data('chocolat')
+            if chocolat?
+                chocolat.api().destroy()
+
+        it "should remove data from calling element", ->
+
+            chocolat = $('#example0').Chocolat().data('chocolat')
+
+            dataBefore = $('#example0').data('chocolat')
+            expect(dataBefore).not.to.be.null
+
+            chocolat.api().destroy()
+
+            dataAfter = $('#example0').data('chocolat')
+            expect(dataAfter).to.be.undefined
+
+        it "should remove wrapper element", (done) ->
+
+            chocolat = $('#example0').Chocolat().data('chocolat')
+
+            chocolat.api().open().done( ->
+                lengthBefore = $('.chocolat-wrapper').length
+                expect(lengthBefore).to.equal(1)
+
+                chocolat.api().destroy()
+
+                lengthAfter = $('.chocolat-wrapper').length
+                expect(lengthAfter).to.equal(0)
+                done()
+            )
+
+        it "should unbind event handler of the links (triggering chocolat.open)", ->
+
+            chocolat = $('#example0').Chocolat().data('chocolat')
+            imageSelector = chocolat.api().get('imageSelector')
+
+            links = chocolat.element.find(imageSelector)
+
+            eventBefore = $._data(links.first()[0], 'events')
+            expect(eventBefore.click[0].namespace).to.equal('chocolat')
+
+            chocolat.api().destroy()
+
+            eventAfter = $._data(links.first()[0], 'events')
+            expect(typeof eventAfter).to.equal('undefined')
+
+
     describe "FullScreen", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
-
-            chocolat?.elems?.wrapper?.remove()
-
-            chocolat?.elems?.domContainer?.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat?.settings.currentImage = false;
-            chocolat?.settings.initialized = false;
-
-            $('#example0').data('chocolat', null)
+            chocolat.api().destroy()
 
         it "should open fullscreen when clicking .fullscreen", (done) ->
 
@@ -196,14 +231,7 @@ describe "Chocolat", ->
     describe "Change image", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
-
-            chocolat.elems.wrapper.remove()
-
-            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat.settings.currentImage = false;
-            chocolat.settings.initialized = false;
-
-            $('#example0').data('chocolat', null)
+            chocolat.api().destroy()
 
         it "should go to next image", (done) ->
             chocolat = $('#example0').Chocolat().data('chocolat')
@@ -290,14 +318,7 @@ describe "Chocolat", ->
     describe "ImageSize cover", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
-
-            chocolat.elems.wrapper.remove()
-
-            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat.settings.currentImage = false;
-            chocolat.settings.initialized = false;
-
-            $('#example0').data('chocolat', null)
+            chocolat.api().destroy()
 
         it "should add class chocolat-cover to parent", (done) ->
             chocolat = $('#example0').Chocolat({imageSize: 'cover'}).data('chocolat')
@@ -393,14 +414,7 @@ describe "Chocolat", ->
     describe "ImageSize contain", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
-
-            chocolat.elems.wrapper.remove()
-
-            chocolat.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
-            chocolat.settings.currentImage = false;
-            chocolat.settings.initialized = false;
-
-            $('#example0').data('chocolat', null)
+            chocolat.api().destroy()
 
         it "should have 'longest' side of the container equal to 'longest' side to the image in container", (done) ->
             chocolat = $('#example0').Chocolat({
@@ -531,6 +545,9 @@ describe "Chocolat", ->
 
         it "should have a place method", ->
             expect(typeof chocolat.api().place).to.equal("function")
+
+        it "should have a destroy method", ->
+            expect(typeof chocolat.api().destroy).to.equal("function")
 
         it "should have a set method", ->
             expect(typeof chocolat.api().set).to.equal("function")

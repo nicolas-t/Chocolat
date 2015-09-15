@@ -22,6 +22,9 @@
                 color: #2645FF;
                 text-decoration: none;
             }
+            .demo {
+
+            }
         </style>
         <title>Chocolat — demo</title>
         <script>
@@ -51,11 +54,11 @@
     </head>
     <body>
         <div style="text-align: center;background: #E8E8E8; padding: 10px;margin-bottom: 10px;">
-            <a href="https://github.com/nicolas-t/Chocolat"> on github</a>
+            <a href="https://github.com/nicolas-t/Chocolat"> Chocolat on github</a>
         </div>
 
         <h2>
-           Full window, contain: 
+           Full window, contain, click the numbers to open:
         </h2>
         <div id="example0">
             <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
@@ -70,7 +73,7 @@
         </div>
 
         <h2>
-            Full window, cover, looping : 
+            Full window, cover, looping :
         </h2>
         <div id="example1">
             <a class="chocolat-image" href="demo-images/1.jpg" title="foo">
@@ -82,7 +85,7 @@
         </div>
 
         <h2>
-            Display in a container, cover, with thumbnails :  
+            Display in a container, cover, with thumbnails :
         </h2>
 
         <div id="example3" data-chocolat-title="set title">
@@ -97,10 +100,10 @@
             </a>
         </div>
         <!-- Container (notice the relative width) :  -->
-        <div id="container2" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+        <div id="container2" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
 
         <h2>
-            Display in a container, looping :  
+            Display in a container, looping :
         </h2>
 
         <div id="example2" data-chocolat-title="set title">
@@ -115,7 +118,7 @@
             </a>
         </div>
         <!-- Container (notice the relative width) :  -->
-        <div id="container1" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+        <div id="container1" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
 
 
         <h2>
@@ -127,14 +130,14 @@
         <a class="api-next" href="#">Next</a>
         <a class="api-prev" href="#">Prev</a>
         <br>
-        <a class="api-cover" href="#">Enter cover mode</a> / 
+        <a class="api-cover" href="#">Enter cover mode</a> /
         <a class="api-contain" href="#">Enter contain mode</a>
 
         <br>
         <br>
         <a class="api-close" href="#">Close</a>
         <!-- Container (notice the relative width) :  -->
-        <div id="container3" style="width: 80%; max-width:1000px; height: 600px;background: #E0E0E0;margin:auto;"></div>
+        <div id="container3" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
 
         <script>
             $(function(){
@@ -143,7 +146,7 @@
                     loop: true,
                     images : [
                         {src : 'demo-images/1.jpg', title : 'caption 1'},
-                        {src : 'demo-images/6.jpg', title : 'caption 2'}, 
+                        {src : 'demo-images/6.jpg', title : 'caption 2'},
                         {src : 'demo-images/8.jpg', title : 'caption 3'},
                     ],
                     imageSize : 'contain',

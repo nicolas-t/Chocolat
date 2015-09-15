@@ -19,7 +19,7 @@
         initialized       : false,
         timer             : false,
         timerDebounce     : false,
-        images            : []
+        images            : [],
     };
 
     function Chocolat(element, settings) {
@@ -28,12 +28,23 @@
         this.settings  = settings;
         this._defaults = defaults;
         this.elems     = {};
+        this.element   = element;
+
+        this._cssClasses = [
+            'chocolat-open',
+            'chocolat-mobile',
+            'chocolat-in-container',
+            'chocolat-cover',
+            'chocolat-zoomable',
+            'chocolat-zoomed'
+        ];
 
         if (!this.settings.setTitle && element.data('chocolat-title')) {
             this.settings.setTitle = element.data('chocolat-title');
         }
 
-        element.find(this.settings.imageSelector).each(function () {
+
+        this.element.find(this.settings.imageSelector).each(function () {
             that.settings.images.push({
                 title  : $(this).attr('title'),
                 src    : $(this).attr('href'),
@@ -42,10 +53,10 @@
             });
         });
 
-        element.find(this.settings.imageSelector).each(function (i) {
-            $(this).off('click').on('click', function(event){
+        this.element.find(this.settings.imageSelector).each(function (i) {
+            $(this).off('click.chocolat').on('click.chocolat', function(e){
                 that.init(i);
-                event.preventDefault();
+                e.preventDefault();
             });
         });
 
@@ -299,12 +310,28 @@
             ];
             var that = this;
             var def = $.when($(els).fadeOut(200)).done(function () {
-                that.elems.domContainer.removeClass('chocolat-open chocolat-mobile chocolat-in-container chocolat-cover');
+                that.elems.domContainer.removeClass(this._cssClasses.join(' '));
             });
             this.settings.currentImage = false;
             this.settings.initialized = false;
 
             return def;
+        },
+
+        destroy : function() {
+            this.element.removeData();
+            this.element.find(this.settings.imageSelector).off('click.chocolat');
+
+            if (!this.settings.initialized) {
+                return;
+            }
+            if (this.settings.fullscreenOpen) {
+                this.exitFullScreen();
+            }
+            this.settings.currentImage = false;
+            this.settings.initialized = false;
+            this.elems.domContainer.removeClass(this._cssClasses.join(' '));
+            this.elems.wrapper.remove();
         },
 
         getOutMarginW : function() {
@@ -649,6 +676,10 @@
 
                 place : function(){
                     return that.place(that.settings.currentImage, that.settings.duration);
+                },
+
+                destroy : function(){
+                    return that.destroy();
                 },
 
                 set : function(property, value){
