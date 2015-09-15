@@ -310,7 +310,7 @@
             ];
             var that = this;
             var def = $.when($(els).fadeOut(200)).done(function () {
-                that.elems.domContainer.removeClass(this._cssClasses.join(' '));
+                that.elems.domContainer.removeClass(that._cssClasses.join(' '));
             });
             this.settings.currentImage = false;
             this.settings.initialized = false;
