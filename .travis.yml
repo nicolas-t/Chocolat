@@ -1,9 +1,7 @@
 language: node_js
 node_js:
-  - "0.10"
+  - "0.12"
 install:
-  - npm install https://github.com/ariya/phantomjs/archive/1.9.1.tar.gz
-  - npm install https://github.com/nathanboktae/mocha-phantomjs/archive/v3.5.3.tar.gz
   - npm install
 before_script:
   - phantomjs --version
