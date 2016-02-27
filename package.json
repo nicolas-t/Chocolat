@@ -10,6 +10,7 @@
     "jquery": "~1.8.2"
   },
   "devDependencies": {
+    "phantomjs": "^1.9.1",
     "chai": "^3.0.0",
     "coffee-script": "^1.9.3",
     "gulp": "^3.9.0",
