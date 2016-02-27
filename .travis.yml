@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - "4.1"
+  - "0.10"
 install:
   - npm install phantomjs
-  - npm install mocha-phantomjs
+  - npm install https://github.com/nathanboktae/mocha-phantomjs/archive/v3.5.3.tar.gz
   - npm install
 before_script:
   - phantomjs --version
