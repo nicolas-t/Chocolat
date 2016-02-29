@@ -37,9 +37,12 @@
     "responsive"
   ],
   "author": "Nicolas Turlais",
-  "license": "ISC",
-  "bugs": {
+  "licenses": [{
+    "type": "GPLv3",
+    "url": "http://chocolat.insipi.de"
+  }],
+   "bugs": {
     "url": "https://github.com/nicolas-t/Chocolat/issues"
   },
-  "homepage": "https://github.com/nicolas-t/Chocolat#readme"
+  "homepage": "http://chocolat.insipi.de"
 }
