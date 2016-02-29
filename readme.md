@@ -2,8 +2,11 @@
 -----------
 Chocolat is a responsive jQuery lightbox plugin
 What you are looking for is in the `/dist/` folder.  
+[Demo page is here](http://chocolat.insipi.de/#demo)
   
-![Image of Chocolat](http://full.ouplo.com/10/9/jzbY.jpg)  
+[![Image of Chocolat][2]][1]
+  [1]: http://chocolat.insipi.de/#demo
+  [2]: http://full.ouplo.com/10/9/jzbY.jpg (yep)
   
 #### Dependencies
 
