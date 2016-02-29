@@ -1,8 +1,10 @@
 ##Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat)
 -----------
 Chocolat is a responsive jQuery lightbox plugin
-What you are looking for is in the `/dist/` folder.
-
+What you are looking for is in the `/dist/` folder.  
+  
+![Image of Chocolat](http://full.ouplo.com/10/9/jzbY.jpg)  
+  
 #### Dependencies
 
 It expects jQuery to work (either 1.x or 2.x): https://github.com/jquery/jquery
