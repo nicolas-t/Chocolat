@@ -41,7 +41,7 @@
     "type": "GPLv3",
     "url": "http://chocolat.insipi.de"
   }],
-   "bugs": {
+  "bugs": {
     "url": "https://github.com/nicolas-t/Chocolat/issues"
   },
   "homepage": "http://chocolat.insipi.de"
