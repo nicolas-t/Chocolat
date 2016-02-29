@@ -159,6 +159,15 @@ Set to the container when chocolat is zoomable
 **.chocolat-zoomed  :**
 Set to the container when chocolat is zoomed
 
+## License
+-----------
+### Commercial license
+
+If you want to use Chocolat.js to develop commercial sites, themes, projects, and applications, the Commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a Chocolat.js Commercial License at [uplabs.com/posts/chocolat-js-responsive-lightbox](http://www.site.uplabs.com/posts/chocolat-js-responsive-lightbox)
+
+### Open source license
+If you are creating an open source application under a license compatible with the GNU GPL license v3, you may use this project under the terms of the GPLv3.
+
 
 ##Contributing
 -----------
