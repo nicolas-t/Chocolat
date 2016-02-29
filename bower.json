@@ -5,7 +5,7 @@
     "dist/css/chocolat.css",
     "dist/js/jquery.chocolat.js"
   ],
-  "license": "CC-BY-2.0",
+  "license": "GPLv3",
   "dependencies": {
     "jquery": "~1.8.2"
   },
