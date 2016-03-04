@@ -136,7 +136,7 @@
             this.arrows();
 
             this.storeImgSize(imgLoader, i);
-            fitting = this.fit(i, that.settings.container);
+            fitting = this.fit(i, that.elems.wrapper);
 
             return this.center(
                 fitting.width,
@@ -575,7 +575,7 @@
                     return;
                 }
                 that.debounce(50, function() {
-                    fitting = that.fit(that.settings.currentImage, that.settings.container);
+                    fitting = that.fit(that.settings.currentImage, that.elems.wrapper);
                     that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
                     that.zoomable();
                 });
@@ -610,7 +610,7 @@
             this.elems.wrapper.trigger(event);
 
             this.elems.domContainer.addClass('chocolat-zoomed');
-            fitting = this.fit(this.settings.currentImage, this.settings.container);
+            fitting = this.fit(this.settings.currentImage, this.elems.wrapper);
             return this.center(fitting.width, fitting.height, fitting.left, fitting.top, this.settings.duration);
         },
 
@@ -625,7 +625,7 @@
             this.elems.img.animate({'margin': 0}, duration);
 
             this.elems.domContainer.removeClass('chocolat-zoomed');
-            fitting = this.fit(this.settings.currentImage, this.settings.container);
+            fitting = this.fit(this.settings.currentImage, this.elems.wrapper);
             return this.center(fitting.width, fitting.height, fitting.left, fitting.top, duration);
         },
 
