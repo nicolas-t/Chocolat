@@ -1,6 +1,6 @@
 {
   "name": "chocolat",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": " Responsive jQuery Lightbox Plugin",
   "main": "js/jquery.chocolat.js",
   "directories": {
@@ -37,10 +37,12 @@
     "responsive"
   ],
   "author": "Nicolas Turlais",
-  "licenses": [{
-    "type": "GPLv3",
-    "url": "http://chocolat.insipi.de"
-  }],
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "http://chocolat.insipi.de"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/nicolas-t/Chocolat/issues"
   },
