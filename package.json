@@ -23,9 +23,6 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.6"
   },
-  "scripts": {
-    "test": "make test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicolas-t/Chocolat.git"

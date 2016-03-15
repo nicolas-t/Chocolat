@@ -1,4 +1,10 @@
-﻿; (function($, window, document, undefined) {
+﻿(function (factory) {
+    if(typeof module === "object" && typeof module.exports === "object") {
+        module.exports = factory(require("jquery"), window, document);
+    } else {
+        factory(jQuery, window, document);
+    }
+}(function($, window, document, undefined) {
     var calls = 0;
     var defaults = {
         container         : window, // window or jquery object or jquery selector, or element
@@ -712,4 +718,4 @@
             }
         });
     };
-})( jQuery, window, document );
+}));
