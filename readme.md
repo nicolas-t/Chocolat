@@ -16,6 +16,10 @@ It expects jQuery to work (either 1.x or 2.x): https://github.com/jquery/jquery
 recent browsers such as :
 IE 7+, Safari, Firefox & Chrome.
 
+#### Installation
+You can install chocolat.js by linking `dist/js/jquery.chocolat.js` and `dist/css/chocolat.css` to your html file  
+Or your you can use chocolat as a node module with `npm install chocolat` (css from node_module has to be linked in your html file anyway)
+
 ##Markup
 -----------
 ```html
