@@ -26,6 +26,7 @@
         timer             : false,
         timerDebounce     : false,
         images            : [],
+        enableZoom        : true,
     };
 
     function Chocolat(element, settings) {
@@ -593,7 +594,7 @@
             var wrapperWidth = this.elems.wrapper.width();
             var wrapperHeight = this.elems.wrapper.height();
 
-            var isImageZoomable = currentImage.width > wrapperWidth || currentImage.height > wrapperHeight;
+            var isImageZoomable = ( this.settings.enableZoom && ( currentImage.width > wrapperWidth || currentImage.height > wrapperHeight)) ? true : false;
             var isImageStretched = this.elems.img.width() > currentImage.width || this.elems.img.height() > currentImage.height;
 
 
