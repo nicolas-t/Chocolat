@@ -1,6 +1,6 @@
 {
   "name": "chocolat",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "main": [
     "dist/css/chocolat.css",
     "dist/js/jquery.chocolat.js"
