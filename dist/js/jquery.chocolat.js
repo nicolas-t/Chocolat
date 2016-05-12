@@ -106,12 +106,12 @@
                 return;
             }
 
-            this.elems.overlay.fadeIn(800);
+            this.elems.overlay.fadeIn(this.settings.duration);
             this.settings.timer = setTimeout(function(){
                 if (typeof that.elems != 'undefined') {
                     $.proxy(that.elems.loader.fadeIn(), that);
                 }
-            }, 800);
+            }, this.settings.duration);
 
             var deferred = this.preload(i)
                 .then(function (imgLoader) {
