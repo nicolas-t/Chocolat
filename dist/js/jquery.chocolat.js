@@ -27,6 +27,7 @@
         timerDebounce     : false,
         images            : [],
         enableZoom        : true,
+        imageSource       : "href",
     };
 
     function Chocolat(element, settings) {
@@ -54,7 +55,7 @@
         this.element.find(this.settings.imageSelector).each(function () {
             that.settings.images.push({
                 title  : $(this).attr('title'),
-                src    : $(this).attr('href'),
+                src    : $(this).attr(that.settings.imageSource),
                 height : false,
                 width  : false
             });
