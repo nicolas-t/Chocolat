@@ -6,35 +6,11 @@
     }
 }(function($, window, document, undefined) {
     var calls = 0;
-    var defaults = {
-        container         : window, // window or jquery object or jquery selector, or element
-        imageSelector     : '.chocolat-image',
-        className         : '',
-        imageSize         : 'default', // 'default', 'contain', 'cover' or 'native'
-        initialZoomState  : null,
-        fullScreen        : false,
-        loop              : false,
-        linkImages        : true,
-        duration          : 300,
-        setTitle          : '',
-        separator2        : '/',
-        setIndex          : 0,
-        firstImage        : 0,
-        lastImage         : false,
-        currentImage      : false,
-        initialized       : false,
-        timer             : false,
-        timerDebounce     : false,
-        images            : [],
-        enableZoom        : true,
-        imageSource       : "href",
-    };
 
     function Chocolat(element, settings) {
         var that = this;
 
         this.settings  = settings;
-        this._defaults = defaults;
         this.elems     = {};
         this.element   = element;
 
@@ -70,6 +46,7 @@
 
         return this;
     }
+
     $.extend(Chocolat.prototype, {
 
         init : function(i) {
@@ -352,6 +329,31 @@
             return this.elems.top.outerHeight(true) + this.elems.bottom.outerHeight(true);
         },
 
+        markupTop : function() {
+            this.elems.close = $('<span/>', {
+                'class' : 'chocolat-close'
+            }).appendTo(this.elems.top);
+        },
+
+        markupBottom : function() {
+            this.elems.fullscreen = $('<span/>', {
+                'class' : 'chocolat-fullscreen'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.description = $('<span/>', {
+                'class' : 'chocolat-description'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.pagination = $('<span/>', {
+                'class' : 'chocolat-pagination'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.setTitle = $('<span/>', {
+                'class' : 'chocolat-set-title',
+                'html' : this.settings.setTitle
+            }).appendTo(this.elems.bottom);
+        },
+
         markup : function() {
             this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
             if (this.settings.imageSize == 'cover') {
@@ -399,26 +401,8 @@
                 'class' : 'chocolat-bottom'
             }).appendTo(this.elems.wrapper);
 
-            this.elems.fullscreen = $('<span/>', {
-                'class' : 'chocolat-fullscreen'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.description = $('<span/>', {
-                'class' : 'chocolat-description'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.pagination = $('<span/>', {
-                'class' : 'chocolat-pagination'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.setTitle = $('<span/>', {
-                'class' : 'chocolat-set-title',
-                'html' : this.settings.setTitle
-            }).appendTo(this.elems.bottom);
-
-            this.elems.close = $('<span/>', {
-                'class' : 'chocolat-close'
-            }).appendTo(this.elems.top);
+            this.settings.markupTop.call(this)
+            this.settings.markupBottom.call(this)
         },
 
         openFullScreen : function() {
@@ -706,11 +690,36 @@
         }
     });
 
+    var defaults = {
+        container         : window, // window or jquery object or jquery selector, or element
+        imageSelector     : '.chocolat-image',
+        className         : '',
+        imageSize         : 'default', // 'default', 'contain', 'cover' or 'native'
+        initialZoomState  : null,
+        fullScreen        : false,
+        loop              : false,
+        linkImages        : true,
+        duration          : 300,
+        setTitle          : '',
+        separator2        : '/',
+        setIndex          : 0,
+        firstImage        : 0,
+        lastImage         : false,
+        currentImage      : false,
+        initialized       : false,
+        timer             : false,
+        timerDebounce     : false,
+        images            : [],
+        enableZoom        : true,
+        imageSource       : "href",
+        markupBottom      : Chocolat.prototype.markupBottom,
+        markupTop         : Chocolat.prototype.markupTop
+    };
+
     $.fn.Chocolat = function (options) {
         return this.each(function() {
 
             calls++;
-
             var settings = $.extend(true, {}, defaults, options, {setIndex:calls} );
 
             if (!$.data(this, 'chocolat')) {
