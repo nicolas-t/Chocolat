@@ -328,44 +328,6 @@
             return this.elems.top.outerHeight(true) + this.elems.bottom.outerHeight(true);
         },
 
-        /*
-        * markupTop and markupBottom functions are used to modify the markup
-        * of the zones at the top and at the bottom of the image
-        * these functions combined must create these elements :
-        * this.elems.close, this.elems.fullscreen, this.elems.description,
-        * this.elems.pagination, this.elems.setTitle,
-        * and append/prepend them to either this.elems.top or this.elems.bottom
-        *
-        * You can check the test :
-        * "should append description element in top element (instead of bottom, the default behaviour)"
-        * in test/test.chocolat.coffee to see an example
-        */
-
-        markupTop : function() {
-            this.elems.close = $('<span/>', {
-                'class' : 'chocolat-close'
-            }).appendTo(this.elems.top);
-        },
-
-        markupBottom : function() {
-            this.elems.fullscreen = $('<span/>', {
-                'class' : 'chocolat-fullscreen'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.description = $('<span/>', {
-                'class' : 'chocolat-description'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.pagination = $('<span/>', {
-                'class' : 'chocolat-pagination'
-            }).appendTo(this.elems.bottom);
-
-            this.elems.setTitle = $('<span/>', {
-                'class' : 'chocolat-set-title',
-                'html' : this.settings.setTitle
-            }).appendTo(this.elems.bottom);
-        },
-
         markup : function() {
             this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
             if (this.settings.imageSize == 'cover') {
@@ -413,8 +375,28 @@
                 'class' : 'chocolat-bottom'
             }).appendTo(this.elems.wrapper);
 
-            this.settings.markupTop.call(this);
-            this.settings.markupBottom.call(this);
+            this.elems.close = $('<span/>', {
+                'class' : 'chocolat-close'
+            }).appendTo(this.elems.top);
+
+            this.elems.fullscreen = $('<span/>', {
+                'class' : 'chocolat-fullscreen'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.description = $('<span/>', {
+                'class' : 'chocolat-description'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.pagination = $('<span/>', {
+                'class' : 'chocolat-pagination'
+            }).appendTo(this.elems.bottom);
+
+            this.elems.setTitle = $('<span/>', {
+                'class' : 'chocolat-set-title',
+                'html' : this.settings.setTitle
+            }).appendTo(this.elems.bottom);
+
+            this.settings.afterMarkup.call(this);
         },
 
         openFullScreen : function() {
@@ -724,8 +706,7 @@
         images            : [],
         enableZoom        : true,
         imageSource       : "href",
-        markupBottom      : Chocolat.prototype.markupBottom,
-        markupTop         : Chocolat.prototype.markupTop
+        afterMarkup       : function () {},
     };
 
     $.fn.Chocolat = function (options) {

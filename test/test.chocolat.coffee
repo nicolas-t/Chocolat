@@ -105,81 +105,15 @@ describe "Chocolat", ->
 
             expect(spyMarkup.calledOnce).to.be.true
 
-        it "should call custom markup functions", ->
-            markupTopCalled = false
-            markupBottomCalled = false
-
-            markupTop = () ->
-                markupTopCalled = true
-
-                this.elems.close = $('<span/>', {
-                    'class' : 'chocolat-close'
-                }).appendTo(this.elems.top)
-
-            markupBottom = () ->
-                markupBottomCalled = true
-
-                this.elems.description = $('<span/>', {
-                    'class' : 'chocolat-description'
-                }).appendTo(this.elems.bottom)
-
-                this.elems.fullscreen = $('<span/>', {
-                    'class' : 'chocolat-fullscreen'
-                }).appendTo(this.elems.bottom)
-
-                this.elems.pagination = $('<span/>', {
-                    'class' : 'chocolat-pagination'
-                }).appendTo(this.elems.bottom)
-
-                this.elems.setTitle = $('<span/>', {
-                    'class' : 'chocolat-set-title',
-                    'html' : this.settings.setTitle
-                }).appendTo(this.elems.bottom)
-
-
-            chocolat = $('#example0').Chocolat({
-                loop : true
-                container : $('#container')
-                markupTop : markupTop
-                markupBottom : markupBottom
-
-            }).data('chocolat');
-
-            $('#example0').find('.chocolat-image').first().trigger('click')
-
-            expect(markupTopCalled).to.be.true
-            expect(markupBottomCalled).to.be.true
-
         it "should append description element in top element (instead of bottom, the default behaviour)", ->
 
-            markupTop = () ->
-                this.elems.description = $('<span/>', {
-                    'class' : 'chocolat-description'
-                }).appendTo(this.elems.top)
-
-                this.elems.close = $('<span/>', {
-                    'class' : 'chocolat-close'
-                }).appendTo(this.elems.top)
-
-            markupBottom = () ->
-                this.elems.fullscreen = $('<span/>', {
-                    'class' : 'chocolat-fullscreen'
-                }).appendTo(this.elems.bottom)
-
-                this.elems.pagination = $('<span/>', {
-                    'class' : 'chocolat-pagination'
-                }).appendTo(this.elems.bottom)
-
-                this.elems.setTitle = $('<span/>', {
-                    'class' : 'chocolat-set-title',
-                    'html' : this.settings.setTitle
-                }).appendTo(this.elems.bottom)
+            afterMarkup = () ->
+                this.elems.description.appendTo(this.elems.top)
 
             chocolat = $('#example0').Chocolat({
                 loop : true
                 container : $('#container')
-                markupTop : markupTop
-                markupBottom : markupBottom
+                afterMarkup: afterMarkup
 
             }).data('chocolat');
 
