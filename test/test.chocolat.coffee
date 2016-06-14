@@ -92,6 +92,102 @@ describe "Chocolat", ->
             expect(spyLoad.calledOnce).to.be.true
             expect(spyLoad.calledWithExactly(0)).to.be.true
 
+        it "should call markup function", ->
+
+            chocolat = $('#example0').Chocolat({
+                loop : true,
+                container : $('#container'),
+            }).data('chocolat');
+
+            spyMarkup = sinon.spy(chocolat, 'markup')
+
+            $('#example0').find('.chocolat-image').first().trigger('click')
+
+            expect(spyMarkup.calledOnce).to.be.true
+
+        it "should call custom markup functions", ->
+            markupTopCalled = false
+            markupBottomCalled = false
+
+            markupTop = () ->
+                markupTopCalled = true
+
+                this.elems.close = $('<span/>', {
+                    'class' : 'chocolat-close'
+                }).appendTo(this.elems.top)
+
+            markupBottom = () ->
+                markupBottomCalled = true
+
+                this.elems.description = $('<span/>', {
+                    'class' : 'chocolat-description'
+                }).appendTo(this.elems.bottom)
+
+                this.elems.fullscreen = $('<span/>', {
+                    'class' : 'chocolat-fullscreen'
+                }).appendTo(this.elems.bottom)
+
+                this.elems.pagination = $('<span/>', {
+                    'class' : 'chocolat-pagination'
+                }).appendTo(this.elems.bottom)
+
+                this.elems.setTitle = $('<span/>', {
+                    'class' : 'chocolat-set-title',
+                    'html' : this.settings.setTitle
+                }).appendTo(this.elems.bottom)
+
+
+            chocolat = $('#example0').Chocolat({
+                loop : true
+                container : $('#container')
+                markupTop : markupTop
+                markupBottom : markupBottom
+
+            }).data('chocolat');
+
+            $('#example0').find('.chocolat-image').first().trigger('click')
+
+            expect(markupTopCalled).to.be.true
+            expect(markupBottomCalled).to.be.true
+
+        it "should append description element in top element (instead of bottom, the default behaviour)", ->
+
+            markupTop = () ->
+                this.elems.description = $('<span/>', {
+                    'class' : 'chocolat-description'
+                }).appendTo(this.elems.top)
+
+                this.elems.close = $('<span/>', {
+                    'class' : 'chocolat-close'
+                }).appendTo(this.elems.top)
+
+            markupBottom = () ->
+                this.elems.fullscreen = $('<span/>', {
+                    'class' : 'chocolat-fullscreen'
+                }).appendTo(this.elems.bottom)
+
+                this.elems.pagination = $('<span/>', {
+                    'class' : 'chocolat-pagination'
+                }).appendTo(this.elems.bottom)
+
+                this.elems.setTitle = $('<span/>', {
+                    'class' : 'chocolat-set-title',
+                    'html' : this.settings.setTitle
+                }).appendTo(this.elems.bottom)
+
+            chocolat = $('#example0').Chocolat({
+                loop : true
+                container : $('#container')
+                markupTop : markupTop
+                markupBottom : markupBottom
+
+            }).data('chocolat');
+
+            $('#example0').find('.chocolat-image').first().trigger('click')
+
+            expect(chocolat.elems.top.find(chocolat.elems.description).length).to.equal(1)
+            expect(chocolat.elems.bottom.find(chocolat.elems.description).length).to.equal(0)
+
     describe "Destroy method", ->
         afterEach ->
             chocolat = $('#example0').data('chocolat')
@@ -139,7 +235,6 @@ describe "Chocolat", ->
 
             eventAfter = $._data(links.first()[0], 'events')
             expect(typeof eventAfter).to.equal('undefined')
-
 
     describe "FullScreen", ->
         afterEach ->

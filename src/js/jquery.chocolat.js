@@ -27,7 +27,6 @@
             this.settings.setTitle = element.data('chocolat-title');
         }
 
-
         this.element.find(this.settings.imageSelector).each(function () {
             that.settings.images.push({
                 title  : $(this).attr('title'),
@@ -401,8 +400,8 @@
                 'class' : 'chocolat-bottom'
             }).appendTo(this.elems.wrapper);
 
-            this.settings.markupTop.call(this)
-            this.settings.markupBottom.call(this)
+            this.settings.markupTop.call(this);
+            this.settings.markupBottom.call(this);
         },
 
         openFullScreen : function() {
