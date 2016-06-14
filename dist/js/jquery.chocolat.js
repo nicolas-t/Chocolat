@@ -328,6 +328,19 @@
             return this.elems.top.outerHeight(true) + this.elems.bottom.outerHeight(true);
         },
 
+        /*
+        * markupTop and markupBottom functions are used to modify the markup
+        * of the zones at the top and at the bottom of the image
+        * these functions combined must create these elements :
+        * this.elems.close, this.elems.fullscreen, this.elems.description,
+        * this.elems.pagination, this.elems.setTitle,
+        * and append/prepend them to either this.elems.top or this.elems.bottom
+        *
+        * You can check the test :
+        * "should append description element in top element (instead of bottom, the default behaviour)"
+        * in test/test.chocolat.coffee to see an example
+        */
+
         markupTop : function() {
             this.elems.close = $('<span/>', {
                 'class' : 'chocolat-close'
