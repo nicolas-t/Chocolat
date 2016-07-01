@@ -514,48 +514,16 @@
 
             });
 
-            this.elems.wrapper.mousemove(function( e ) {
-                if (that.settings.initialZoomState === null) {
-                    return;
-                }
-                if (that.elems.img.is(':animated')) {
-                    return;
-                }
+            var wrapper = this.elems.wrapper;
 
-                var pos = $(this).offset();
-                var height = $(this).height();
-                var width = $(this).width();
-
-                var currentImage = that.settings.images[that.settings.currentImage];
-                var imgWidth = currentImage.width;
-                var imgHeight = currentImage.height;
-
-                var coord = [e.pageX - width/2 - pos.left, e.pageY - height/2 - pos.top];
-
-                var mvtX = 0;
-                if (imgWidth > width) {
-                    mvtX = coord[0] / (width / 2);
-                    mvtX = ((imgWidth - width + 0)/ 2) * mvtX;
-                }
-
-                var mvtY = 0;
-                if (imgHeight > height) {
-                    mvtY = coord[1] / (height / 2);
-                    mvtY = ((imgHeight - height + 0) / 2) * mvtY;
-                }
-
-                var animation = {
-                    'margin-left': - mvtX + 'px',
-                    'margin-top': - mvtY + 'px'
-                };
-                if (typeof e.duration !== 'undefined') {
-                    $(that.elems.img).stop(false, true).animate(animation, e.duration);
-                }
-                else {
-                    $(that.elems.img).stop(false, true).css(animation);
-                }
-
+            wrapper.mousemove(function( e ) {
+                that.imageMove(wrapper, false, e);
             });
+
+            $(document).on('touchmove', wrapper, function(e){
+                that.imageMove(wrapper, true, e);
+            });
+
             $(window).on('resize', function() {
                 if (!that.settings.initialized) {
                     return;
@@ -566,6 +534,60 @@
                     that.zoomable();
                 });
             });
+        },
+
+        imageMove : function(wrapper, touch, e){
+
+            if(touch && wrapper.parents('.chocolat-open.chocolat-zoomed').length){
+                e.preventDefault();
+            }
+
+            if (that.settings.initialZoomState === null) {
+                return;
+            }
+
+            if (that.elems.img.is(':animated')) {
+                return;
+            }
+
+            var pos = wrapper.offset();
+            var height = wrapper.height();
+            var width = wrapper.width();
+
+            var currentImage = that.settings.images[that.settings.currentImage];
+            var imgWidth = currentImage.width;
+            var imgHeight = currentImage.height;
+            var coord;
+
+            if(touch){
+                var touchE = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+                coord = [touchE.pageX - width/2 - pos.left, touchE.pageY - height/2 - pos.top];
+            }else{
+                coord = [e.pageX - width/2 - pos.left, e.pageY - height/2 - pos.top];
+            }
+
+            var mvtX = 0;
+            if (imgWidth > width) {
+                mvtX = coord[0] / (width / 2);
+                mvtX = ((imgWidth - width + 0)/ 2) * mvtX;
+            }
+
+            var mvtY = 0;
+            if (imgHeight > height) {
+                mvtY = coord[1] / (height / 2);
+                mvtY = ((imgHeight - height + 0) / 2) * mvtY;
+            }
+
+            var animation = {
+                'margin-left': - mvtX + 'px',
+                'margin-top': - mvtY + 'px'
+            };
+            if (typeof e.duration !== 'undefined') {
+                $(that.elems.img).stop(false, true).animate(animation, e.duration);
+            }
+            else {
+                $(that.elems.img).stop(false, true).css(animation);
+            }
         },
 
         zoomable : function () {
