@@ -319,9 +319,13 @@
         },
 
         getOutMarginW : function() {
-            var left  = this.elems.left.outerWidth(true);
-            var right = this.elems.right.outerWidth(true);
-            return left + right;
+            if (!this.settings.overlapArrows) {
+                var left  = this.elems.left.outerWidth(true);
+                var right = this.elems.right.outerWidth(true);
+                return left + right;
+            } else {
+                return 0;
+            }
         },
 
         getOutMarginH : function() {
@@ -703,6 +707,7 @@
         initialized       : false,
         timer             : false,
         timerDebounce     : false,
+        overlapArrows     : false,
         images            : [],
         enableZoom        : true,
         imageSource       : "href",
