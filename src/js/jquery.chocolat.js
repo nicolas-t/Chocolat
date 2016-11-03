@@ -30,8 +30,8 @@
             that.settings.images.push({
                 title: $(this).attr('title'),
                 src: $(this).attr(that.settings.imageSource),
-                srcset : $(this).attr(that.settings.srcset),
-                sizes : $(this).attr(that.settings.sizes),
+                srcset: $(this).attr(that.settings.srcset),
+                sizes: $(this).attr(that.settings.sizes),
                 height: false,
                 width: false,
             })
@@ -75,7 +75,7 @@
                 def.resolve(imgLoader)
             }
             imgLoader.srcset = this.settings.images[i].srcset
-            imgLoader.sizes  = this.settings.images[i].sizes
+            imgLoader.sizes = this.settings.images[i].sizes
             imgLoader.src = this.settings.images[i].src
 
             return def
@@ -159,8 +159,8 @@
                 that.elems.img
                     .attr('srcset', that.settings.images[i].srcset)
                     .attr('sizes', that.settings.images[i].sizes)
-                    .attr('src', that.settings.images[i].src);
-            });
+                    .attr('src', that.settings.images[i].src)
+            })
         },
 
         fit: function(i, container) {
@@ -711,8 +711,8 @@
         images: [],
         enableZoom: true,
         imageSource: 'href',
-        srcset : "data-srcset",
-        sizes : "data-sizes",
+        srcset: 'data-srcset',
+        sizes: 'data-sizes',
         afterInitialize: function() {},
         afterMarkup: function() {},
         afterImageLoad: function() {},
