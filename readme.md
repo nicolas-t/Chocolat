@@ -33,10 +33,10 @@ Or the old school way by linking `dist/js/jquery.chocolat.js` and `dist/css/choc
 -----------
 ```html
 <div id="example1" data-chocolat-title="Set title">
-    <a class="chocolat-image" href="img/a.jpg" title="image caption a">
+    <a class="chocolat-image" href="img/a.jpg" title="image caption a" data-srcset="..." data-sizes="...">
         A <!-- you can display a thumbnail here : <img src="thumb/a.jpg" /> -->
     </a>
-    <a class="chocolat-image" href="img/b.jpg" title="image caption b">
+    <a class="chocolat-image" href="img/b.jpg" title="image caption b" data-srcset="..." data-sizes="...">
         B <!-- you can display a thumbnail here : <img src="thumb/b.jpg" /> -->
     </a>
 </div>

@@ -45,6 +45,11 @@
                     loop           : true,
                 })
 
+                $('#example4').Chocolat({
+                    imageSize     : 'cover',
+                    loop           : true,
+                })
+
                 $('#example3').Chocolat({
                     container      : '#container2',
                     imageSize     : 'cover',
@@ -81,6 +86,16 @@
             </a>
             <a class="chocolat-image" href="demo-images/2.jpg" title="bar">
                 D
+            </a>
+        </div>
+
+
+        <h2>
+            Full window, cover, looping, with thumbnails, srcset and sizes :
+        </h2>
+        <div id="example4">
+            <a class="chocolat-image" href="demo-images/480x320.png" title="foo" data-srcset="demo-images/480x320.png 480w, demo-images/768x480.png 768w, demo-images/1024x768.png 1024w, demo-images/2000x1024.png 2000w" data-sizes="100vw">
+                <img src="demo-images/75x50.png" style="width:75px; height:50px" alt="">
             </a>
         </div>
 
