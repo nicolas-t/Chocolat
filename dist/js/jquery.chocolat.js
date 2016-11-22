@@ -122,6 +122,8 @@
             this.storeImgSize(imgLoader, i);
             fitting = this.fit(i, that.elems.wrapper);
 
+            this.settings.afterPlace.call(this);
+
             return this.center(
                 fitting.width,
                 fitting.height,
@@ -706,6 +708,7 @@
         images            : [],
         enableZoom        : true,
         imageSource       : "href",
+        afterPlace        : function () {},
         afterMarkup       : function () {},
     };
 
