@@ -150,7 +150,16 @@
                         {src : 'demo-images/8.jpg', title : 'caption 3'},
                     ],
                     imageSize : 'contain',
-                    container : '#container3'
+                    container : '#container3',
+                    afterMarkup: function () {
+                        console.log('afterMarkup hook is called')
+                    },
+                    afterImageLoad: function () {
+                        console.log('afterImageLoad hook is called')
+                    },
+                    afterInitialize: function () {
+                        console.log('afterInitialize hook is called')
+                    }
                 }).data('chocolat');
 
                 $('.api-open').on('click', function(e) {
