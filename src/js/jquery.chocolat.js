@@ -709,7 +709,7 @@
         imageSource       : "href",
         afterInitialize   : function () {},
         afterMarkup       : function () {},
-        afterImageLoad  : function () {},
+        afterImageLoad    : function () {},
     };
 
     $.fn.Chocolat = function (options) {
