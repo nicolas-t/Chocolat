@@ -9,17 +9,18 @@ What you are looking for is in the `/dist/` folder.
   [2]: http://full.ouplo.com/10/9/jzbY.jpg (yep)
   
 ## Installation
-You can install chocolat.js by linking `dist/js/jquery.chocolat.js` and `dist/css/chocolat.css` to your html file  
-
-Or your you can use chocolat as a node module with:
-```
-npm install chocolat
-```
-or
+You can install chocolat as a node module    
+(css from node_modules has to be linked in your html file anyway)
 ```
 yarn add chocolat
 ```
-(css from node_module has to be linked in your html file anyway)
+or
+```
+npm install chocolat
+```
+
+Or the old school way by linking `dist/js/jquery.chocolat.js` and `dist/css/chocolat.css` to your html file  
+
 
 ##Markup
 -----------
