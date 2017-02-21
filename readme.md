@@ -8,14 +8,6 @@ What you are looking for is in the `/dist/` folder.
   [1]: http://chocolat.insipi.de/#demo
   [2]: http://full.ouplo.com/10/9/jzbY.jpg (yep)
   
-#### Dependencies
-
-It expects jQuery to work (either 1.x or 2.x): https://github.com/jquery/jquery
-
-#### Compatibility
-recent browsers such as :
-IE 7+, Safari, Firefox & Chrome.
-
 ## Installation
 You can install chocolat.js by linking `dist/js/jquery.chocolat.js` and `dist/css/chocolat.css` to your html file  
 
