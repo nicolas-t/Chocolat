@@ -4,10 +4,9 @@ Chocolat is a responsive lightbox
 What you are looking for is in the `/dist/` folder.  
 [Demo page is here](http://chocolat.insipi.de/#demo)
   
-[![Image of Chocolat][2]][1]
-  [1]: http://chocolat.insipi.de/#demo
-  [2]: http://full.ouplo.com/10/9/jzbY.jpg (yep)
-  
+[![Image of Chocolat](http://full.ouplo.com/10/9/jzbY.jpg)](http://chocolat.insipi.de/#demo)
+
+
 ## Installation
 You can install chocolat as a node module    
 (css from node_modules has to be linked in your html file anyway)
