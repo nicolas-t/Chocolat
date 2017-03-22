@@ -16,7 +16,6 @@
 
         this._cssClasses = [
             'chocolat-open',
-            'chocolat-mobile',
             'chocolat-in-container',
             'chocolat-cover',
             'chocolat-zoomable',
@@ -56,6 +55,7 @@
                 this.settings.lastImage   = this.settings.images.length - 1;
                 this.settings.initialized = true;
             }
+
             this.settings.afterInitialize.call(this);
 
             return this.load(i);
@@ -85,6 +85,9 @@
             }
 
             this.elems.overlay.fadeIn(this.settings.duration);
+            this.elems.wrapper.fadeIn(this.settings.duration);
+            this.elems.domContainer.addClass('chocolat-open');
+
             this.settings.timer = setTimeout(function(){
                 if (typeof that.elems != 'undefined') {
                     $.proxy(that.elems.loader.fadeIn(), that);
@@ -295,10 +298,9 @@
             ];
             var that = this;
             var def = $.when($(els).fadeOut(200)).done(function () {
-                that.elems.domContainer.removeClass(that._cssClasses.join(' '));
+                that.elems.domContainer.removeClass('chocolat-open');
             });
             this.settings.currentImage = false;
-            this.settings.initialized = false;
 
             return def;
         },
@@ -709,7 +711,7 @@
         imageSource       : "href",
         afterInitialize   : function () {},
         afterMarkup       : function () {},
-        afterImageLoad  : function () {},
+        afterImageLoad    : function () {},
     };
 
     $.fn.Chocolat = function (options) {

@@ -1,6 +1,6 @@
 {
   "name": "chocolat",
-  "version": "0.4.16",
+  "version": "0.4.17",
   "description": " Responsive jQuery Lightbox Plugin",
   "main": "dist/js/jquery.chocolat.js",
   "directories": {
