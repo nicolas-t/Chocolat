@@ -159,6 +159,16 @@
                     },
                     afterInitialize: function () {
                         console.log('afterInitialize hook is called')
+                    },
+                    zoomedPaddingX: function (imgWidth, canvasWidth) {
+                        // add a padding around the zoomed image
+                        // default to 0
+                        return canvasWidth / 4;
+                    },
+                    zoomedPaddingY: function (imgHeight, canvasHeight) {
+                        // add a padding around the zoomed image
+                        // default to 0
+                        return canvasHeight / 4;
                     }
                 }).data('chocolat');
 
