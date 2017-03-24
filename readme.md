@@ -1,13 +1,12 @@
-##Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat)
+## Chocolat [![Build Status](https://travis-ci.org/nicolas-t/Chocolat.svg?branch=master)](https://travis-ci.org/nicolas-t/Chocolat)
 -----------
 Chocolat is a responsive lightbox  
 What you are looking for is in the `/dist/` folder.  
 [Demo page is here](http://chocolat.insipi.de/#demo)
   
-[![Image of Chocolat][2]][1]
-  [1]: http://chocolat.insipi.de/#demo
-  [2]: http://full.ouplo.com/10/9/jzbY.jpg (yep)
-  
+[![Image of Chocolat](http://full.ouplo.com/10/9/jzbY.jpg)](http://chocolat.insipi.de/#demo)
+
+
 ## Installation
 You can install chocolat as a node module    
 (css from node_modules has to be linked in your html file anyway)
@@ -22,7 +21,7 @@ npm install chocolat
 Or the old school way by linking `dist/js/jquery.chocolat.js` and `dist/css/chocolat.css` to your html file  
 
 
-##Markup
+## Markup
 -----------
 ```html
 <div id="example1" data-chocolat-title="Set title">
@@ -41,7 +40,7 @@ $(document).ready(function(){
 });
 ```
 
-##Documentation
+## Documentation
 -----------
 
 ### Parameters
@@ -148,16 +147,16 @@ Set to the container when chocolat is zoomed
 If you are creating an open source application under a license compatible with the GNU GPL license v3, you may use this project under the terms of the GPLv3.
 
 
-##Contributing
+## Contributing
 -----------
 Feel free to contribute by forking then making a pull request.
 Edit files in the `/src/` folder, run `gulp` to copy/minify into the `/dist/` folder and to watch for changes.
 
-##Testing
+## Testing
 To test, run `gulp test`, if you don't have all packages installed then run `npm install`
 Tests are written in `test/src/test.chocolat.coffee`
 
 
-##Angular (ng-chocolat)
+## Angular (ng-chocolat)
 An angular directive of Chocolat.js exists thanks to @beuted:
 https://github.com/beuted/ng-chocolat
