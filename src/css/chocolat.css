@@ -12,13 +12,14 @@
     top:0;
     z-index:10;
     background-color:#fff;
-    display:none;
+    display: none;
     opacity: 0.8;
 }
 .chocolat-wrapper{
     height:100%;
     width:100%;
     position:fixed;
+    display: none;
     left:0;
     top:0;
     z-index:16;
