@@ -439,6 +439,10 @@
                 document.webkitExitFullscreen();
                 this.settings.fullscreenOpen = false;
             }
+            else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+                this.settings.fullscreenOpen = false;
+            }
             else {
                 this.settings.fullscreenOpen = true;
             }
@@ -565,7 +569,7 @@
 
             });
             $(window).on('resize', function() {
-                if (!that.settings.initialized) {
+                if (!that.settings.initialized || that.settings.currentImage === false)  {
                     return;
                 }
                 that.debounce(50, function() {
@@ -609,7 +613,7 @@
         },
 
         zoomOut : function (e, duration) {
-            if (this.settings.initialZoomState === null) {
+            if (this.settings.initialZoomState === null || this.settings.currentImage === false) {
                 return;
             }
             duration = duration || this.settings.duration;
