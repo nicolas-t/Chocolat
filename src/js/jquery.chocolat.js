@@ -439,6 +439,10 @@
                 document.webkitExitFullscreen();
                 this.settings.fullscreenOpen = false;
             }
+            else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+                this.settings.fullscreenOpen = false;
+            }
             else {
                 this.settings.fullscreenOpen = true;
             }
