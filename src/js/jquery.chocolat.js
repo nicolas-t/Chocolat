@@ -725,4 +725,6 @@
             }
         })
     }
+
+    return $.fn.Chocolat
 })
