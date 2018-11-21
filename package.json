@@ -6,22 +6,25 @@
   "directories": {
     "test": "test"
   },
+  "scripts": {
+    "build": "gulp build",
+    "test": "./node_modules/.bin/mocha-phantomjs test/index.html",
+    "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
+  },
   "dependencies": {
     "jquery": "^3.0"
   },
   "devDependencies": {
-    "phantomjs": "^1.9.1",
     "chai": "^3.0.0",
-    "coffee-script": "^1.9.3",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
-    "gulp-coffee": "^2.3.1",
-    "gulp-jshint": "^1.11.2",
-    "mocha-phantomjs": "3.5.3",
-    "gulp-mocha-phantomjs": "^0.6.1",
+    "gulp-mocha-phantomjs": "^0.12.2",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
-    "gulp-util": "^3.0.6"
+    "gulp-util": "^3.0.6",
+    "mocha-phantomjs": "3.5.3",
+    "phantomjs": "^1.9.1",
+    "prettier": "1.15.2"
   },
   "repository": {
     "type": "git",
