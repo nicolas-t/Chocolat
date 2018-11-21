@@ -10,4 +10,5 @@ before_script:
   - gulp compile-coffee &
   - sleep 5
 script:
+  - prettier-check src/js/*.js test/*.js
   - mocha-phantomjs test/index.html
