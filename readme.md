@@ -163,16 +163,16 @@ If you are creating an open source application under a license compatible with t
 
 ## Contributing
 -----------
-Feel free to contribute by forking then making a pull request.
-Edit files in the `/src/` folder, run `gulp` to copy/minify into the `/dist/` folder and to watch for changes.
-Before creating a pull request please run the test suite : `yarn test` or `npm run test`
-And `yarn prettier` or `npm run prettier` to correct code style errors.
+Feel free to contribute by forking then making a pull request.  
+Edit files in the `/src/` folder, run `gulp` to copy/minify into the `/dist/` folder and to watch for changes.  
+Before creating a pull request please run the test suite : `yarn test` or `npm run test`  
+And `yarn prettier` or `npm run prettier` to correct code style errors.  
 
 ## Testing
-To test, run `gulp test`, open the file `test/index.html` to write new tests
-The main test file is : `test/src/test.chocolat.js`  
-To run the tests in command line use : `yarn test` or `npm run test`
-To run prettier use : `yarn prettier` or `npm run prettier`
+To test, run `gulp test`, open the file `test/index.html` to write new tests  
+The main test file is : `test/src/test.chocolat.js`   
+To run the tests in command line use : `yarn test` or `npm run test`  
+To run prettier use : `yarn prettier` or `npm run prettier`  
 
 ## Angular (ng-chocolat)
 An angular directive of Chocolat.js exists thanks to @beuted:
