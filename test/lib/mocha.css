@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 body {
-  margin:0;
+  margin: 0;
 }
 
 #mocha {
@@ -41,7 +41,7 @@ body {
 
 #mocha .suite .suite h1 {
   margin-top: 0;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 #mocha .hidden {
@@ -64,7 +64,7 @@ body {
 }
 
 #mocha .test.pending:hover h2::after {
-  content: '(pending)';
+  content: "(pending)";
   font-family: arial, sans-serif;
 }
 
@@ -77,7 +77,7 @@ body {
 }
 
 #mocha .test.pass::before {
-  content: '✓';
+  content: "✓";
   font-size: 12px;
   display: block;
   float: left;
@@ -90,9 +90,9 @@ body {
   margin-left: 5px;
   padding: 2px 5px;
   color: #fff;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
@@ -109,7 +109,7 @@ body {
 }
 
 #mocha .test.pending::before {
-  content: '◦';
+  content: "◦";
   color: #0b97c4;
 }
 
@@ -122,7 +122,7 @@ body {
 }
 
 #mocha .test.fail::before {
-  content: '✖';
+  content: "✖";
   font-size: 12px;
   display: block;
   float: left;
@@ -288,11 +288,21 @@ body {
   height: 40px;
 }
 
-#mocha code .comment { color: #ddd; }
-#mocha code .init { color: #2f6fad; }
-#mocha code .string { color: #5890ad; }
-#mocha code .keyword { color: #8a6343; }
-#mocha code .number { color: #2f6fad; }
+#mocha code .comment {
+  color: #ddd;
+}
+#mocha code .init {
+  color: #2f6fad;
+}
+#mocha code .string {
+  color: #5890ad;
+}
+#mocha code .keyword {
+  color: #8a6343;
+}
+#mocha code .number {
+  color: #2f6fad;
+}
 
 @media screen and (max-device-width: 480px) {
   #mocha {
