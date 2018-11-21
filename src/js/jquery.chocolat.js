@@ -5,7 +5,7 @@
         factory(jQuery, window, document)
     }
 })(function($, window, document, undefined) {
-    var calls = 0;
+    var calls = 0
 
     function Chocolat(element, settings) {
         var that = this
