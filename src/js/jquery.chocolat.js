@@ -7,9 +7,21 @@
 })(function($, window, document, undefined) {
     var calls = 0
 
-    function Chocolat(element, settings) {
-        var that = this
+    function loadImage(path) {
+        let image = new Image()
+        if ('decode' in image) {
+            image.src = path
+            return image.decode()
+        } else {
+            return new Promise(function (resolve, reject) {
+                image.onload  = resolve(image)
+                image.onerror = resolve
+                image.src = path
+            })
+        }
+    }
 
+    function Chocolat(element, settings) {
         this.settings = settings
         this.elems = {}
         this.element = element
@@ -26,20 +38,20 @@
             this.settings.setTitle = element.data('chocolat-title')
         }
 
-        this.element.find(this.settings.imageSelector).each(function() {
-            that.settings.images.push({
-                title: $(this).attr('title'),
-                src: $(this).attr(that.settings.imageSource),
+        this.element.find(this.settings.imageSelector).each(() => {
+            this.settings.images.push({
+                title: this.getAttribute('title'),
+                src: this.getAttribute(this.settings.imageSource),
                 height: false,
                 width: false,
             })
         })
 
-        this.element.find(this.settings.imageSelector).each(function(i) {
+        this.element.find(this.settings.imageSelector).each((i) => {
             $(this)
                 .off('click.chocolat')
                 .on('click.chocolat', function(e) {
-                    that.init(i)
+                    this.init(i)
                     e.preventDefault()
                 })
         })
@@ -63,22 +75,10 @@
         },
 
         preload: function(i) {
-            var def = $.Deferred()
-
-            if (typeof this.settings.images[i] === 'undefined') {
-                return
-            }
-            var imgLoader = new Image()
-            imgLoader.onload = function() {
-                def.resolve(imgLoader)
-            }
-            imgLoader.src = this.settings.images[i].src
-
-            return def
+            return loadImage(this.settings.images[i].src)
         },
 
         load: function(i) {
-            var that = this
             if (this.settings.fullScreen) {
                 this.openFullScreen()
             }
@@ -91,22 +91,22 @@
             this.elems.wrapper.fadeIn(this.settings.duration)
             this.elems.domContainer.addClass('chocolat-open')
 
-            this.settings.timer = setTimeout(function() {
-                if (typeof that.elems != 'undefined') {
-                    $.proxy(that.elems.loader.fadeIn(), that)
+            this.settings.timer = setTimeout(() => {
+                if (typeof this.elems != 'undefined') {
+                    $.proxy(this.elems.loader.fadeIn(), this)
                 }
             }, this.settings.duration)
 
-            var deferred = this.preload(i)
-                .then(function(imgLoader) {
-                    return that.place(i, imgLoader)
+            var promise = this.preload(i)
+                .then((imgLoader) => {
+                    return this.place(i, imgLoader)
                 })
-                .then(function(imgLoader) {
-                    return that.appear(i)
+                .then((imgLoader) => {
+                    return this.appear(i)
                 })
-                .then(function(imgLoader) {
-                    that.zoomable()
-                    that.settings.afterImageLoad.call(that)
+                .then((imgLoader) => {
+                    this.zoomable()
+                    this.settings.afterImageLoad.call(this)
                 })
 
             var nextIndex = i + 1
@@ -114,11 +114,10 @@
                 this.preload(nextIndex)
             }
 
-            return deferred
+            return promise
         },
 
         place: function(i, imgLoader) {
-            var that = this
             var fitting
 
             this.settings.currentImage = i
@@ -127,7 +126,7 @@
             this.arrows()
 
             this.storeImgSize(imgLoader, i)
-            fitting = this.fit(i, that.elems.wrapper)
+            fitting = this.fit(i, this.elems.wrapper)
 
             return this.center(fitting.width, fitting.height, fitting.left, fitting.top, 0)
         },
@@ -148,11 +147,10 @@
         },
 
         appear: function(i) {
-            var that = this
             clearTimeout(this.settings.timer)
 
-            this.elems.loader.stop().fadeOut(300, function() {
-                that.elems.img.attr('src', that.settings.images[i].src)
+            this.elems.loader.stop().fadeOut(300, () => {
+                this.elems.img[0].attr('src', this.settings.images[i].src)
             })
         },
 
@@ -249,16 +247,14 @@
         },
 
         description: function() {
-            var that = this
-            this.elems.description.html(that.settings.images[that.settings.currentImage].title)
+            this.elems.description.html(this.settings.images[this.settings.currentImage].title)
         },
 
         pagination: function() {
-            var that = this
             var last = this.settings.lastImage + 1
             var position = this.settings.currentImage + 1
 
-            this.elems.pagination.html(position + ' ' + that.settings.separator2 + last)
+            this.elems.pagination.html(position + ' ' + this.settings.separator2 + last)
         },
 
         storeImgSize: function(img, i) {
@@ -278,9 +274,8 @@
             }
 
             var els = [this.elems.overlay[0], this.elems.loader[0], this.elems.wrapper[0]]
-            var that = this
-            var def = $.when($(els).fadeOut(200)).done(function() {
-                that.elems.domContainer.removeClass('chocolat-open')
+            var def = $.when($(els).fadeOut(200)).done(() => {
+                this.elems.domContainer.removeClass('chocolat-open')
             })
             this.settings.currentImage = false
 
@@ -423,86 +418,77 @@
         },
 
         events: function() {
-            var that = this
 
             $(document)
                 .off('keydown.chocolat')
-                .on('keydown.chocolat', function(e) {
-                    if (that.settings.initialized) {
+                .on('keydown.chocolat', (e) => {
+                    if (this.settings.initialized) {
                         if (e.keyCode == 37) {
-                            that.change(-1)
+                            this.change(-1)
                         } else if (e.keyCode == 39) {
-                            that.change(1)
+                            this.change(1)
                         } else if (e.keyCode == 27) {
-                            that.close()
+                            this.close()
                         }
                     }
                 })
-            // this.elems.wrapper.find('.chocolat-img')
-            //     .off('click.chocolat')
-            //     .on('click.chocolat', function(e) {
-            //         var currentImage = that.settings.images[that.settings.currentImage];
-            //         if(currentImage.width > $(that.elems.wrapper).width() || currentImage.height > $(that.elems.wrapper).height() ){
-            //             that.toggleZoom(e);
-            //         }
-            // });
 
             this.elems.wrapper
                 .find('.chocolat-right')
                 .off('click.chocolat')
-                .on('click.chocolat', function() {
-                    that.change(+1)
+                .on('click.chocolat', () => {
+                    this.change(+1)
                 })
 
             this.elems.wrapper
                 .find('.chocolat-left')
                 .off('click.chocolat')
-                .on('click.chocolat', function() {
-                    return that.change(-1)
+                .on('click.chocolat', () => {
+                    return this.change(-1)
                 })
 
             $([this.elems.overlay[0], this.elems.close[0]])
                 .off('click.chocolat')
-                .on('click.chocolat', function() {
-                    return that.close()
+                .on('click.chocolat', () => {
+                    return this.close()
                 })
 
-            this.elems.fullscreen.off('click.chocolat').on('click.chocolat', function() {
-                if (that.settings.fullscreenOpen) {
-                    that.exitFullScreen()
+            this.elems.fullscreen.off('click.chocolat').on('click.chocolat', () => {
+                if (this.settings.fullscreenOpen) {
+                    this.exitFullScreen()
                     return
                 }
 
-                that.openFullScreen()
+                this.openFullScreen()
             })
 
-            if (that.settings.backgroundClose) {
-                this.elems.overlay.off('click.chocolat').on('click.chocolat', function() {
-                    return that.close()
+            if (this.settings.backgroundClose) {
+                this.elems.overlay.off('click.chocolat').on('click.chocolat', () => {
+                    return this.close()
                 })
             }
-            this.elems.wrapper.off('click.chocolat').on('click.chocolat', function(e) {
-                return that.zoomOut(e)
+            this.elems.wrapper.off('click.chocolat').on('click.chocolat', (e) => {
+                return this.zoomOut(e)
             })
 
             this.elems.wrapper
                 .find('.chocolat-img')
                 .off('click.chocolat')
-                .on('click.chocolat', function(e) {
+                .on('click.chocolat', (e) => {
                     if (
-                        that.settings.initialZoomState === null &&
-                        that.elems.domContainer.hasClass('chocolat-zoomable')
+                        this.settings.initialZoomState === null &&
+                        this.elems.domContainer.hasClass('chocolat-zoomable')
                     ) {
                         e.stopPropagation()
-                        return that.zoomIn(e)
+                        return this.zoomIn(e)
                     }
                 })
 
-            this.elems.wrapper.mousemove(function(e) {
-                if (that.settings.initialZoomState === null) {
+            this.elems.wrapper.mousemove((e) => {
+                if (this.settings.initialZoomState === null) {
                     return
                 }
-                if (that.elems.img.is(':animated')) {
+                if (this.elems.img.is(':animated')) {
                     return
                 }
 
@@ -510,7 +496,7 @@
                 var height = $(this).height()
                 var width = $(this).width()
 
-                var currentImage = that.settings.images[that.settings.currentImage]
+                var currentImage = this.settings.images[this.settings.currentImage]
                 var imgWidth = currentImage.width
                 var imgHeight = currentImage.height
 
@@ -518,14 +504,14 @@
 
                 var mvtX = 0
                 if (imgWidth > width) {
-                    var paddingX = that.settings.zoomedPaddingX(imgWidth, width)
+                    var paddingX = this.settings.zoomedPaddingX(imgWidth, width)
                     mvtX = coord[0] / (width / 2)
                     mvtX = ((imgWidth - width) / 2 + paddingX) * mvtX
                 }
 
                 var mvtY = 0
                 if (imgHeight > height) {
-                    var paddingY = that.settings.zoomedPaddingY(imgHeight, height)
+                    var paddingY = this.settings.zoomedPaddingY(imgHeight, height)
                     mvtY = coord[1] / (height / 2)
                     mvtY = ((imgHeight - height) / 2 + paddingY) * mvtY
                 }
@@ -535,23 +521,23 @@
                     'margin-top': -mvtY + 'px',
                 }
                 if (typeof e.duration !== 'undefined') {
-                    $(that.elems.img)
+                    $(this.elems.img)
                         .stop(false, true)
                         .animate(animation, e.duration)
                 } else {
-                    $(that.elems.img)
+                    $(this.elems.img)
                         .stop(false, true)
                         .css(animation)
                 }
             })
-            $(window).on('resize', function() {
-                if (!that.settings.initialized || that.settings.currentImage === false) {
+            $(window).on('resize', () => {
+                if (!this.settings.initialized || this.settings.currentImage === false) {
                     return
                 }
-                that.debounce(50, function() {
-                    var fitting = that.fit(that.settings.currentImage, that.elems.wrapper)
-                    that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0)
-                    that.zoomable()
+                this.debounce(50, () => {
+                    var fitting = this.fit(this.settings.currentImage, this.elems.wrapper)
+                    this.center(fitting.width, fitting.height, fitting.left, fitting.top, 0)
+                    this.zoomable()
                 })
             })
         },
@@ -631,52 +617,51 @@
         },
 
         api: function() {
-            var that = this
             return {
-                open: function(i) {
+                open: (i) => {
                     i = parseInt(i) || 0
-                    return that.init(i)
+                    return this.init(i)
                 },
 
-                close: function() {
-                    return that.close()
+                close: () => {
+                    return this.close()
                 },
 
-                next: function() {
-                    return that.change(1)
+                next: () => {
+                    return this.change(1)
                 },
 
-                prev: function() {
-                    return that.change(-1)
+                prev: () => {
+                    return this.change(-1)
                 },
 
-                goto: function(i) {
+                goto: (i) => {
                     // open alias
-                    return that.open(i)
+                    return this.open(i)
                 },
-                current: function() {
-                    return that.settings.currentImage
-                },
-
-                place: function() {
-                    return that.place(that.settings.currentImage, that.settings.duration)
+                current: () => {
+                    return this.settings.currentImage
                 },
 
-                destroy: function() {
-                    return that.destroy()
+                place: () => {
+                    return this.place(this.settings.currentImage, this.settings.duration)
                 },
 
-                set: function(property, value) {
-                    that.settings[property] = value
+                destroy: () => {
+                    return this.destroy()
+                },
+
+                set: (property, value) => {
+                    this.settings[property] = value
                     return value
                 },
 
-                get: function(property) {
-                    return that.settings[property]
+                get: (property) => {
+                    return this.settings[property]
                 },
 
-                getElem: function(name) {
-                    return that.elems[name]
+                getElem: (name) => {
+                    return this.elems[name]
                 },
             }
         },
