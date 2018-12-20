@@ -4,6 +4,7 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const bump = require('gulp-bump');
 const mochaPhantomJS = require('gulp-mocha-phantomjs');
+const babel = require('gulp-babel');
 
 gulp.task('testing', () =>
     gulp.src('./test/index.html')
@@ -12,6 +13,9 @@ gulp.task('testing', () =>
 
 gulp.task('build-js', () =>
     gulp.src('./src/js/jquery.chocolat.js')
+    .pipe(babel({
+        presets: ['@babel/env']
+    }))
     .pipe(gulp.dest('./dist/js/'))
     .pipe(rename('jquery.chocolat.min.js'))
     .pipe(uglify())
