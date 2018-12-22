@@ -40,7 +40,6 @@ const defaults = {
 };
 class Chocolat {
   constructor(element, settings) {
-    var that = this;
     this.settings = settings;
     this.elems = {};
     this.element = $(element);
@@ -50,17 +49,17 @@ class Chocolat {
       this.settings.setTitle = this.element.data('chocolat-title');
     }
 
-    this.element.find(this.settings.imageSelector).each(function () {
-      that.settings.images.push({
-        title: $(this).attr('title'),
-        src: $(this).attr(that.settings.imageSource),
+    this.element.find(this.settings.imageSelector).each((i, el) => {
+      this.settings.images.push({
+        title: $(el).attr('title'),
+        src: $(el).attr(this.settings.imageSource),
         height: false,
         width: false
       });
     });
-    this.element.find(this.settings.imageSelector).each(function (i) {
-      $(this).off('click.chocolat').on('click.chocolat', function (e) {
-        that.init(i);
+    this.element.find(this.settings.imageSelector).each((i, el) => {
+      $(el).off('click.chocolat').on('click.chocolat', e => {
+        this.init(i);
         e.preventDefault();
       });
     });
@@ -88,7 +87,7 @@ class Chocolat {
 
     var imgLoader = new Image();
 
-    imgLoader.onload = function () {
+    imgLoader.onload = () => {
       def.resolve(imgLoader);
     };
 
@@ -97,8 +96,6 @@ class Chocolat {
   }
 
   load(i) {
-    var that = this;
-
     if (this.settings.fullScreen) {
       this.openFullScreen();
     }
@@ -110,18 +107,18 @@ class Chocolat {
     this.elems.overlay.fadeIn(this.settings.duration);
     this.elems.wrapper.fadeIn(this.settings.duration);
     this.elems.domContainer.addClass('chocolat-open');
-    this.settings.timer = setTimeout(function () {
-      if (typeof that.elems != 'undefined') {
-        $.proxy(that.elems.loader.fadeIn(), that);
+    this.settings.timer = setTimeout(() => {
+      if (typeof this.elems != 'undefined') {
+        this.elems.loader.fadeIn();
       }
     }, this.settings.duration);
-    var deferred = this.preload(i).then(function (imgLoader) {
-      return that.place(i, imgLoader);
-    }).then(function (imgLoader) {
-      return that.appear(i);
-    }).then(function (imgLoader) {
-      that.zoomable();
-      that.settings.afterImageLoad.call(that);
+    var deferred = this.preload(i).then(imgLoader => {
+      return this.place(i, imgLoader);
+    }).then(imgLoader => {
+      return this.appear(i);
+    }).then(imgLoader => {
+      this.zoomable();
+      this.settings.afterImageLoad();
     });
     var nextIndex = i + 1;
 
@@ -133,14 +130,13 @@ class Chocolat {
   }
 
   place(i, imgLoader) {
-    var that = this;
     var fitting;
     this.settings.currentImage = i;
     this.description();
     this.pagination();
     this.arrows();
     this.storeImgSize(imgLoader, i);
-    fitting = this.fit(i, that.elems.wrapper);
+    fitting = this.fit(i, this.elems.wrapper);
     return this.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
   }
 
@@ -154,10 +150,9 @@ class Chocolat {
   }
 
   appear(i) {
-    var that = this;
     clearTimeout(this.settings.timer);
-    this.elems.loader.stop().fadeOut(300, function () {
-      that.elems.img.attr('src', that.settings.images[i].src);
+    this.elems.loader.stop().fadeOut(300, () => {
+      this.elems.img.attr('src', this.settings.images[i].src);
     });
   }
 
@@ -251,15 +246,13 @@ class Chocolat {
   }
 
   description() {
-    var that = this;
-    this.elems.description.html(that.settings.images[that.settings.currentImage].title);
+    this.elems.description.html(this.settings.images[this.settings.currentImage].title);
   }
 
   pagination() {
-    var that = this;
     var last = this.settings.lastImage + 1;
     var position = this.settings.currentImage + 1;
-    this.elems.pagination.html(position + ' ' + that.settings.separator2 + last);
+    this.elems.pagination.html(position + ' ' + this.settings.separator2 + last);
   }
 
   storeImgSize(img, i) {
@@ -280,9 +273,8 @@ class Chocolat {
     }
 
     var els = [this.elems.overlay[0], this.elems.loader[0], this.elems.wrapper[0]];
-    var that = this;
-    var def = $.when($(els).fadeOut(200)).done(function () {
-      that.elems.domContainer.removeClass('chocolat-open');
+    var def = $.when($(els).fadeOut(200)).done(() => {
+      this.elems.domContainer.removeClass('chocolat-open');
     });
     this.settings.currentImage = false;
     return def;
@@ -414,79 +406,70 @@ class Chocolat {
   }
 
   events() {
-    var that = this;
-    $(document).off('keydown.chocolat').on('keydown.chocolat', function (e) {
-      if (that.settings.initialized) {
+    $(document).off('keydown.chocolat').on('keydown.chocolat', e => {
+      if (this.settings.initialized) {
         if (e.keyCode == 37) {
-          that.change(-1);
+          this.change(-1);
         } else if (e.keyCode == 39) {
-          that.change(1);
+          this.change(1);
         } else if (e.keyCode == 27) {
-          that.close();
+          this.close();
         }
       }
-    }); // this.elems.wrapper.find('.chocolat-img')
-    //     .off('click.chocolat')
-    //     .on('click.chocolat', function(e) {
-    //         var currentImage = that.settings.images[that.settings.currentImage];
-    //         if(currentImage.width > $(that.elems.wrapper).width() || currentImage.height > $(that.elems.wrapper).height() ){
-    //             that.toggleZoom(e);
-    //         }
-    // });
-
-    this.elems.wrapper.find('.chocolat-right').off('click.chocolat').on('click.chocolat', function () {
-      that.change(+1);
     });
-    this.elems.wrapper.find('.chocolat-left').off('click.chocolat').on('click.chocolat', function () {
-      return that.change(-1);
+    this.elems.wrapper.find('.chocolat-right').off('click.chocolat').on('click.chocolat', () => {
+      this.change(+1);
     });
-    $([this.elems.overlay[0], this.elems.close[0]]).off('click.chocolat').on('click.chocolat', function () {
-      return that.close();
+    this.elems.wrapper.find('.chocolat-left').off('click.chocolat').on('click.chocolat', () => {
+      return this.change(-1);
     });
-    this.elems.fullscreen.off('click.chocolat').on('click.chocolat', function () {
-      if (that.settings.fullscreenOpen) {
-        that.exitFullScreen();
+    $([this.elems.overlay[0], this.elems.close[0]]).off('click.chocolat').on('click.chocolat', () => {
+      return this.close();
+    });
+    this.elems.fullscreen.off('click.chocolat').on('click.chocolat', () => {
+      if (this.settings.fullscreenOpen) {
+        this.exitFullScreen();
         return;
       }
 
-      that.openFullScreen();
+      this.openFullScreen();
     });
 
-    if (that.settings.backgroundClose) {
-      this.elems.overlay.off('click.chocolat').on('click.chocolat', function () {
-        return that.close();
+    if (this.settings.backgroundClose) {
+      this.elems.overlay.off('click.chocolat').on('click.chocolat', () => {
+        return this.close();
       });
     }
 
-    this.elems.wrapper.off('click.chocolat').on('click.chocolat', function (e) {
-      return that.zoomOut(e);
+    this.elems.wrapper.off('click.chocolat').on('click.chocolat', e => {
+      return this.zoomOut(e);
     });
-    this.elems.wrapper.find('.chocolat-img').off('click.chocolat').on('click.chocolat', function (e) {
-      if (that.settings.initialZoomState === null && that.elems.domContainer.hasClass('chocolat-zoomable')) {
+    this.elems.wrapper.find('.chocolat-img').off('click.chocolat').on('click.chocolat', e => {
+      if (this.settings.initialZoomState === null && this.elems.domContainer.hasClass('chocolat-zoomable')) {
         e.stopPropagation();
-        return that.zoomIn(e);
+        return this.zoomIn(e);
       }
     });
-    this.elems.wrapper.mousemove(function (e) {
-      if (that.settings.initialZoomState === null) {
+    this.elems.wrapper.mousemove(e => {
+      if (this.settings.initialZoomState === null) {
         return;
       }
 
-      if (that.elems.img.is(':animated')) {
+      if (this.elems.img.is(':animated')) {
         return;
       }
 
       var pos = $(this).offset();
       var height = $(this).height();
       var width = $(this).width();
-      var currentImage = that.settings.images[that.settings.currentImage];
+      var currentImage = this.settings.images[this.settings.currentImage];
       var imgWidth = currentImage.width;
       var imgHeight = currentImage.height;
       var coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
       var mvtX = 0;
 
       if (imgWidth > width) {
-        var paddingX = that.settings.zoomedPaddingX(imgWidth, width);
+        var paddingX = this.settings.zoomedPaddingX(imgWidth, width);
         mvtX = coord[0] / (width / 2);
         mvtX = ((imgWidth - width) / 2 + paddingX) * mvtX;
       }
@@ -494,7 +477,7 @@ class Chocolat {
       var mvtY = 0;
 
       if (imgHeight > height) {
-        var paddingY = that.settings.zoomedPaddingY(imgHeight, height);
+        var paddingY = this.settings.zoomedPaddingY(imgHeight, height);
         mvtY = coord[1] / (height / 2);
         mvtY = ((imgHeight - height) / 2 + paddingY) * mvtY;
       }
@@ -505,20 +488,20 @@ class Chocolat {
       };
 
       if (typeof e.duration !== 'undefined') {
-        $(that.elems.img).stop(false, true).animate(animation, e.duration);
+        $(this.elems.img).stop(false, true).animate(animation, e.duration);
       } else {
-        $(that.elems.img).stop(false, true).css(animation);
+        $(this.elems.img).stop(false, true).css(animation);
       }
     });
-    $(window).on('resize', function () {
-      if (!that.settings.initialized || that.settings.currentImage === false) {
+    $(window).on('resize', () => {
+      if (!this.settings.initialized || this.settings.currentImage === false) {
         return;
       }
 
-      that.debounce(50, function () {
-        var fitting = that.fit(that.settings.currentImage, that.elems.wrapper);
-        that.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
-        that.zoomable();
+      this.debounce(50, () => {
+        var fitting = this.fit(this.settings.currentImage, this.elems.wrapper);
+        this.center(fitting.width, fitting.height, fitting.left, fitting.top, 0);
+        this.zoomable();
       });
     });
   }
@@ -584,43 +567,42 @@ class Chocolat {
   }
 
   api() {
-    var that = this;
     return {
-      open: function (i) {
+      open: i => {
         i = parseInt(i) || 0;
-        return that.init(i);
+        return this.init(i);
       },
-      close: function () {
-        return that.close();
+      close: () => {
+        return this.close();
       },
-      next: function () {
-        return that.change(1);
+      next: () => {
+        return this.change(1);
       },
-      prev: function () {
-        return that.change(-1);
+      prev: () => {
+        return this.change(-1);
       },
-      goto: function (i) {
+      goto: i => {
         // open alias
-        return that.open(i);
+        return this.open(i);
       },
-      current: function () {
-        return that.settings.currentImage;
+      current: () => {
+        return this.settings.currentImage;
       },
-      place: function () {
-        return that.place(that.settings.currentImage, that.settings.duration);
+      place: () => {
+        return this.place(this.settings.currentImage, this.settings.duration);
       },
-      destroy: function () {
-        return that.destroy();
+      destroy: () => {
+        return this.destroy();
       },
-      set: function (property, value) {
-        that.settings[property] = value;
+      set: (property, value) => {
+        this.settings[property] = value;
         return value;
       },
-      get: function (property) {
-        return that.settings[property];
+      get: property => {
+        return this.settings[property];
       },
-      getElem: function (name) {
-        return that.elems[name];
+      getElem: name => {
+        return this.elems[name];
       }
     };
   }
