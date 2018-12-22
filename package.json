@@ -1,20 +1,26 @@
 {
   "name": "chocolat",
-  "version": "0.4.21",
-  "description": " Responsive jQuery Lightbox Plugin",
-  "main": "dist/js/jquery.chocolat.js",
+  "version": "0.5.0",
+  "description": "Responsive jQuery Lightbox Plugin",
+  "main": "dist/js/chocolat.cjs.js",
+  "module": "dist/js/chocolat.esm.js",
+  "browser": "dist/js/chocolat.iife.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "gulp build",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "./node_modules/.bin/mocha-phantomjs test/index.html",
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
   },
   "dependencies": {
+    "es6-promise": "^4.2.5",
     "jquery": "^3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "babel-preset-env": "^1.7.0",
     "chai": "^3.0.0",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
@@ -25,7 +31,11 @@
     "mocha-phantomjs": "3.5.3",
     "phantomjs": "^1.9.1",
     "prettier": "1.15.2",
-    "prettier-check": "^2.0.0"
+    "prettier-check": "^2.0.0",
+    "rollup": "^0.68.1",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
   },
   "repository": {
     "type": "git",
