@@ -36,9 +36,7 @@ describe('Chocolat', function() {
             )
             expect($('#container .chocolat-bottom').find('.chocolat-fullscreen').length).to.equal(1)
             expect($('#container .chocolat-bottom').find('.chocolat-set-title').length).to.equal(1)
-            expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(
-                1
-            )
+            expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(1)
         })
 
         it('should add css classes to parent when in container', function(done) {
@@ -552,10 +550,8 @@ describe('Chocolat', function() {
                         expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
                         expect(dim.imgHeight).to.be.closeTo(dim.containerHeight, 1)
                     } else {
-                        console.log('debug: ', "b")
                         var targetHeight = dim.imgWidth * dim.imgRatio
                         // 1px delta, because of rounded values
-                        console.log('debug: ',dim.imgHeight,  targetHeight)
                         expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
                         expect(dim.imgWidth).to.be.closeTo(dim.containerWidth, 1)
                     }
