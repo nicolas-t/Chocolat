@@ -41,11 +41,11 @@ class Chocolat {
     var that = this;
     this.settings = settings;
     this.elems = {};
-    this.element = element;
+    this.element = $(element);
     this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed'];
 
-    if (!this.settings.setTitle && element.data('chocolat-title')) {
-      this.settings.setTitle = element.data('chocolat-title');
+    if (!this.settings.setTitle && this.element.data('chocolat-title')) {
+      this.settings.setTitle = this.element.data('chocolat-title');
     }
 
     this.element.find(this.settings.imageSelector).each(function () {
@@ -625,10 +625,11 @@ class Chocolat {
 
 }
 
+let calls = 0;
 function main_esm (options) {
   return this.each(function () {
     calls++;
-    var settings = $.extend(true, {}, defaults, options, {
+    var settings = Object.assign({}, defaults, options, {
       setIndex: calls
     });
 

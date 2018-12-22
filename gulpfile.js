@@ -3,7 +3,6 @@ const gutil = require('gulp-util');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const bump = require('gulp-bump');
-const mochaPhantomJS = require('gulp-mocha-phantomjs');
 
 gulp.task('testing', () =>
     gulp.src('./test/index.html')

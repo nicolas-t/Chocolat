@@ -37,7 +37,7 @@ export class Chocolat {
 
         this.settings = settings
         this.elems = {}
-        this.element = element
+        this.element = $(element)
 
         this._cssClasses = [
             'chocolat-open',
@@ -47,8 +47,8 @@ export class Chocolat {
             'chocolat-zoomed',
         ]
 
-        if (!this.settings.setTitle && element.data('chocolat-title')) {
-            this.settings.setTitle = element.data('chocolat-title')
+        if (!this.settings.setTitle && this.element.data('chocolat-title')) {
+            this.settings.setTitle = this.element.data('chocolat-title')
         }
 
         this.element.find(this.settings.imageSelector).each(function() {

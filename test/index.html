@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Chocolat tests</title>
-    <link rel="stylesheet" media="all" href="lib/mocha.css">
+    <link rel="stylesheet" media="all" href="../node_modules/mocha/mocha.css">
     <link rel="stylesheet" media="all" href="../dist/css/chocolat.css">
 </head>
 <body>
@@ -22,22 +22,20 @@
     </div>
 
     <div id="mocha"><p><a href=".">Index</a></p></div>
-    <div id="messages"></div>
-    <div id="fixtures"></div>
-    <script src="lib/mocha.js"></script>
-    <script src="lib/sinon.js"></script>
-    <script src="lib/chai.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="../dist/js/chocolat.iife.js"></script>
     <script>
-      mocha.setup('bdd')
-      mocha.reporter('html');
-      expect = chai.expect;
+        mocha.setup('bdd')
+        mocha.reporter('html');
+        expect = chai.expect;
     </script>
-    <script src="test.chocolat.js"></script>
+    <script src="test.js"></script>
     <script>
-      if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-      else { mocha.run(); }
+        mocha.run()
     </script>
 </body>
 </html>

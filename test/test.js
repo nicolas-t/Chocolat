@@ -2,7 +2,7 @@ describe('Chocolat', function() {
     describe('Opening', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
-            return chocolat.api().destroy()
+            chocolat.api().destroy()
         })
 
         it('should call markup function and create markup', function() {
@@ -36,7 +36,7 @@ describe('Chocolat', function() {
             )
             expect($('#container .chocolat-bottom').find('.chocolat-fullscreen').length).to.equal(1)
             expect($('#container .chocolat-bottom').find('.chocolat-set-title').length).to.equal(1)
-            return expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(
+            expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(
                 1
             )
         })
@@ -48,7 +48,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -66,7 +66,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -84,7 +84,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -109,7 +109,7 @@ describe('Chocolat', function() {
                 .trigger('click')
 
             expect(spyInit.calledOnce).to.be.true
-            return expect(spyInit.calledWithExactly(0)).to.be.true
+            expect(spyInit.calledWithExactly(0)).to.be.true
         })
 
         it('should call load function', function() {
@@ -128,7 +128,7 @@ describe('Chocolat', function() {
                 .trigger('click')
 
             expect(spyLoad.calledOnce).to.be.true
-            return expect(spyLoad.calledWithExactly(0)).to.be.true
+            expect(spyLoad.calledWithExactly(0)).to.be.true
         })
 
         it('should call markup function', function() {
@@ -146,7 +146,7 @@ describe('Chocolat', function() {
                 .first()
                 .trigger('click')
 
-            return expect(spyMarkup.calledOnce).to.be.true
+            expect(spyMarkup.calledOnce).to.be.true
         })
 
         return it('should append description element in top element (instead of bottom, the default behaviour)', function() {
@@ -168,7 +168,7 @@ describe('Chocolat', function() {
                 .trigger('click')
 
             expect(chocolat.elems.top.find(chocolat.elems.description).length).to.equal(1)
-            return expect(chocolat.elems.bottom.find(chocolat.elems.description).length).to.equal(0)
+            expect(chocolat.elems.bottom.find(chocolat.elems.description).length).to.equal(0)
         })
     })
 
@@ -176,7 +176,7 @@ describe('Chocolat', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
             if (chocolat != null) {
-                return chocolat.api().destroy()
+                chocolat.api().destroy()
             }
         })
 
@@ -191,7 +191,7 @@ describe('Chocolat', function() {
             chocolat.api().destroy()
 
             var dataAfter = $('#example0').data('chocolat')
-            return expect(dataAfter).to.be.undefined
+            expect(dataAfter).to.be.undefined
         })
 
         it('should remove wrapper element', function(done) {
@@ -199,7 +199,7 @@ describe('Chocolat', function() {
                 .Chocolat()
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -228,14 +228,14 @@ describe('Chocolat', function() {
             chocolat.api().destroy()
 
             var eventAfter = $._data(links.first()[0], 'events')
-            return expect(typeof eventAfter).to.equal('undefined')
+            expect(typeof eventAfter).to.equal('undefined')
         })
     })
 
     describe('FullScreen', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
-            return chocolat.api().destroy()
+            chocolat.api().destroy()
         })
 
         it('should open fullscreen when clicking .fullscreen', function(done) {
@@ -255,7 +255,7 @@ describe('Chocolat', function() {
 
             var spyOpen = sinon.spy(chocolat, 'openFullScreen')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -285,7 +285,7 @@ describe('Chocolat', function() {
 
             var spyClose = sinon.spy(chocolat, 'exitFullScreen')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -314,7 +314,7 @@ describe('Chocolat', function() {
 
             var spyClose = sinon.spy(chocolat, 'exitFullScreen')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -344,7 +344,7 @@ describe('Chocolat', function() {
 
             var spyOpen = sinon.spy(chocolat, 'openFullScreen')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -357,7 +357,7 @@ describe('Chocolat', function() {
     describe('Change image', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
-            return chocolat.api().destroy()
+            chocolat.api().destroy()
         })
 
         it('should go to next image', function(done) {
@@ -368,7 +368,7 @@ describe('Chocolat', function() {
             var spyLoad = sinon.spy(chocolat, 'load')
             var spyChange = sinon.spy(chocolat, 'change')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -390,20 +390,20 @@ describe('Chocolat', function() {
                 .Chocolat()
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
-                    return chocolat
+                    chocolat
                         .api()
                         .next()
                         .done(function() {
                             expect(spyLoad.calledWithExactly(1)).to.be.true
                             var spyChange = sinon.spy(chocolat, 'change')
 
-                            return chocolat
+                            chocolat
                                 .api()
                                 .prev()
                                 .done(function() {
@@ -427,13 +427,13 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
-                    return chocolat
+                    chocolat
                         .api()
                         .prev()
                         .done(function() {
@@ -458,13 +458,13 @@ describe('Chocolat', function() {
 
             var lastImage = chocolat.settings.images.length - 1
 
-            return chocolat
+            chocolat
                 .api()
                 .open(lastImage)
                 .done(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
-                    return chocolat
+                    chocolat
                         .api()
                         .next()
                         .done(function() {
@@ -480,7 +480,7 @@ describe('Chocolat', function() {
     describe('ImageSize cover', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
-            return chocolat.api().destroy()
+            chocolat.api().destroy()
         })
 
         it('should add class chocolat-cover to parent', function(done) {
@@ -488,7 +488,7 @@ describe('Chocolat', function() {
                 .Chocolat({ imageSize: 'cover' })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -511,7 +511,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -521,12 +521,12 @@ describe('Chocolat', function() {
                         var targetWidth = dim.imgHeight / dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                        expect(dim.imgHeight).to.equal(dim.containerHeight)
+                        expect(dim.imgHeight).to.be.closeTo(dim.containerHeight, 1)
                     } else {
                         var targetHeight = dim.imgWidth * dim.imgRatio
                         // 1px delta, because of rounded values
-                        expect(dim.imgWidth).to.be.closeTo(targetHeight, 1)
-                        expect(dim.imgWidth).to.equal(dim.containerWidth)
+                        expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
+                        expect(dim.imgWidth).to.be.closeTo(dim.containerWidth, 1)
                     }
 
                     return done()
@@ -540,7 +540,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -550,12 +550,14 @@ describe('Chocolat', function() {
                         var targetWidth = dim.imgHeight / dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                        expect(dim.imgHeight).to.equal(dim.containerHeight)
+                        expect(dim.imgHeight).to.be.closeTo(dim.containerHeight, 1)
                     } else {
+                        console.log('debug: ', "b")
                         var targetHeight = dim.imgWidth * dim.imgRatio
                         // 1px delta, because of rounded values
-                        expect(dim.imgWidth).to.be.closeTo(targetHeight, 1)
-                        expect(dim.imgWidth).to.equal(dim.containerWidth)
+                        console.log('debug: ',dim.imgHeight,  targetHeight)
+                        expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
+                        expect(dim.imgWidth).to.be.closeTo(dim.containerWidth, 1)
                     }
 
                     return done()
@@ -569,7 +571,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -595,7 +597,7 @@ describe('Chocolat', function() {
     describe('ImageSize contain', function() {
         afterEach(function() {
             var chocolat = $('#example0').data('chocolat')
-            return chocolat.api().destroy()
+            chocolat.api().destroy()
         })
 
         it("should have 'longest' side of the container equal to 'longest' side to the image in container", function(done) {
@@ -606,7 +608,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -616,12 +618,12 @@ describe('Chocolat', function() {
                         var targetWidth = dim.containerPaddedHeight / dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                        expect(dim.imgHeight).to.equal(dim.containerPaddedHeight)
+                        expect(dim.imgHeight).to.be.closeTo(dim.containerPaddedHeight, 1)
                     } else {
                         var targetHeight = dim.containerPaddedWidth * dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
-                        expect(dim.imgWidth).to.equal(dim.containerPaddedWidth)
+                        expect(dim.imgWidth).to.be.closeTo(dim.containerPaddedWidth, 1)
                     }
 
                     return done()
@@ -635,7 +637,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
@@ -645,12 +647,12 @@ describe('Chocolat', function() {
                         var targetWidth = dim.containerPaddedHeight / dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                        expect(dim.imgHeight).to.equal(dim.containerPaddedHeight)
+                        expect(dim.imgHeight).to.be.closeTo(dim.containerPaddedHeight, 1)
                     } else {
                         var targetHeight = dim.containerPaddedWidth * dim.imgRatio
                         // 1px delta, because of rounded values
                         expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
-                        expect(dim.imgWidth).to.equal(dim.containerPaddedWidth)
+                        expect(dim.imgWidth).to.be.closeTo(dim.containerPaddedWidth, 1)
                     }
 
                     return done()
@@ -664,7 +666,7 @@ describe('Chocolat', function() {
                 })
                 .data('chocolat')
 
-            return chocolat
+            chocolat
                 .api()
                 .open()
                 .done(function() {
