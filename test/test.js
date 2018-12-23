@@ -149,7 +149,7 @@ describe('Chocolat', function() {
 
         return it('should append description element in top element (instead of bottom, the default behaviour)', function() {
             var afterMarkup = function() {
-                return this.elems.description.appendTo(this.elems.top)
+                return $(this.elems.description).appendTo(this.elems.top)
             }
 
             var chocolat = $('#example0')
@@ -165,8 +165,19 @@ describe('Chocolat', function() {
                 .first()
                 .trigger('click')
 
-            expect(chocolat.elems.top.find(chocolat.elems.description).length).to.equal(1)
-            expect(chocolat.elems.bottom.find(chocolat.elems.description).length).to.equal(0)
+            chocolat.api().getElem('top')
+            expect(
+                chocolat
+                    .api()
+                    .getElem('top')
+                    .find(chocolat.api().getElem('description')).length
+            ).to.equal(1)
+            expect(
+                chocolat
+                    .api()
+                    .getElem('bottom')
+                    .find(chocolat.api().getElem('description')).length
+            ).to.equal(0)
         })
     })
 
