@@ -68,6 +68,7 @@ class Chocolat {
   }
 
   on(element, eventName, cb) {
+    // const eventName = this.settings.setIndex + '-' + eventName
     const length = this.events.push({
       element,
       eventName,
@@ -78,6 +79,7 @@ class Chocolat {
   }
 
   off(element, eventName) {
+    // const eventName = this.settings.setIndex + '-' + eventName
     const index = this.events.findIndex(event => {
       return event.element === element && event.eventName === eventName;
     });
@@ -302,7 +304,7 @@ class Chocolat {
     }
 
     var els = [this.elems.overlay, this.elems.loader, this.elems.wrapper];
-    var def = $.when($(els).fadeOut(200)).done(() => {
+    var def = $.when($(els).fadeOut(200)).then(() => {
       this.elems.domContainer.removeClass('chocolat-open');
     });
     this.settings.currentImage = false;
@@ -436,7 +438,8 @@ class Chocolat {
   }
 
   attachListeners() {
-    $(document).off('keydown.chocolat').on('keydown.chocolat', e => {
+    this.off(document, 'keydown.chocolat');
+    this.on(document, 'keydown.chocolat', e => {
       if (this.settings.initialized) {
         if (e.keyCode == 37) {
           this.change(-1);
@@ -447,16 +450,22 @@ class Chocolat {
         }
       }
     });
-    $(this.elems.wrapper).find('.chocolat-right').off('click.chocolat').on('click.chocolat', () => {
+    const right = this.elems.wrapper.querySelector('.chocolat-right');
+    this.off(right, 'click.chocolat');
+    this.on(right, 'click.chocolat', () => {
       this.change(+1);
     });
-    $(this.elems.wrapper).find('.chocolat-left').off('click.chocolat').on('click.chocolat', () => {
-      return this.change(-1);
+    const left = this.elems.wrapper.querySelector('.chocolat-left');
+    this.off(left, 'click.chocolat');
+    this.on(left, 'click.chocolat', () => {
+      this.change(-1);
     });
-    $([this.elems.overlay, this.elems.close]).off('click.chocolat').on('click.chocolat', () => {
-      return this.close();
+    this.off(this.elems.close, 'click.chocolat');
+    this.on(this.elems.close, 'click.chocolat', () => {
+      this.close();
     });
-    $(this.elems.fullscreen).off('click.chocolat').on('click.chocolat', () => {
+    this.off(this.elems.fullscreen, 'click.chocolat');
+    this.on(this.elems.fullscreen, 'click.chocolat', () => {
       if (this.settings.fullscreenOpen) {
         this.exitFullScreen();
         return;
@@ -466,21 +475,25 @@ class Chocolat {
     });
 
     if (this.settings.backgroundClose) {
-      $(this.elems.overlay).off('click.chocolat').on('click.chocolat', () => {
-        return this.close();
+      this.off(this.elems.overlay, 'click.chocolat');
+      this.on(this.elems.overlay, 'click.chocolat', e => {
+        this.close();
       });
     }
 
-    $(this.elems.wrapper).off('click.chocolat').on('click.chocolat', e => {
-      return this.zoomOut(e);
+    this.off(this.elems.wrapper, 'click.chocolat');
+    this.on(this.elems.wrapper, 'click.chocolat', e => {
+      this.zoomOut(e);
     });
-    $(this.elems.wrapper).find('.chocolat-img').off('click.chocolat').on('click.chocolat', e => {
+    const img = this.elems.wrapper.querySelector('.chocolat-img');
+    this.off(img, 'click.chocolat');
+    this.on(img, 'click.chocolat', e => {
       if (this.settings.initialZoomState === null && this.elems.domContainer.hasClass('chocolat-zoomable')) {
         e.stopPropagation();
-        return this.zoomIn(e);
+        this.zoomIn(e);
       }
     });
-    $(this.elems.wrapper).mousemove(e => {
+    this.on(this.elems.wrapper, 'mousemove.chocolat', e => {
       if (this.settings.initialZoomState === null) {
         return;
       }
@@ -489,9 +502,9 @@ class Chocolat {
         return;
       }
 
-      var pos = $(this).offset();
-      var height = $(this).height();
-      var width = $(this).width();
+      var pos = $(this.elems.wrapper).offset();
+      var height = $(this.elems.wrapper).height();
+      var width = $(this.elems.wrapper).width();
       var currentImage = this.settings.images[this.settings.currentImage];
       var imgWidth = currentImage.width;
       var imgHeight = currentImage.height;
@@ -523,7 +536,7 @@ class Chocolat {
         $(this.elems.img).stop(false, true).css(animation);
       }
     });
-    $(window).on('resize', () => {
+    this.on(window, 'resize.chocolat', e => {
       if (!this.settings.initialized || this.settings.currentImage === false) {
         return;
       }
