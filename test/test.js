@@ -49,7 +49,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect($('#container').hasClass('chocolat-in-container')).to.be.true
                     expect($('#container').hasClass('chocolat-open')).to.be.true
                     // expect($('#container').hasClass('chocolat-zoomable')).to.be.true
@@ -67,7 +67,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect($('body').hasClass('chocolat-open')).to.be.true
                     expect($('body').hasClass('chocolat-' + chocolat.settings.imageSize)).to.be.true
                     // expect($('#container').hasClass('chocolat-zoomable')).to.be.true
@@ -85,7 +85,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect($('body').hasClass('custom-class-name')).to.be.true
                     return done()
                 })
@@ -200,7 +200,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var lengthBefore = $('.chocolat-wrapper').length
                     expect(lengthBefore).to.equal(1)
 
@@ -218,7 +218,7 @@ describe('Chocolat', function() {
                 .data('chocolat')
             var imageSelector = chocolat.api().get('imageSelector')
 
-            var links = chocolat.element.find(imageSelector)
+            var links = chocolat.$element.find(imageSelector)
 
             var eventBefore = $._data(links.first()[0], 'events')
             expect(eventBefore.click[0].namespace).to.equal('chocolat')
@@ -256,7 +256,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     chocolat.elems.fullscreen.click()
                     expect(spyOpen.calledOnce).to.be.true
                     expect(chocolat.api().get('fullscreenOpen')).to.be.true
@@ -286,7 +286,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     chocolat.elems.fullscreen.click()
                     chocolat.elems.fullscreen.click()
                     expect(spyClose.calledOnce).to.be.true
@@ -315,7 +315,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     chocolat.elems.fullscreen.click()
                     chocolat.elems.close.click()
                     expect(spyClose.calledOnce).to.be.true
@@ -345,7 +345,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect(spyOpen.calledOnce).to.be.true
                     return done()
                 })
@@ -369,7 +369,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect(spyLoad.calledWithExactly(0)).to.be.true
 
                     chocolat.elems.right.click()
@@ -391,20 +391,20 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
                     chocolat
                         .api()
                         .next()
-                        .done(function() {
+                        .then(function() {
                             expect(spyLoad.calledWithExactly(1)).to.be.true
                             var spyChange = sinon.spy(chocolat, 'change')
 
                             chocolat
                                 .api()
                                 .prev()
-                                .done(function() {
+                                .then(function() {
                                     expect(spyLoad.calledWithExactly(0)).to.be.true
 
                                     expect(spyChange.calledOnce).to.be.true
@@ -428,13 +428,13 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
                     chocolat
                         .api()
                         .prev()
-                        .done(function() {
+                        .then(function() {
                             expect(
                                 spyLoad.calledWithExactly(chocolat.api().get('lastImage'))
                             ).to.be.true
@@ -459,13 +459,13 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open(lastImage)
-                .done(function() {
+                .then(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
                     chocolat
                         .api()
                         .next()
-                        .done(function() {
+                        .then(function() {
                             expect(spyLoad.calledWithExactly(0)).to.be.true
                             expect(chocolat.api().current()).to.equal(0)
 
@@ -489,7 +489,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     expect(chocolat.api().get('imageSize')).to.equal('cover')
                     expect(
                         chocolat
@@ -512,7 +512,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     if (dim.imgRatio < dim.containerRatio) {
@@ -541,7 +541,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     if (dim.imgRatio < dim.containerRatio) {
@@ -570,7 +570,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     var $content = chocolat.api().getElem('content')
@@ -607,7 +607,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     if (dim.imgRatio > dim.containerPaddedRatio) {
@@ -636,7 +636,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     if (dim.imgRatio > dim.containerPaddedRatio) {
@@ -665,7 +665,7 @@ describe('Chocolat', function() {
             chocolat
                 .api()
                 .open()
-                .done(function() {
+                .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
                     var $content = chocolat.api().getElem('content')

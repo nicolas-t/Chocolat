@@ -35,7 +35,8 @@ export class Chocolat {
     constructor(element, settings) {
         this.settings = settings
         this.elems = {}
-        this.element = $(element)
+        this.$element = $(element)
+        this.element = this.$element[0]
 
         this._cssClasses = [
             'chocolat-open',
@@ -45,20 +46,20 @@ export class Chocolat {
             'chocolat-zoomed',
         ]
 
-        if (!this.settings.setTitle && this.element.data('chocolat-title')) {
-            this.settings.setTitle = this.element.data('chocolat-title')
+        if (!this.settings.setTitle && this.element.dataset['chocolat-title']) {
+            this.settings.setTitle = this.element.dataset['chocolat-title']
         }
 
-        this.element.find(this.settings.imageSelector).each((i, el) => {
+        const imgs = this.element.querySelectorAll(this.settings.imageSelector)
+
+        imgs.forEach((el, i) => {
             this.settings.images.push({
-                title: $(el).attr('title'),
-                src: $(el).attr(this.settings.imageSource),
+                title: el.getAttribute('title'),
+                src: el.getAttribute(this.settings.imageSource),
                 height: false,
                 width: false,
             })
-        })
 
-        this.element.find(this.settings.imageSelector).each((i, el) => {
             $(el)
                 .off('click.chocolat')
                 .on('click.chocolat', (e) => {
@@ -83,18 +84,23 @@ export class Chocolat {
     }
 
     preload(i) {
-        var def = $.Deferred()
-
-        if (typeof this.settings.images[i] === 'undefined') {
-            return
+        const src = this.settings.images[i].src
+        let image = new Image()
+        if ('decode' in image) {
+            image.src = src
+            return new Promise(function(resolve, reject) {
+                image
+                    .decode()
+                    .then(resolve.bind(this, image))
+                    .catch(resolve)
+            })
+        } else {
+            return new Promise(function(resolve, reject) {
+                image.onload = resolve.bind(this, image)
+                image.onerror = resolve
+                image.src = src
+            })
         }
-        var imgLoader = new Image()
-        imgLoader.onload = () => {
-            def.resolve(imgLoader)
-        }
-        imgLoader.src = this.settings.images[i].src
-
-        return def
     }
 
     load(i) {
@@ -168,9 +174,12 @@ export class Chocolat {
     appear(i) {
         clearTimeout(this.settings.timer)
 
-        this.elems.loader.stop().fadeOut(300, () => {
-            this.elems.img.attr('src', this.settings.images[i].src)
-        })
+        return this.elems.loader
+            .stop()
+            .fadeOut(300, () => {
+                this.elems.img.attr('src', this.settings.images[i].src)
+            })
+            .promise()
     }
 
     fit(i, container) {
@@ -302,8 +311,12 @@ export class Chocolat {
     }
 
     destroy() {
-        this.element.removeData()
-        this.element.find(this.settings.imageSelector).off('click.chocolat')
+        this.$element.removeData()
+
+        const imgs = this.element.querySelectorAll(this.settings.imageSelector)
+        imgs.forEach((el) => {
+            $(el).off('click.chocolat')
+        })
 
         if (!this.settings.initialized) {
             return
