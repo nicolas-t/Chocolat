@@ -44,6 +44,7 @@ class Chocolat {
     this.elems = {};
     this.$element = $(element);
     this.element = this.$element[0];
+    this.events = [];
     this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed'];
 
     if (!this.settings.setTitle && this.element.dataset['chocolat-title']) {
@@ -58,18 +59,42 @@ class Chocolat {
         height: false,
         width: false
       });
-      $(el).off('click.chocolat').on('click.chocolat', e => {
+      this.off(el, 'click.chocolat');
+      this.on(el, 'click.chocolat', e => {
         this.init(i);
         e.preventDefault();
       });
     });
   }
 
+  on(element, eventName, cb) {
+    const length = this.events.push({
+      element,
+      eventName,
+      cb
+    });
+    element.addEventListener(eventName.split('.')[0], this.events[length - 1].cb);
+    return this;
+  }
+
+  off(element, eventName) {
+    const index = this.events.findIndex(event => {
+      return event.element === element && event.eventName === eventName;
+    });
+
+    if (this.events[index]) {
+      element.removeEventListener(eventName.split('.')[0], this.events[index].cb);
+      this.events.splice(index, 1);
+    }
+
+    return this;
+  }
+
   init(i) {
     if (!this.settings.initialized) {
       this.setDomContainer();
       this.markup();
-      this.events();
+      this.attachListeners();
       this.settings.lastImage = this.settings.images.length - 1;
       this.settings.initialized = true;
     }
@@ -287,8 +312,8 @@ class Chocolat {
   destroy() {
     this.$element.removeData();
     const imgs = this.element.querySelectorAll(this.settings.imageSelector);
-    imgs.forEach(el => {
-      $(el).off('click.chocolat');
+    imgs.forEach((el, i) => {
+      this.off(el, 'click.chocolat');
     });
 
     if (!this.settings.initialized) {
@@ -410,7 +435,7 @@ class Chocolat {
     }
   }
 
-  events() {
+  attachListeners() {
     $(document).off('keydown.chocolat').on('keydown.chocolat', e => {
       if (this.settings.initialized) {
         if (e.keyCode == 37) {

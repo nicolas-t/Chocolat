@@ -17,8 +17,8 @@ describe('Chocolat', function() {
 
             $('#example0')
                 .find('.chocolat-image')
-                .first()
-                .trigger('click')
+                .first()[0]
+                .click()
 
             expect(spyMarkup.calledOnce).to.be.true
             expect($('#container').find('.chocolat-wrapper').length).to.equal(1)
@@ -103,8 +103,8 @@ describe('Chocolat', function() {
 
             $('#example0')
                 .find('.chocolat-image')
-                .first()
-                .trigger('click')
+                .first()[0]
+                .click()
 
             expect(spyInit.calledOnce).to.be.true
             expect(spyInit.calledWithExactly(0)).to.be.true
@@ -122,8 +122,8 @@ describe('Chocolat', function() {
 
             $('#example0')
                 .find('.chocolat-image')
-                .first()
-                .trigger('click')
+                .first()[0]
+                .click()
 
             expect(spyLoad.calledOnce).to.be.true
             expect(spyLoad.calledWithExactly(0)).to.be.true
@@ -141,8 +141,8 @@ describe('Chocolat', function() {
 
             $('#example0')
                 .find('.chocolat-image')
-                .first()
-                .trigger('click')
+                .first()[0]
+                .click()
 
             expect(spyMarkup.calledOnce).to.be.true
         })
@@ -162,8 +162,8 @@ describe('Chocolat', function() {
 
             $('#example0')
                 .find('.chocolat-image')
-                .first()
-                .trigger('click')
+                .first()[0]
+                .click()
 
             chocolat.api().getElem('top')
             expect(
@@ -229,15 +229,24 @@ describe('Chocolat', function() {
                 .data('chocolat')
             var imageSelector = chocolat.api().get('imageSelector')
 
-            var links = chocolat.$element.find(imageSelector)
-
-            var eventBefore = $._data(links.first()[0], 'events')
-            expect(eventBefore.click[0].namespace).to.equal('chocolat')
+            var eventBefore = Object.values(chocolat.events)
+            expect(eventBefore.length).to.equal(document.querySelectorAll(imageSelector).length)
 
             chocolat.api().destroy()
 
-            var eventAfter = $._data(links.first()[0], 'events')
-            expect(typeof eventAfter).to.equal('undefined')
+            var eventAfter = Object.values(chocolat.events)
+            expect(eventAfter.length).to.equal(0)
+
+            var spyInit = sinon.spy(chocolat, 'init')
+
+            const link = $('#example0')
+                .find(imageSelector)
+                .first()[0]
+
+            link.setAttribute('href', '#')
+            link.click()
+
+            expect(spyInit.notCalled).to.be.true
         })
     })
 
