@@ -2,7 +2,7 @@ const defaults = {
   container: window,
   // window or jquery object or jquery selector, or element
   imageSelector: '.chocolat-image',
-  className: '',
+  className: undefined,
   imageSize: 'default',
   // 'default', 'contain', 'cover' or 'native'
   initialZoomState: null,
@@ -132,7 +132,7 @@ class Chocolat {
 
     $(this.elems.overlay).fadeIn(this.settings.duration);
     $(this.elems.wrapper).fadeIn(this.settings.duration);
-    this.elems.domContainer.addClass('chocolat-open');
+    $(this.elems.domContainer)[0].classList.add('chocolat-open');
     this.settings.timer = setTimeout(() => {
       if (typeof this.elems != 'undefined') {
         $(this.elems.loader).fadeIn();
@@ -254,23 +254,25 @@ class Chocolat {
 
   arrows() {
     if (this.settings.loop) {
-      $([this.elems.left, this.elems.right]).addClass('active');
+      this.elems.left.classList.add('active');
+      this.elems.right.classList.add('active');
     } else if (this.settings.linkImages) {
       // right
       if (this.settings.currentImage == this.settings.lastImage) {
-        $(this.elems.right).removeClass('active');
+        this.elems.right.classList.remove('active');
       } else {
-        $(this.elems.right).addClass('active');
+        this.elems.right.classList.add('active');
       } // left
 
 
       if (this.settings.currentImage === 0) {
-        $(this.elems.left).removeClass('active');
+        this.elems.left.classList.remove('active');
       } else {
-        $(this.elems.left).addClass('active');
+        this.elems.left.classList.add('active');
       }
     } else {
-      $([this.elems.left, this.elems.right]).removeClass('active');
+      this.elems.left.classList.remove('active');
+      this.elems.right.classList.remove('active');
     }
   }
 
@@ -303,7 +305,7 @@ class Chocolat {
 
     var els = [this.elems.overlay, this.elems.loader, this.elems.wrapper];
     var def = $.when($(els).fadeOut(200)).then(() => {
-      this.elems.domContainer.removeClass('chocolat-open');
+      $(this.elems.domContainer)[0].classList.remove('chocolat-open');
     });
     this.settings.currentImage = false;
     return def;
@@ -326,7 +328,7 @@ class Chocolat {
 
     this.settings.currentImage = false;
     this.settings.initialized = false;
-    this.elems.domContainer.removeClass(this._cssClasses.join(' '));
+    $(this.elems.domContainer)[0].classList.remove(...this._cssClasses);
     $(this.elems.wrapper).remove();
   }
 
@@ -341,14 +343,14 @@ class Chocolat {
   }
 
   markup() {
-    this.elems.domContainer.addClass('chocolat-open ' + this.settings.className);
+    $(this.elems.domContainer)[0].classList.add('chocolat-open', this.settings.className);
 
     if (this.settings.imageSize == 'cover') {
-      this.elems.domContainer.addClass('chocolat-cover');
+      $(this.elems.domContainer)[0].classList.add('chocolat-cover');
     }
 
     if (this.settings.container !== window) {
-      this.elems.domContainer.addClass('chocolat-in-container');
+      $(this.elems.domContainer)[0].classList.add('chocolat-in-container');
     }
 
     this.elems.wrapper = document.createElement('div');
@@ -560,9 +562,9 @@ class Chocolat {
     var isImageStretched = this.elems.img.clientWidth > currentImage.width || this.elems.img.clientHeight > currentImage.height;
 
     if (isImageZoomable && !isImageStretched) {
-      this.elems.domContainer.addClass('chocolat-zoomable');
+      $(this.elems.domContainer)[0].classList.add('chocolat-zoomable');
     } else {
-      this.elems.domContainer.removeClass('chocolat-zoomable');
+      $(this.elems.domContainer)[0].classList.remove('chocolat-zoomable');
     }
   }
 
@@ -574,7 +576,7 @@ class Chocolat {
     event.pageY = e.pageY;
     event.duration = this.settings.duration;
     $(this.elems.wrapper).trigger(event);
-    this.elems.domContainer.addClass('chocolat-zoomed');
+    $(this.elems.domContainer)[0].classList.add('chocolat-zoomed');
     const {
       width,
       height,
@@ -595,7 +597,7 @@ class Chocolat {
     $(this.elems.img).animate({
       margin: 0
     }, duration);
-    this.elems.domContainer.removeClass('chocolat-zoomed');
+    $(this.elems.domContainer)[0].classList.remove('chocolat-zoomed');
     const {
       width,
       height,
