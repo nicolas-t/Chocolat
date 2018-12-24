@@ -132,7 +132,7 @@ class Chocolat {
 
     $(this.elems.overlay).fadeIn(this.settings.duration);
     $(this.elems.wrapper).fadeIn(this.settings.duration);
-    $(this.elems.domContainer)[0].classList.add('chocolat-open');
+    this.elems.domContainer.classList.add('chocolat-open');
     this.settings.timer = setTimeout(() => {
       if (typeof this.elems != 'undefined') {
         $(this.elems.loader).fadeIn();
@@ -305,7 +305,7 @@ class Chocolat {
 
     var els = [this.elems.overlay, this.elems.loader, this.elems.wrapper];
     var def = $.when($(els).fadeOut(200)).then(() => {
-      $(this.elems.domContainer)[0].classList.remove('chocolat-open');
+      this.elems.domContainer.classList.remove('chocolat-open');
     });
     this.settings.currentImage = false;
     return def;
@@ -328,7 +328,7 @@ class Chocolat {
 
     this.settings.currentImage = false;
     this.settings.initialized = false;
-    $(this.elems.domContainer)[0].classList.remove(...this._cssClasses);
+    this.elems.domContainer.classList.remove(...this._cssClasses);
     $(this.elems.wrapper).remove();
   }
 
@@ -343,20 +343,20 @@ class Chocolat {
   }
 
   markup() {
-    $(this.elems.domContainer)[0].classList.add('chocolat-open', this.settings.className);
+    this.elems.domContainer.classList.add('chocolat-open', this.settings.className);
 
     if (this.settings.imageSize == 'cover') {
-      $(this.elems.domContainer)[0].classList.add('chocolat-cover');
+      this.elems.domContainer.classList.add('chocolat-cover');
     }
 
     if (this.settings.container !== window) {
-      $(this.elems.domContainer)[0].classList.add('chocolat-in-container');
+      this.elems.domContainer.classList.add('chocolat-in-container');
     }
 
     this.elems.wrapper = document.createElement('div');
     this.elems.wrapper.setAttribute('id', 'chocolat-content-' + this.settings.setIndex);
     this.elems.wrapper.setAttribute('class', 'chocolat-wrapper');
-    this.elems.domContainer[0].appendChild(this.elems.wrapper);
+    this.elems.domContainer.appendChild(this.elems.wrapper);
     this.elems.overlay = document.createElement('div');
     this.elems.overlay.setAttribute('class', 'chocolat-overlay');
     this.elems.wrapper.appendChild(this.elems.overlay);
@@ -488,7 +488,7 @@ class Chocolat {
     const img = this.elems.wrapper.querySelector('.chocolat-img');
     this.off(img, 'click.chocolat');
     this.on(img, 'click.chocolat', e => {
-      if (this.settings.initialZoomState === null && this.elems.domContainer.hasClass('chocolat-zoomable')) {
+      if (this.settings.initialZoomState === null && this.elems.domContainer.classList.contains('chocolat-zoomable')) {
         e.stopPropagation();
         this.zoomIn(e);
       }
@@ -562,9 +562,9 @@ class Chocolat {
     var isImageStretched = this.elems.img.clientWidth > currentImage.width || this.elems.img.clientHeight > currentImage.height;
 
     if (isImageZoomable && !isImageStretched) {
-      $(this.elems.domContainer)[0].classList.add('chocolat-zoomable');
+      this.elems.domContainer.classList.add('chocolat-zoomable');
     } else {
-      $(this.elems.domContainer)[0].classList.remove('chocolat-zoomable');
+      this.elems.domContainer.classList.remove('chocolat-zoomable');
     }
   }
 
@@ -576,7 +576,7 @@ class Chocolat {
     event.pageY = e.pageY;
     event.duration = this.settings.duration;
     $(this.elems.wrapper).trigger(event);
-    $(this.elems.domContainer)[0].classList.add('chocolat-zoomed');
+    this.elems.domContainer.classList.add('chocolat-zoomed');
     const {
       width,
       height,
@@ -597,7 +597,7 @@ class Chocolat {
     $(this.elems.img).animate({
       margin: 0
     }, duration);
-    $(this.elems.domContainer)[0].classList.remove('chocolat-zoomed');
+    this.elems.domContainer.classList.remove('chocolat-zoomed');
     const {
       width,
       height,
@@ -611,9 +611,9 @@ class Chocolat {
     // if container == window
     // domContainer = body
     if (this.settings.container === window) {
-      this.elems.domContainer = $('body');
+      this.elems.domContainer = document.body;
     } else {
-      this.elems.domContainer = $(this.settings.container);
+      this.elems.domContainer = this.settings.container;
     }
   }
 

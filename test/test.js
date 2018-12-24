@@ -9,7 +9,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     loop: true,
-                    container: $('#container'),
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -42,7 +42,7 @@ describe('Chocolat', function() {
         it('should add css classes to parent when in container', function(done) {
             var chocolat = $('#example0')
                 .Chocolat({
-                    container: $('#container'),
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -95,7 +95,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     loop: true,
-                    container: $('#container'),
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -114,7 +114,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     loop: true,
-                    container: $('#container'),
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -133,7 +133,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     loop: true,
-                    container: $('#container'),
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -155,7 +155,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     loop: true,
-                    container: $('#container'),
+                    container: $('#container')[0],
                     afterMarkup: afterMarkup,
                 })
                 .data('chocolat')
@@ -525,7 +525,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     imageSize: 'cover',
-                    container: '#container',
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
@@ -620,7 +620,7 @@ describe('Chocolat', function() {
             var chocolat = $('#example0')
                 .Chocolat({
                     imageSize: 'contain',
-                    container: '#container',
+                    container: $('#container')[0],
                 })
                 .data('chocolat')
 
