@@ -287,11 +287,13 @@ class Chocolat {
   }
 
   destroy() {
-    // todo remove all events ?
-    this.off(this.elems.wrapper, 'mousemove.chocolat');
-    this.elements.forEach((el, i) => {
-      this.off(el, 'click.chocolat');
-    });
+    for (var i = this.events.length - 1; i >= 0; i--) {
+      const {
+        element,
+        eventName
+      } = this.events[i];
+      this.off(element, eventName);
+    }
 
     if (!this.settings.initialized) {
       return;
