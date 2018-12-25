@@ -1,14 +1,12 @@
 import { Chocolat, defaults } from './chocolat.js'
 
-let calls = 0
+const instances = []
 
 export default function(options) {
-    return this.each(function() {
-        calls++
-        var settings = Object.assign({}, defaults, options, { setIndex: calls })
+    const settings = Object.assign({}, defaults, options, { setIndex: instances.length })
+    const instance = new Chocolat(elements, settings)
 
-        if (!$.data(this, 'chocolat')) {
-            $.data(this, 'chocolat', new Chocolat($(this), settings))
-        }
-    })
+    instances.push(instance)
+
+    return instance
 }

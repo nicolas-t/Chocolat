@@ -3,7 +3,6 @@
 const defaults = {
   container: window,
   // window or jquery object or jquery selector, or element
-  imageSelector: '.chocolat-image',
   className: undefined,
   imageSize: 'default',
   // 'default', 'contain', 'cover' or 'native'
@@ -39,20 +38,13 @@ const defaults = {
   }
 };
 class Chocolat {
-  constructor(element, settings) {
+  constructor(elements, settings) {
     this.settings = settings;
     this.elems = {};
-    this.$element = $(element);
-    this.element = this.$element[0];
+    this.elements = elements;
     this.events = [];
     this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed'];
-
-    if (!this.settings.setTitle && this.element.dataset['chocolat-title']) {
-      this.settings.setTitle = this.element.dataset['chocolat-title'];
-    }
-
-    const imgs = this.element.querySelectorAll(this.settings.imageSelector);
-    imgs.forEach((el, i) => {
+    this.elements.forEach((el, i) => {
       this.settings.images.push({
         title: el.getAttribute('title'),
         src: el.getAttribute(this.settings.imageSource),
@@ -321,11 +313,9 @@ class Chocolat {
   }
 
   destroy() {
-    this.$element.removeData(); // todo remove all events ?
-
+    // todo remove all events ?
     this.off(this.elems.wrapper, 'mousemove.chocolat');
-    const imgs = this.element.querySelectorAll(this.settings.imageSelector);
-    imgs.forEach((el, i) => {
+    this.elements.forEach((el, i) => {
       this.off(el, 'click.chocolat');
     });
 
@@ -340,7 +330,7 @@ class Chocolat {
     this.settings.currentImage = undefined;
     this.settings.initialized = false;
     this.elems.domContainer.classList.remove(...this._cssClasses);
-    $(this.elems.wrapper).remove();
+    this.elems.wrapper.parentNode.removeChild(this.elems.wrapper);
   }
 
   getOutMarginW() {
@@ -682,18 +672,14 @@ class Chocolat {
 
 }
 
-let calls = 0;
+const instances = [];
 function main_esm (options) {
-  return this.each(function () {
-    calls++;
-    var settings = Object.assign({}, defaults, options, {
-      setIndex: calls
-    });
-
-    if (!$.data(this, 'chocolat')) {
-      $.data(this, 'chocolat', new Chocolat($(this), settings));
-    }
+  const settings = Object.assign({}, defaults, options, {
+    setIndex: instances.length
   });
+  const instance = new Chocolat(elements, settings);
+  instances.push(instance);
+  return instance;
 }
 
 module.exports = main_esm;

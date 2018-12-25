@@ -29,27 +29,27 @@
         <title>Chocolat — demo</title>
         <script>
             $(function(){
-                $('#example0').Chocolat({
+                Chocolat($('#example0')[0].querySelectorAll('.chocolat-image'), {
                     imageSize: 'contain'
-                });
+                })
 
-                $('#example1').Chocolat({
+                Chocolat($('#example1')[0].querySelectorAll('.chocolat-image'), {
                     loop           : true,
                     imageSize     : 'cover',
                     overlayOpacity : 0.9
-                });
+                })
 
-                $('#example2').Chocolat({
+                Chocolat($('#example2')[0].querySelectorAll('.chocolat-image'), {
                     container      : $('#container1')[0],
                     imageSize     : 'contain',
                     loop           : true,
                 })
 
-                $('#example3').Chocolat({
+                Chocolat($('#example3')[0].querySelectorAll('.chocolat-image'), {
                     container      : $('#container2')[0],
                     imageSize     : 'cover',
                 })
-            });
+            })
         </script>
     </head>
     <body>
@@ -88,7 +88,7 @@
             Display in a container, cover, with thumbnails :
         </h2>
 
-        <div id="example3" data-chocolat-title="set title">
+        <div id="example3">
             <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
                 <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
             </a>
@@ -106,7 +106,7 @@
             Display in a container, looping :
         </h2>
 
-        <div id="example2" data-chocolat-title="set title">
+        <div id="example2">
             <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
                 A
             </a>
@@ -141,7 +141,7 @@
 
         <script>
             $(function(){
-                var instance = $('#container3').Chocolat({
+                var instance = Chocolat([], {
                     setTitle : 'set title',
                     loop: true,
                     images : [
@@ -170,7 +170,7 @@
                         // default to 0
                         return canvasHeight / 4;
                     }
-                }).data('chocolat');
+                });
 
                 $('.api-open').on('click', function(e) {
                     e.preventDefault()
