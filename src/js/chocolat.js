@@ -61,31 +61,6 @@ export class Chocolat {
         })
     }
 
-    on(element, eventName, cb) {
-        // const eventName = this.settings.setIndex + '-' + eventName
-        const length = this.events.push({
-            element,
-            eventName,
-            cb,
-        })
-        element.addEventListener(eventName.split('.')[0], this.events[length - 1].cb)
-        return this
-    }
-
-    off(element, eventName) {
-        // const eventName = this.settings.setIndex + '-' + eventName
-        const index = this.events.findIndex((event) => {
-            return event.element === element && event.eventName === eventName
-        })
-
-        if (this.events[index]) {
-            element.removeEventListener(eventName.split('.')[0], this.events[index].cb)
-            this.events.splice(index, 1)
-        }
-
-        return this
-    }
-
     init(i) {
         if (!this.settings.initialized) {
             this.setDomContainer()
@@ -321,20 +296,19 @@ export class Chocolat {
             return
         }
 
-        this.elems.overlay.classList.remove('chocolat-visible')
-        this.elems.loader.classList.remove('chocolat-visible')
-        this.elems.wrapper.classList.remove('chocolat-visible')
-
         this.settings.currentImage = undefined
 
-        // todo
-        setTimeout(() => {
+        const promiseOverlay = this.transitionAsPromise(() => {
+            this.elems.overlay.classList.remove('chocolat-visible')
+        }, this.elems.overlay)
+
+        const promiseWrapper = this.transitionAsPromise(() => {
+            this.elems.wrapper.classList.remove('chocolat-visible')
+        }, this.elems.wrapper)
+
+        return Promise.all([promiseOverlay, promiseWrapper]).then(() => {
             this.elems.domContainer.classList.remove('chocolat-open')
-        }, 1000)
-        return Promise.resolve()
-        // return $.when($(els).fadeOut(200)).then(() => {
-        //     this.elems.domContainer.classList.remove('chocolat-open')
-        // })
+        })
     }
 
     destroy() {
@@ -679,6 +653,42 @@ export class Chocolat {
         this.settings.timerDebounce = setTimeout(function() {
             callback()
         }, duration)
+    }
+
+    on(element, eventName, cb) {
+        // const eventName = this.settings.setIndex + '-' + eventName
+        const length = this.events.push({
+            element,
+            eventName,
+            cb,
+        })
+        element.addEventListener(eventName.split('.')[0], this.events[length - 1].cb)
+        return this
+    }
+
+    off(element, eventName) {
+        // const eventName = this.settings.setIndex + '-' + eventName
+        const index = this.events.findIndex((event) => {
+            return event.element === element && event.eventName === eventName
+        })
+
+        if (this.events[index]) {
+            element.removeEventListener(eventName.split('.')[0], this.events[index].cb)
+            this.events.splice(index, 1)
+        }
+
+        return this
+    }
+
+    transitionAsPromise(triggeringFunc, el) {
+        return new Promise((resolve) => {
+            triggeringFunc()
+            const handleTransitionEnded = (e) => {
+                el.removeEventListener('transitionend', handleTransitionEnded)
+                resolve()
+            }
+            el.addEventListener('transitionend', handleTransitionEnded)
+        })
     }
 
     api() {
