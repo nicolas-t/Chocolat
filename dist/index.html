@@ -40,13 +40,13 @@
                 });
 
                 $('#example2').Chocolat({
-                    container      : '#container1',
+                    container      : $('#container1')[0],
                     imageSize     : 'contain',
                     loop           : true,
                 })
 
                 $('#example3').Chocolat({
-                    container      : '#container2',
+                    container      : $('#container2')[0],
                     imageSize     : 'cover',
                 })
             });
@@ -150,7 +150,7 @@
                         {src : 'demo-images/8.jpg', title : 'caption 3'},
                     ],
                     imageSize : 'contain',
-                    container : '#container3',
+                    container : $('#container3')[0],
                     afterMarkup: function () {
                         console.log('afterMarkup hook is called')
                     },
