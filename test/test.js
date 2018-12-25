@@ -1,8 +1,7 @@
 describe('Chocolat', function() {
     var chocolat
 
-    beforeEach(function() {
-    })
+    beforeEach(function() {})
 
     afterEach(function() {
         chocolat.api().destroy()
@@ -11,9 +10,9 @@ describe('Chocolat', function() {
     describe('Opening', function() {
         it('should call markup function and create markup', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                    container: $('#container')[0],
-                })
+                loop: true,
+                container: $('#container')[0],
+            })
 
             var spyMarkup = sinon.spy(chocolat, 'markup')
 
@@ -43,9 +42,8 @@ describe('Chocolat', function() {
 
         it('should add css classes to parent when in container', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    container: $('#container')[0],
-                })
-
+                container: $('#container')[0],
+            })
 
             chocolat
                 .api()
@@ -60,9 +58,8 @@ describe('Chocolat', function() {
 
         it('should add css classes to body when full window', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'cover',
-                })
-
+                imageSize: 'cover',
+            })
 
             chocolat
                 .api()
@@ -77,9 +74,8 @@ describe('Chocolat', function() {
 
         it('should add custom css classe', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    className: 'custom-class-name',
-                })
-
+                className: 'custom-class-name',
+            })
 
             chocolat
                 .api()
@@ -92,10 +88,9 @@ describe('Chocolat', function() {
 
         it('should call init function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                    container: $('#container')[0],
-                })
-
+                loop: true,
+                container: $('#container')[0],
+            })
 
             var spyInit = sinon.spy(chocolat, 'init')
 
@@ -110,10 +105,9 @@ describe('Chocolat', function() {
 
         it('should call load function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                    container: $('#container')[0],
-                })
-
+                loop: true,
+                container: $('#container')[0],
+            })
 
             var spyLoad = sinon.spy(chocolat, 'load')
 
@@ -128,10 +122,9 @@ describe('Chocolat', function() {
 
         it('should call markup function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                    container: $('#container')[0],
-                })
-
+                loop: true,
+                container: $('#container')[0],
+            })
 
             var spyMarkup = sinon.spy(chocolat, 'markup')
 
@@ -176,7 +169,6 @@ describe('Chocolat', function() {
     })
 
     describe('Destroy method', function() {
-
         it('should remove wrapper element', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
 
@@ -184,7 +176,6 @@ describe('Chocolat', function() {
                 .api()
                 .open()
                 .then(function() {
-
                     var lengthBefore = $('.chocolat-wrapper').length
                     expect(lengthBefore).to.equal(1)
 
@@ -223,7 +214,6 @@ describe('Chocolat', function() {
         it('should open fullscreen when clicking .fullscreen', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
 
-
             // test only if browser fullscreenAPI is available
             if (
                 typeof Element.prototype.requestFullscreen === 'undefined' &&
@@ -252,7 +242,6 @@ describe('Chocolat', function() {
         it('should close fullscreen when clicking .fullscreen twice', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
 
-
             // test only if browser fullscreenAPI is available
             if (
                 typeof Element.prototype.requestFullscreen === 'undefined' &&
@@ -280,7 +269,6 @@ describe('Chocolat', function() {
         it('should close fullscreen when closing chocolat', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
 
-
             // test only if browser fullscreenAPI is available
             if (
                 typeof Element.prototype.requestFullscreen === 'undefined' &&
@@ -306,9 +294,8 @@ describe('Chocolat', function() {
 
         return it('should open fullscreen directly', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    fullScreen: true,
-                })
-
+                fullScreen: true,
+            })
 
             // test only if browser fullscreenAPI is available
             if (
@@ -336,7 +323,6 @@ describe('Chocolat', function() {
         it('should go to next image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
 
-
             var spyLoad = sinon.spy(chocolat, 'load')
             var spyChange = sinon.spy(chocolat, 'change')
 
@@ -359,7 +345,6 @@ describe('Chocolat', function() {
 
         it('should go to previous image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-
 
             chocolat
                 .api()
@@ -393,9 +378,8 @@ describe('Chocolat', function() {
 
         it('should loop and go to last image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                })
-
+                loop: true,
+            })
 
             chocolat
                 .api()
@@ -421,9 +405,8 @@ describe('Chocolat', function() {
 
         return it('should loop and go to first image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    loop: true,
-                })
-
+                loop: true,
+            })
 
             var lastImage = chocolat.settings.images.length - 1
 
@@ -447,9 +430,10 @@ describe('Chocolat', function() {
     })
 
     describe('ImageSize cover', function() {
-
         it('should add class chocolat-cover to parent', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), { imageSize: 'cover' })
+            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
+                imageSize: 'cover',
+            })
 
             chocolat
                 .api()
@@ -468,10 +452,9 @@ describe('Chocolat', function() {
 
         it("should have 'shortest' side of the container equal to 'shortest' side to the image in container", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'cover',
-                    container: $('#container')[0],
-                })
-
+                imageSize: 'cover',
+                container: $('#container')[0],
+            })
 
             chocolat
                 .api()
@@ -497,9 +480,8 @@ describe('Chocolat', function() {
 
         it("should have 'shortest' side of the container equal to 'shortest' side to the image in window", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'cover',
-                })
-
+                imageSize: 'cover',
+            })
 
             chocolat
                 .api()
@@ -525,9 +507,8 @@ describe('Chocolat', function() {
 
         return it('should center the image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'cover',
-                })
-
+                imageSize: 'cover',
+            })
 
             chocolat
                 .api()
@@ -555,9 +536,9 @@ describe('Chocolat', function() {
     describe('ImageSize contain', function() {
         it("should have 'longest' side of the container equal to 'longest' side to the image in container", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'contain',
-                    container: $('#container')[0],
-                })
+                imageSize: 'contain',
+                container: $('#container')[0],
+            })
 
             chocolat
                 .api()
@@ -583,9 +564,8 @@ describe('Chocolat', function() {
 
         it("should have 'longest' side of the container equal to 'longest' side to the image in window", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'contain',
-                })
-
+                imageSize: 'contain',
+            })
 
             chocolat
                 .api()
@@ -611,9 +591,8 @@ describe('Chocolat', function() {
 
         return it('should center the image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                    imageSize: 'contain',
-                })
-
+                imageSize: 'contain',
+            })
 
             chocolat
                 .api()
