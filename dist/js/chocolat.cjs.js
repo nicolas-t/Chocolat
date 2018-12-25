@@ -17,7 +17,7 @@ const defaults = {
   setIndex: 0,
   firstImage: 0,
   lastImage: false,
-  currentImage: false,
+  currentImage: undefined,
   initialized: false,
   timer: false,
   timerDebounce: false,
@@ -132,8 +132,10 @@ class Chocolat {
       return;
     }
 
-    $(this.elems.overlay).fadeIn(this.settings.duration);
-    $(this.elems.wrapper).fadeIn(this.settings.duration);
+    setTimeout(() => {
+      this.elems.overlay.classList.add('chocolat-visible');
+      this.elems.wrapper.classList.add('chocolat-visible');
+    });
     this.elems.domContainer.classList.add('chocolat-open');
     this.settings.timer = setTimeout(() => {
       if (typeof this.elems != 'undefined') {
@@ -305,16 +307,23 @@ class Chocolat {
       return;
     }
 
-    var els = [this.elems.overlay, this.elems.loader, this.elems.wrapper];
-    var def = $.when($(els).fadeOut(200)).then(() => {
+    this.elems.overlay.classList.remove('chocolat-visible');
+    this.elems.loader.classList.remove('chocolat-visible');
+    this.elems.wrapper.classList.remove('chocolat-visible');
+    this.settings.currentImage = undefined; // todo
+
+    setTimeout(() => {
       this.elems.domContainer.classList.remove('chocolat-open');
-    });
-    this.settings.currentImage = false;
-    return def;
+    }, 1000);
+    return Promise.resolve(); // return $.when($(els).fadeOut(200)).then(() => {
+    //     this.elems.domContainer.classList.remove('chocolat-open')
+    // })
   }
 
   destroy() {
-    this.$element.removeData();
+    this.$element.removeData(); // todo remove all events ?
+
+    this.off(this.elems.wrapper, 'mousemove.chocolat');
     const imgs = this.element.querySelectorAll(this.settings.imageSelector);
     imgs.forEach((el, i) => {
       this.off(el, 'click.chocolat');
@@ -328,7 +337,7 @@ class Chocolat {
       this.exitFullScreen();
     }
 
-    this.settings.currentImage = false;
+    this.settings.currentImage = undefined;
     this.settings.initialized = false;
     this.elems.domContainer.classList.remove(...this._cssClasses);
     $(this.elems.wrapper).remove();
@@ -504,6 +513,10 @@ class Chocolat {
         return;
       }
 
+      if (this.settings.currentImage === undefined) {
+        return;
+      }
+
       var pos = $(this.elems.wrapper).offset();
       var height = $(this.elems.wrapper).height();
       var width = $(this.elems.wrapper).width();
@@ -539,7 +552,7 @@ class Chocolat {
       }
     });
     this.on(window, 'resize.chocolat', e => {
-      if (!this.settings.initialized || this.settings.currentImage === false) {
+      if (!this.settings.initialized || this.settings.currentImage === undefined) {
         return;
       }
 
@@ -589,7 +602,7 @@ class Chocolat {
   }
 
   zoomOut(e, duration) {
-    if (this.settings.initialZoomState === null || this.settings.currentImage === false) {
+    if (this.settings.initialZoomState === null || this.settings.currentImage === undefined) {
       return;
     }
 

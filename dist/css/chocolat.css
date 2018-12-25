@@ -5,6 +5,7 @@
     overflow: hidden;
 }
 .chocolat-overlay{
+    transition: opacity 1s ease, visibility 0s 1s ease;
     height:100%;
     width:100%;
     position:fixed;
@@ -12,19 +13,33 @@
     top:0;
     z-index:10;
     background-color:#fff;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+}
+.chocolat-overlay.chocolat-visible{
+    transition: opacity 1s, visibility 0s;
+    visibility: visible;
     opacity: 0.8;
 }
+
 .chocolat-wrapper{
-    height:100%;
+    transition: opacity 1s ease, visibility 0s 1s ease;
     width:100%;
+    height: 100%;
     position:fixed;
-    display: none;
+    opacity: 0;
     left:0;
     top:0;
     z-index:16;
     color: #fff;
+    visibility: hidden;
 }
+.chocolat-wrapper.chocolat-visible{
+    transition: opacity 1s, visibility 0s;
+    opacity: 1;
+    visibility: visible;
+}
+
 .chocolat-zoomable .chocolat-img{
     cursor : zoom-in;
 }
