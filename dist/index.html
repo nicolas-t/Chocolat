@@ -142,7 +142,7 @@
         <script>
             $(function(){
                 var instance = Chocolat([], {
-                    setTitle : 'set title',
+                    setTitle : function () { return 'set title' },
                     loop: true,
                     images : [
                         {src : 'demo-images/1.jpg', title : 'caption 1'},

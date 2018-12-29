@@ -7,8 +7,6 @@ export const defaults = {
     loop: false,
     linkImages: true,
     duration: 300,
-    setTitle: '',
-    separator2: '/',
     setIndex: 0,
     firstImage: 0,
     lastImage: false,
@@ -19,6 +17,18 @@ export const defaults = {
     images: [],
     enableZoom: true,
     imageSource: 'href',
+    setTitle: function() {
+        return ''
+    },
+    description: function() {
+        return this.settings.images[this.settings.currentImage].title
+    },
+    pagination: function() {
+        var last = this.settings.lastImage + 1
+        var position = this.settings.currentImage + 1
+
+        return position + '/' + last
+    },
     afterInitialize() {},
     afterMarkup() {},
     afterImageLoad() {},
@@ -132,8 +142,8 @@ export class Chocolat {
     }
 
     place(image) {
-        this.description()
-        this.pagination()
+        this.elems.description.textContent = this.settings.description.call(this)
+        this.elems.pagination.textContent = this.settings.pagination.call(this)
         this.arrows()
 
         const { width, height, left, top } = this.fit(image, this.elems.wrapper)
@@ -259,17 +269,6 @@ export class Chocolat {
         }
     }
 
-    description() {
-        $(this.elems.description).html(this.settings.images[this.settings.currentImage].title)
-    }
-
-    pagination() {
-        var last = this.settings.lastImage + 1
-        var position = this.settings.currentImage + 1
-
-        $(this.elems.pagination).html(position + ' ' + this.settings.separator2 + last)
-    }
-
     close() {
         if (this.settings.fullscreenOpen) {
             this.exitFullScreen()
@@ -384,6 +383,7 @@ export class Chocolat {
 
         this.elems.setTitle = document.createElement('span')
         this.elems.setTitle.setAttribute('class', 'chocolat-set-title')
+        this.elems.setTitle.textContent = this.settings.setTitle()
         this.elems.bottom.appendChild(this.elems.setTitle)
 
         this.settings.afterMarkup.call(this)

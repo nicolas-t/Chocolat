@@ -12,8 +12,6 @@
       loop: false,
       linkImages: true,
       duration: 300,
-      setTitle: '',
-      separator2: '/',
       setIndex: 0,
       firstImage: 0,
       lastImage: false,
@@ -24,6 +22,17 @@
       images: [],
       enableZoom: true,
       imageSource: 'href',
+      setTitle: function () {
+        return '';
+      },
+      description: function () {
+        return this.settings.images[this.settings.currentImage].title;
+      },
+      pagination: function () {
+        var last = this.settings.lastImage + 1;
+        var position = this.settings.currentImage + 1;
+        return position + '/' + last;
+      },
 
       afterInitialize() {},
 
@@ -124,8 +133,8 @@
       }
 
       place(image) {
-        this.description();
-        this.pagination();
+        this.elems.description.textContent = this.settings.description.call(this);
+        this.elems.pagination.textContent = this.settings.pagination.call(this);
         this.arrows();
         const {
           width,
@@ -252,16 +261,6 @@
         }
       }
 
-      description() {
-        $(this.elems.description).html(this.settings.images[this.settings.currentImage].title);
-      }
-
-      pagination() {
-        var last = this.settings.lastImage + 1;
-        var position = this.settings.currentImage + 1;
-        $(this.elems.pagination).html(position + ' ' + this.settings.separator2 + last);
-      }
-
       close() {
         if (this.settings.fullscreenOpen) {
           this.exitFullScreen();
@@ -366,6 +365,7 @@
         this.elems.bottom.appendChild(this.elems.pagination);
         this.elems.setTitle = document.createElement('span');
         this.elems.setTitle.setAttribute('class', 'chocolat-set-title');
+        this.elems.setTitle.textContent = this.settings.setTitle();
         this.elems.bottom.appendChild(this.elems.setTitle);
         this.settings.afterMarkup.call(this);
       }
@@ -669,7 +669,9 @@
     const instances = [];
 
     window.Chocolat = function (elements, options) {
-      const settings = Object.assign({}, defaults, options, {
+      const settings = Object.assign({}, defaults, {
+        images: []
+      }, options, {
         setIndex: instances.length
       });
       const instance = new Chocolat(elements, settings);

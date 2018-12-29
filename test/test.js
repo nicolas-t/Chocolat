@@ -136,7 +136,7 @@ describe('Chocolat', function() {
             expect(spyMarkup.calledOnce).to.be.true
         })
 
-        return it('should append description element in top element (instead of bottom, the default behaviour)', function() {
+        it('should append description element in top element (instead of bottom, the default behaviour)', function() {
             var afterMarkup = function() {
                 return $(this.elems.description).appendTo(this.elems.top)
             }
@@ -165,6 +165,86 @@ describe('Chocolat', function() {
                     .getElem('bottom')
                     .find(chocolat.api().getElem('description')).length
             ).to.equal(0)
+        })
+
+        it('can define a title', function() {
+            var setTitle = function() {
+                return 'hello'
+            }
+
+            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
+                container: $('#container')[0],
+                setTitle: setTitle,
+            })
+
+            $('#example0')
+                .find('.chocolat-image')
+                .first()[0]
+                .click()
+
+            const elem = chocolat.api().getElem('setTitle')[0]
+            expect(elem.textContent).to.equal('hello')
+        })
+
+        it('can define a description per image', function(done) {
+            var description = function() {
+                return (
+                    'prefix ' + this.settings.images[this.settings.currentImage].title + ' suffix'
+                )
+            }
+
+            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
+                container: $('#container')[0],
+                description: description,
+            })
+
+            chocolat
+                .api()
+                .open()
+                .then(() => {
+                    const elem = chocolat.api().getElem('description')[0]
+                    expect(elem.textContent).to.equal('prefix foo suffix')
+
+                    chocolat
+                        .api()
+                        .next()
+                        .then(() => {
+                            const elem = chocolat.api().getElem('description')[0]
+                            expect(elem.textContent).to.equal('prefix baz suffix')
+                            done()
+                        })
+                })
+        })
+
+        it('can define a pagination per image', function(done) {
+            var pagination = function() {
+                var last = this.settings.lastImage + 1
+                var position = this.settings.currentImage + 1
+
+                return 'prefix ' + position + '/' + last + ' suffix'
+            }
+
+            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
+                container: $('#container')[0],
+                pagination: pagination,
+            })
+
+            chocolat
+                .api()
+                .open()
+                .then(() => {
+                    const elem = chocolat.api().getElem('pagination')[0]
+                    expect(elem.textContent).to.equal('prefix 1/3 suffix')
+
+                    chocolat
+                        .api()
+                        .next()
+                        .then(() => {
+                            const elem = chocolat.api().getElem('pagination')[0]
+                            expect(elem.textContent).to.equal('prefix 2/3 suffix')
+                            done()
+                        })
+                })
         })
     })
 
@@ -202,19 +282,19 @@ describe('Chocolat', function() {
             var spyInit = sinon.spy(chocolat, 'init')
 
             const link = links[0]
+            const linkBefore = link.getAttribute('href')
 
             link.setAttribute('href', '#')
             link.click()
 
             expect(spyInit.notCalled).to.be.true
+            link.setAttribute('href', linkBefore)
         })
     })
 
     describe('FullScreen', function() {
         it('should open fullscreen when clicking .fullscreen', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-            // chocolat.openFullScreen = function () {}
-            // chocolat.exitFullScreen = function () {}
             // test only if browser fullscreenAPI is available
             if (
                 typeof Element.prototype.requestFullscreen === 'undefined' &&
