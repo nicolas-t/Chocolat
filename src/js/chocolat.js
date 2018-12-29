@@ -390,13 +390,41 @@ export class Chocolat {
     }
 
     openFullScreen() {
-        this.elems.wrapper.requestFullscreen()
-        this.settings.fullscreenOpen = true
+        var wrapper = this.elems.wrapper
+
+        if (wrapper.requestFullscreen) {
+            this.settings.fullscreenOpen = true
+            wrapper.requestFullscreen()
+        } else if (wrapper.mozRequestFullScreen) {
+            this.settings.fullscreenOpen = true
+            wrapper.mozRequestFullScreen()
+        } else if (wrapper.webkitRequestFullscreen) {
+            this.settings.fullscreenOpen = true
+            wrapper.webkitRequestFullscreen()
+        } else if (wrapper.msRequestFullscreen) {
+            wrapper.msRequestFullscreen()
+            this.settings.fullscreenOpen = true
+        } else {
+            this.settings.fullscreenOpen = false
+        }
     }
 
     exitFullScreen() {
-        document.exitFullscreen()
-        this.settings.fullscreenOpen = false
+        if (document.exitFullscreen) {
+            document.exitFullscreen()
+            this.settings.fullscreenOpen = false
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen()
+            this.settings.fullscreenOpen = false
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+            this.settings.fullscreenOpen = false
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen()
+            this.settings.fullscreenOpen = false
+        } else {
+            this.settings.fullscreenOpen = true
+        }
     }
 
     attachListeners() {
