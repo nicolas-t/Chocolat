@@ -178,7 +178,7 @@
                     console.log('open start');
                     var def = instance.api().open()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('open done');
                     })
                 })
@@ -188,7 +188,7 @@
                     console.log('close start');
                     var def = instance.api().close()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('close done');
                     })
                 })
@@ -198,7 +198,7 @@
                     console.log('prev start');
                     var def = instance.api().prev()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('prev done');
                     })
                 })
@@ -208,7 +208,7 @@
                     console.log('next start');
                     var def = instance.api().next()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('next done');
                     })
                 })
@@ -220,7 +220,7 @@
                     instance.api().set('imageSize', 'cover')
                     var def = instance.api().place()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('cover mode done')
                     })
                 })
@@ -232,7 +232,7 @@
                     instance.api().set('imageSize', 'contain')
                     var def = instance.api().place()
 
-                    def.done(function(){
+                    def.then(function(){
                         console.log('contain mode done')
                     })
                 })

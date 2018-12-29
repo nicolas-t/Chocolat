@@ -75,24 +75,12 @@ export class Chocolat {
         return this.load(i)
     }
 
-    preload(i) {
-        const src = this.settings.images[i].src
-        let image = new Image()
-        if ('decode' in image) {
+    loadImage(src, image) {
+        return new Promise(function(resolve, reject) {
+            image.onload = resolve
+            image.onerror = resolve
             image.src = src
-            return new Promise(function(resolve, reject) {
-                image
-                    .decode()
-                    .then(resolve.bind(this, image))
-                    .catch(resolve)
-            })
-        } else {
-            return new Promise(function(resolve, reject) {
-                image.onload = resolve.bind(this, image)
-                image.onerror = resolve
-                image.src = src
-            })
-        }
+        })
     }
 
     load(i) {
@@ -101,86 +89,83 @@ export class Chocolat {
         }
 
         if (this.settings.currentImage === i) {
-            return
+            return Promise.resolve()
         }
 
         setTimeout(() => {
             this.elems.overlay.classList.add('chocolat-visible')
             this.elems.wrapper.classList.add('chocolat-visible')
-        })
+        }, 0)
 
         this.elems.domContainer.classList.add('chocolat-open')
 
         this.settings.timer = setTimeout(() => {
-            if (typeof this.elems != 'undefined') {
-                $(this.elems.loader).fadeIn()
+            if (this.elems !== undefined) {
+                this.elems.loader.classList.add('chocolat-visible')
             }
         }, this.settings.duration)
 
-        return this.preload(i)
-            .then((imgLoader) => {
+        const imgLoader = new Image()
+
+        return this.loadImage(this.settings.images[i].src, imgLoader)
+            .then(() => {
                 const nextIndex = i + 1
                 if (this.settings.images[nextIndex] != undefined) {
-                    this.preload(nextIndex)
+                    this.loadImage(this.settings.images[nextIndex].src, new Image())
                 }
 
-                return this.place(i, imgLoader)
+                this.settings.currentImage = i
+
+                const place = this.place(imgLoader)
+                const appear = this.appear(i)
+                return Promise.all([place, appear])
             })
-            .then((imgLoader) => {
-                return this.appear(i)
-            })
-            .then((imgLoader) => {
+            .then(() => {
                 this.zoomable()
                 this.settings.afterImageLoad()
             })
     }
 
-    place(i, imgLoader) {
-        var fitting
-
-        this.settings.currentImage = i
+    place(image) {
         this.description()
         this.pagination()
         this.arrows()
 
-        this.storeImgSize(imgLoader, i)
-
-        const { width, height, left, top } = this.fit(i, this.elems.wrapper)
-        return this.center(width, height, left, top, 0)
+        const { width, height, left, top } = this.fit(image, this.elems.wrapper)
+        return this.center(width, height, left, top)
     }
 
-    center(width, height, left, top, duration) {
-        return $(this.elems.content)
-            .css('overflow', 'visible')
-            .animate(
-                {
-                    width: width,
-                    height: height,
-                    left: left,
-                    top: top,
-                },
-                duration
-            )
-            .promise()
+    center(width, height, left, top) {
+        return this.transitionAsPromise(() => {
+            Object.assign(this.elems.content.style, {
+                width: width + 'px',
+                height: height + 'px',
+                left: left + 'px',
+                top: top + 'px',
+            })
+        }, this.elems.content)
     }
 
     appear(i) {
         clearTimeout(this.settings.timer)
 
-        return $(this.elems.loader)
-            .stop()
-            .fadeOut(300, () => {
-                $(this.elems.img).attr('src', this.settings.images[i].src)
-            })
-            .promise()
+        if (!this.elems.loader.classList.contains('chocolat-visible')) {
+            return this.loadImage(this.settings.images[i].src, this.elems.img)
+        }
+
+        return this.transitionAsPromise(() => {
+            this.elems.loader.classList.remove('chocolat-visible')
+        }, this.elems.loader).then(() => {
+            return this.loadImage(this.settings.images[i].src, this.elems.img)
+        })
     }
 
-    fit(i, container) {
+    fit(image, container) {
         let height
         let width
 
-        const imgHeight = this.settings.images[i].height
-        const imgWidth = this.settings.images[i].width
+        const imgHeight = image.height
+        const imgWidth = image.width
         const holderHeight = container.clientHeight
         const holderWidth = container.clientWidth
         const holderOutMarginH = this.getOutMarginH()
@@ -278,16 +263,6 @@ export class Chocolat {
         var position = this.settings.currentImage + 1
 
         $(this.elems.pagination).html(position + ' ' + this.settings.separator2 + last)
-    }
-
-    storeImgSize(img, i) {
-        if (typeof img === 'undefined') {
-            return
-        }
-        if (!this.settings.images[i].height || !this.settings.images[i].width) {
-            this.settings.images[i].height = img.height
-            this.settings.images[i].width = img.width
-        }
     }
 
     close() {
@@ -410,41 +385,13 @@ export class Chocolat {
     }
 
     openFullScreen() {
-        var wrapper = this.elems.wrapper
-
-        if (wrapper.requestFullscreen) {
-            this.settings.fullscreenOpen = true
-            wrapper.requestFullscreen()
-        } else if (wrapper.mozRequestFullScreen) {
-            this.settings.fullscreenOpen = true
-            wrapper.mozRequestFullScreen()
-        } else if (wrapper.webkitRequestFullscreen) {
-            this.settings.fullscreenOpen = true
-            wrapper.webkitRequestFullscreen()
-        } else if (wrapper.msRequestFullscreen) {
-            wrapper.msRequestFullscreen()
-            this.settings.fullscreenOpen = true
-        } else {
-            this.settings.fullscreenOpen = false
-        }
+        this.elems.wrapper.requestFullscreen()
+        this.settings.fullscreenOpen = true
     }
 
     exitFullScreen() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen()
-            this.settings.fullscreenOpen = false
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen()
-            this.settings.fullscreenOpen = false
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen()
-            this.settings.fullscreenOpen = false
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen()
-            this.settings.fullscreenOpen = false
-        } else {
-            this.settings.fullscreenOpen = true
-        }
+        document.exitFullscreen()
+        this.settings.fullscreenOpen = false
     }
 
     attachListeners() {
@@ -516,9 +463,7 @@ export class Chocolat {
             if (this.settings.initialZoomState === null) {
                 return
             }
-            if ($(this.elems.img).is(':animated')) {
-                return
-            }
+
             if (this.settings.currentImage === undefined) {
                 return
             }
@@ -528,8 +473,8 @@ export class Chocolat {
             var width = $(this.elems.wrapper).width()
 
             var currentImage = this.settings.images[this.settings.currentImage]
-            var imgWidth = currentImage.width
-            var imgHeight = currentImage.height
+            var imgWidth = this.elems.img.width
+            var imgHeight = this.elems.img.height
 
             var coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top]
 
@@ -547,20 +492,8 @@ export class Chocolat {
                 mvtY = ((imgHeight - height) / 2 + paddingY) * mvtY
             }
 
-            var animation = {
-                'margin-left': -mvtX + 'px',
-                'margin-top': -mvtY + 'px',
-            }
-
-            if (typeof e.duration !== 'undefined') {
-                $(this.elems.img)
-                    .stop(false, true)
-                    .animate(animation, e.duration)
-            } else {
-                $(this.elems.img)
-                    .stop(false, true)
-                    .css(animation)
-            }
+            this.elems.img.style.marginLeft = -mvtX + 'px'
+            this.elems.img.style.marginTop = -mvtY + 'px'
         })
 
         this.on(window, 'resize.chocolat', (e) => {
@@ -568,10 +501,7 @@ export class Chocolat {
                 return
             }
             this.debounce(50, () => {
-                const { width, height, left, top } = this.fit(
-                    this.settings.currentImage,
-                    this.elems.wrapper
-                )
+                const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
 
                 this.center(width, height, left, top, 0)
                 this.zoomable()
@@ -586,12 +516,12 @@ export class Chocolat {
 
         var isImageZoomable =
             this.settings.enableZoom &&
-            (currentImage.width > wrapperWidth || currentImage.height > wrapperHeight)
+            (this.elems.img.width > wrapperWidth || this.elems.img.height > wrapperHeight)
                 ? true
                 : false
         var isImageStretched =
-            this.elems.img.clientWidth > currentImage.width ||
-            this.elems.img.clientHeight > currentImage.height
+            this.elems.img.clientWidth > this.elems.img.width ||
+            this.elems.img.clientHeight > this.elems.img.height
 
         if (isImageZoomable && !isImageStretched) {
             this.elems.domContainer.classList.add('chocolat-zoomable')
@@ -604,16 +534,8 @@ export class Chocolat {
         this.settings.initialZoomState = this.settings.imageSize
         this.settings.imageSize = 'native'
 
-        var event = $.Event('mousemove')
-        event.pageX = e.pageX
-        event.pageY = e.pageY
-        event.duration = this.settings.duration
-        $(this.elems.wrapper).trigger(event)
         this.elems.domContainer.classList.add('chocolat-zoomed')
-        const { width, height, left, top } = this.fit(
-            this.settings.currentImage,
-            this.elems.wrapper
-        )
+        const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
 
         return this.center(width, height, left, top, this.settings.duration)
     }
@@ -626,13 +548,10 @@ export class Chocolat {
 
         this.settings.imageSize = this.settings.initialZoomState
         this.settings.initialZoomState = null
-        $(this.elems.img).animate({ margin: 0 }, duration)
+        this.elems.img.style.margin = 0
 
         this.elems.domContainer.classList.remove('chocolat-zoomed')
-        const { width, height, left, top } = this.fit(
-            this.settings.currentImage,
-            this.elems.wrapper
-        )
+        const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
         return this.center(width, height, left, top, duration)
     }
 
@@ -680,12 +599,23 @@ export class Chocolat {
 
     transitionAsPromise(triggeringFunc, el) {
         return new Promise((resolve) => {
-            triggeringFunc()
-            const handleTransitionEnded = (e) => {
-                el.removeEventListener('transitionend', handleTransitionEnded)
+            const handleTransitionEnd = () => {
+                el.removeEventListener('transitionend', handleTransitionEnd)
                 resolve()
             }
-            el.addEventListener('transitionend', handleTransitionEnded)
+            el.addEventListener('transitionend', handleTransitionEnd)
+
+            const classesBefore = el.getAttribute('class')
+            const stylesBefore = el.getAttribute('style')
+
+            triggeringFunc()
+
+            if (
+                classesBefore === el.getAttribute('class') &&
+                stylesBefore === el.getAttribute('style')
+            ) {
+                handleTransitionEnd()
+            }
         })
     }
 
@@ -717,7 +647,7 @@ export class Chocolat {
             },
 
             place: () => {
-                return this.place(this.settings.currentImage, this.settings.duration)
+                return this.place(this.elems.img, this.settings.duration)
             },
 
             destroy: () => {

@@ -213,7 +213,8 @@ describe('Chocolat', function() {
     describe('FullScreen', function() {
         it('should open fullscreen when clicking .fullscreen', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-
+            // chocolat.openFullScreen = function () {}
+            // chocolat.exitFullScreen = function () {}
             // test only if browser fullscreenAPI is available
             if (
                 typeof Element.prototype.requestFullscreen === 'undefined' &&
@@ -678,14 +679,8 @@ describe('Chocolat', function() {
 // function used to calculate image dimensions
 // in order to be compared with what chocolat is really displaying
 function getExpectedDimensions(chocolat) {
-    var imgWidth = chocolat
-        .api()
-        .getElem('img')
-        .width()
-    var imgHeight = chocolat
-        .api()
-        .getElem('img')
-        .height()
+    var imgWidth = chocolat.api().getElem('img')[0].width
+    var imgHeight = chocolat.api().getElem('img')[0].height
 
     var containerWidth = $(chocolat.api().get('container')).width()
     var containerHeight = $(chocolat.api().get('container')).height()
