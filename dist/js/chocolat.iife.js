@@ -74,11 +74,16 @@
       }
 
       loadImage(src, image) {
-        return new Promise(function (resolve, reject) {
-          image.onload = resolve;
-          image.onerror = resolve;
+        if ('decode' in image) {
           image.src = src;
-        });
+          return image.decode();
+        } else {
+          return new Promise(function (resolve, reject) {
+            image.onload = resolve;
+            image.onerror = resolve;
+            image.src = src;
+          });
+        }
       }
 
       load(i) {
