@@ -179,8 +179,8 @@ export class Chocolat {
         let height
         let width
 
-        const imgHeight = image.height
-        const imgWidth = image.width
+        const imgHeight = image.naturalHeight
+        const imgWidth = image.naturalWidth
         const holderHeight = container.clientHeight
         const holderWidth = container.clientWidth
         const holderOutMarginH = this.getOutMarginH()
@@ -501,9 +501,14 @@ export class Chocolat {
                 return
             }
 
-            var pos = $(this.elems.wrapper).offset()
-            var height = $(this.elems.wrapper).height()
-            var width = $(this.elems.wrapper).width()
+            const rect = this.elems.wrapper.getBoundingClientRect()
+            const pos = {
+                top: rect.top + window.scrollY,
+                left: rect.left + window.scrollX,
+            }
+
+            var height = this.elems.wrapper.clientHeight
+            var width = this.elems.wrapper.clientWidth
 
             var currentImage = this.settings.images[this.settings.currentImage]
             var imgWidth = this.elems.img.width
@@ -549,12 +554,13 @@ export class Chocolat {
 
         var isImageZoomable =
             this.settings.enableZoom &&
-            (this.elems.img.width > wrapperWidth || this.elems.img.height > wrapperHeight)
+            (this.elems.img.naturalWidth > wrapperWidth ||
+                this.elems.img.naturalHeight > wrapperHeight)
                 ? true
                 : false
         var isImageStretched =
-            this.elems.img.clientWidth > this.elems.img.width ||
-            this.elems.img.clientHeight > this.elems.img.height
+            this.elems.img.clientWidth > this.elems.img.naturalWidth ||
+            this.elems.img.clientHeight > this.elems.img.naturalHeight
 
         if (isImageZoomable && !isImageStretched) {
             this.elems.domContainer.classList.add('chocolat-zoomable')
