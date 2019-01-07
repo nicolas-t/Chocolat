@@ -15,8 +15,7 @@
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
   },
   "dependencies": {
-    "es6-promise": "^4.2.5",
-    "jquery": "^3.0"
+    "es6-promise": "^4.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -27,6 +26,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.6",
+    "jquery": "^3.3.1",
     "mocha": "^5.2.0",
     "mocha-chrome": "^1.1.0",
     "prettier": "1.15.2",
