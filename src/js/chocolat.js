@@ -310,13 +310,11 @@ export class Chocolat {
     }
 
     getOutMarginW() {
-        var left = $(this.elems.left).outerWidth(true)
-        var right = $(this.elems.right).outerWidth(true)
-        return left + right
+        return this.elems.left.offsetWidth + this.elems.right.offsetWidth
     }
 
     getOutMarginH() {
-        return $(this.elems.top).outerHeight(true) + $(this.elems.bottom).outerHeight(true)
+        return this.elems.top.offsetHeight + this.elems.bottom.offsetHeight
     }
 
     markup() {
@@ -703,7 +701,7 @@ export class Chocolat {
             },
 
             getElem: (name) => {
-                return $(this.elems[name])
+                return this.elems[name]
             },
         }
     }

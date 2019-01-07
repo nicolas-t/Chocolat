@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="./css/chocolat.css" />
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="./js/chocolat.iife.js"></script>
         <style>
             body {
@@ -27,30 +26,7 @@
             }
         </style>
         <title>Chocolat — demo</title>
-        <script>
-            $(function(){
-                Chocolat($('#example0')[0].querySelectorAll('.chocolat-image'), {
-                    imageSize: 'contain'
-                })
 
-                Chocolat($('#example1')[0].querySelectorAll('.chocolat-image'), {
-                    loop           : true,
-                    imageSize     : 'cover',
-                    overlayOpacity : 0.9
-                })
-
-                Chocolat($('#example2')[0].querySelectorAll('.chocolat-image'), {
-                    container      : $('#container1')[0],
-                    imageSize     : 'contain',
-                    loop           : true,
-                })
-
-                Chocolat($('#example3')[0].querySelectorAll('.chocolat-image'), {
-                    container      : $('#container2')[0],
-                    imageSize     : 'cover',
-                })
-            })
-        </script>
     </head>
     <body>
         <div style="text-align: center;background: #E8E8E8; padding: 10px;margin-bottom: 10px;">
@@ -138,105 +114,126 @@
         <a class="api-close" href="#">Close</a>
         <!-- Container (notice the relative width) :  -->
         <div id="container3" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
-
         <script>
-            $(function(){
-                var instance = Chocolat([], {
-                    setTitle : function () { return 'set title' },
-                    loop: true,
-                    images : [
-                        {src : 'demo-images/1.jpg', title : 'caption 1'},
-                        {src : 'demo-images/6.jpg', title : 'caption 2'},
-                        {src : 'demo-images/8.jpg', title : 'caption 3'},
-                    ],
-                    imageSize : 'contain',
-                    container : $('#container3')[0],
-                    afterMarkup: function () {
-                        console.log('afterMarkup hook is called')
-                    },
-                    afterImageLoad: function () {
-                        console.log('afterImageLoad hook is called')
-                    },
-                    afterInitialize: function () {
-                        console.log('afterInitialize hook is called')
-                    },
-                    zoomedPaddingX: function (imgWidth, canvasWidth) {
-                        // add a padding around the zoomed image
-                        // default to 0
-                        return canvasWidth / 4;
-                    },
-                    zoomedPaddingY: function (imgHeight, canvasHeight) {
-                        // add a padding around the zoomed image
-                        // default to 0
-                        return canvasHeight / 4;
-                    }
-                });
+            // standard demos
+            Chocolat(document.querySelectorAll('#example0 .chocolat-image'), {
+                imageSize: 'contain'
+            })
 
-                $('.api-open').on('click', function(e) {
-                    e.preventDefault()
+            Chocolat(document.querySelectorAll('#example1 .chocolat-image'), {
+                loop: true,
+                imageSize: 'cover',
+                overlayOpacity: 0.9
+            })
 
-                    console.log('open start');
-                    var def = instance.api().open()
+            Chocolat(document.querySelectorAll('#example2 .chocolat-image'), {
+                container: document.querySelector('#container1'),
+                imageSize: 'contain',
+                loop: true,
+            })
 
-                    def.then(function(){
-                        console.log('open done');
-                    })
-                })
-                $('.api-close').on('click', function(e) {
-                    e.preventDefault()
-
-                    console.log('close start');
-                    var def = instance.api().close()
-
-                    def.then(function(){
-                        console.log('close done');
-                    })
-                })
-                $('.api-prev').on('click', function(e) {
-                    e.preventDefault()
-
-                    console.log('prev start');
-                    var def = instance.api().prev()
-
-                    def.then(function(){
-                        console.log('prev done');
-                    })
-                })
-                $('.api-next').on('click', function(e) {
-                    e.preventDefault()
-
-                    console.log('next start');
-                    var def = instance.api().next()
-
-                    def.then(function(){
-                        console.log('next done');
-                    })
-                })
-
-                $('.api-cover').on('click', function(e) {
-                    e.preventDefault()
-
-                    console.log('cover mode start')
-                    instance.api().set('imageSize', 'cover')
-                    var def = instance.api().place()
-
-                    def.then(function(){
-                        console.log('cover mode done')
-                    })
-                })
-
-                $('.api-contain').on('click', function(e) {
-                    e.preventDefault()
-
-                    console.log('contain mode start')
-                    instance.api().set('imageSize', 'contain')
-                    var def = instance.api().place()
-
-                    def.then(function(){
-                        console.log('contain mode done')
-                    })
-                })
+            Chocolat(document.querySelectorAll('#example3 .chocolat-image'), {
+                container: document.querySelector('#container2'),
+                imageSize: 'cover',
+            })
+        </script>
+        <script>
+            // api demo
+            var instance = Chocolat([], {
+                setTitle : function () { return 'set title' },
+                loop: true,
+                images : [
+                    {src : 'demo-images/1.jpg', title : 'caption 1'},
+                    {src : 'demo-images/6.jpg', title : 'caption 2'},
+                    {src : 'demo-images/8.jpg', title : 'caption 3'},
+                ],
+                imageSize : 'contain',
+                container: document.querySelector('#container3'),
+                afterMarkup: function () {
+                    console.log('afterMarkup hook is called')
+                },
+                afterImageLoad: function () {
+                    console.log('afterImageLoad hook is called')
+                },
+                afterInitialize: function () {
+                    console.log('afterInitialize hook is called')
+                },
+                zoomedPaddingX: function (imgWidth, canvasWidth) {
+                    // add a padding around the zoomed image
+                    // default to 0
+                    return canvasWidth / 4;
+                },
+                zoomedPaddingY: function (imgHeight, canvasHeight) {
+                    // add a padding around the zoomed image
+                    // default to 0
+                    return canvasHeight / 4;
+                }
             });
+            document.querySelector('.api-open').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('open start');
+                var def = instance.api().open()
+
+                def.then(function(){
+                    console.log('open done');
+                })
+            })
+
+            document.querySelector('.api-close').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('close start');
+                var def = instance.api().close()
+
+                def.then(function(){
+                    console.log('close done');
+                })
+            })
+            document.querySelector('.api-prev').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('prev start');
+                var def = instance.api().prev()
+
+                def.then(function(){
+                    console.log('prev done');
+                })
+            })
+            document.querySelector('.api-next').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('next start');
+                var def = instance.api().next()
+
+                def.then(function(){
+                    console.log('next done');
+                })
+            })
+
+            document.querySelector('.api-cover').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('cover mode start')
+                instance.api().set('imageSize', 'cover')
+                var def = instance.api().place()
+
+                def.then(function(){
+                    console.log('cover mode done')
+                })
+            })
+
+            document.querySelector('.api-contain').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('contain mode start')
+                instance.api().set('imageSize', 'contain')
+                var def = instance.api().place()
+
+                def.then(function(){
+                    console.log('contain mode done')
+                })
+            })
         </script>
     </body>
 

@@ -11,7 +11,7 @@ describe('Chocolat', function() {
         it('should call markup function and create markup', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 loop: true,
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             var spyMarkup = sinon.spy(chocolat, 'markup')
@@ -42,7 +42,7 @@ describe('Chocolat', function() {
 
         it('should add css classes to parent when in container', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             chocolat
@@ -89,7 +89,7 @@ describe('Chocolat', function() {
         it('should call init function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 loop: true,
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             var spyInit = sinon.spy(chocolat, 'init')
@@ -106,7 +106,7 @@ describe('Chocolat', function() {
         it('should call load function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 loop: true,
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             var spyLoad = sinon.spy(chocolat, 'load')
@@ -123,7 +123,7 @@ describe('Chocolat', function() {
         it('should call markup function', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 loop: true,
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             var spyMarkup = sinon.spy(chocolat, 'markup')
@@ -143,7 +143,7 @@ describe('Chocolat', function() {
 
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 loop: true,
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
                 afterMarkup: afterMarkup,
             })
 
@@ -152,19 +152,10 @@ describe('Chocolat', function() {
                 .first()[0]
                 .click()
 
-            chocolat.api().getElem('top')
-            expect(
-                chocolat
-                    .api()
-                    .getElem('top')
-                    .find(chocolat.api().getElem('description')).length
-            ).to.equal(1)
-            expect(
-                chocolat
-                    .api()
-                    .getElem('bottom')
-                    .find(chocolat.api().getElem('description')).length
-            ).to.equal(0)
+            const top = chocolat.api().getElem('top')
+            const bottom = chocolat.api().getElem('bottom')
+            expect($(top).find(chocolat.api().getElem('description')).length).to.equal(1)
+            expect($(bottom).find(chocolat.api().getElem('description')).length).to.equal(0)
         })
 
         it('can define a title', function() {
@@ -173,7 +164,7 @@ describe('Chocolat', function() {
             }
 
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
                 setTitle: setTitle,
             })
 
@@ -182,7 +173,7 @@ describe('Chocolat', function() {
                 .first()[0]
                 .click()
 
-            const elem = chocolat.api().getElem('setTitle')[0]
+            const elem = chocolat.api().getElem('setTitle')
             expect(elem.textContent).to.equal('hello')
         })
 
@@ -194,7 +185,7 @@ describe('Chocolat', function() {
             }
 
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
                 description: description,
             })
 
@@ -202,14 +193,14 @@ describe('Chocolat', function() {
                 .api()
                 .open()
                 .then(() => {
-                    const elem = chocolat.api().getElem('description')[0]
+                    const elem = chocolat.api().getElem('description')
                     expect(elem.textContent).to.equal('prefix foo suffix')
 
                     chocolat
                         .api()
                         .next()
                         .then(() => {
-                            const elem = chocolat.api().getElem('description')[0]
+                            const elem = chocolat.api().getElem('description')
                             expect(elem.textContent).to.equal('prefix baz suffix')
                             done()
                         })
@@ -225,7 +216,7 @@ describe('Chocolat', function() {
             }
 
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
                 pagination: pagination,
             })
 
@@ -233,14 +224,14 @@ describe('Chocolat', function() {
                 .api()
                 .open()
                 .then(() => {
-                    const elem = chocolat.api().getElem('pagination')[0]
+                    const elem = chocolat.api().getElem('pagination')
                     expect(elem.textContent).to.equal('prefix 1/3 suffix')
 
                     chocolat
                         .api()
                         .next()
                         .then(() => {
-                            const elem = chocolat.api().getElem('pagination')[0]
+                            const elem = chocolat.api().getElem('pagination')
                             expect(elem.textContent).to.equal('prefix 2/3 suffix')
                             done()
                         })
@@ -525,7 +516,7 @@ describe('Chocolat', function() {
                         chocolat
                             .api()
                             .getElem('domContainer')
-                            .hasClass('chocolat-cover')
+                            .classList.contains('chocolat-cover')
                     ).to.be.true
                     return done()
                 })
@@ -534,7 +525,7 @@ describe('Chocolat', function() {
         it("should have 'shortest' side of the container equal to 'shortest' side to the image in container", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 imageSize: 'cover',
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             chocolat
@@ -597,7 +588,7 @@ describe('Chocolat', function() {
                 .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
-                    var $content = chocolat.api().getElem('content')
+                    var $content = $(chocolat.api().getElem('content'))
 
                     var top = parseInt($content.css('top'), 10)
                     var left = parseInt($content.css('left'), 10)
@@ -618,7 +609,7 @@ describe('Chocolat', function() {
         it("should have 'longest' side of the container equal to 'longest' side to the image in container", function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 imageSize: 'contain',
-                container: $('#container')[0],
+                container: document.querySelector('#container'),
             })
 
             chocolat
@@ -681,7 +672,7 @@ describe('Chocolat', function() {
                 .then(function() {
                     var dim = getExpectedDimensions(chocolat)
 
-                    var $content = chocolat.api().getElem('content')
+                    var $content = $(chocolat.api().getElem('content'))
 
                     var top = parseInt($content.css('top'), 10)
                     var left = parseInt($content.css('left'), 10)
@@ -756,33 +747,21 @@ describe('Chocolat', function() {
     })
 })
 
+function getJqueryElement(name) {}
+
 // function used to calculate image dimensions
 // in order to be compared with what chocolat is really displaying
 function getExpectedDimensions(chocolat) {
-    var imgWidth = chocolat.api().getElem('img')[0].width
-    var imgHeight = chocolat.api().getElem('img')[0].height
+    var imgWidth = chocolat.api().getElem('img').width
+    var imgHeight = chocolat.api().getElem('img').height
 
     var containerWidth = $(chocolat.api().get('container')).width()
     var containerHeight = $(chocolat.api().get('container')).height()
 
     var containerOutMarginH =
-        chocolat
-            .api()
-            .getElem('top')
-            .outerHeight(true) +
-        chocolat
-            .api()
-            .getElem('bottom')
-            .outerHeight(true)
+        chocolat.api().getElem('top').offsetHeight + chocolat.api().getElem('bottom').offsetHeight
     var containerOutMarginW =
-        chocolat
-            .api()
-            .getElem('left')
-            .outerWidth(true) +
-        chocolat
-            .api()
-            .getElem('right')
-            .outerWidth(true)
+        chocolat.api().getElem('left').offsetWidth + chocolat.api().getElem('right').offsetWidth
 
     var containerPaddedWidth = containerWidth - containerOutMarginW
     var containerPaddedHeight = containerHeight - containerOutMarginH
