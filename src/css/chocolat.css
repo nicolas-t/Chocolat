@@ -5,7 +5,7 @@
     overflow: hidden;
 }
 .chocolat-overlay{
-    transition: opacity 1s ease, visibility 0s 1s ease;
+    transition: opacity .4s ease, visibility 0s .4s ease;
     height:100%;
     width:100%;
     position:fixed;
@@ -17,13 +17,13 @@
     opacity: 0;
 }
 .chocolat-overlay.chocolat-visible{
-    transition: opacity 1s, visibility 0s;
+    transition: opacity .4s, visibility 0s;
     visibility: visible;
     opacity: 0.8;
 }
 
 .chocolat-wrapper{
-    transition: opacity 1s ease, visibility 0s 1s ease;
+    transition: opacity .4s ease, visibility 0s .4s ease;
     width:100%;
     height: 100%;
     position:fixed;
@@ -35,7 +35,7 @@
     visibility: hidden;
 }
 .chocolat-wrapper.chocolat-visible{
-    transition: opacity 1s, visibility 0s;
+    transition: opacity .4s, visibility 0s;
     opacity: 1;
     visibility: visible;
 }
