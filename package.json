@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "yarn prettier && rollup -c",
     "dev": "rollup -c -w",
     "test": "mocha-chrome test/index.html",
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
@@ -34,6 +34,7 @@
     "rollup": "^0.68.1",
     "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-node-resolve": "^4.0.0",
     "sinon": "^7.2.2"
   },
