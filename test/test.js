@@ -694,9 +694,9 @@ describe('Chocolat', function() {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 backgroundClose: false,
                 images: [
-                    { src: '../dist/demo-images/1.jpg', title: 'You can zoom in the image' },
-                    { src: '../dist/demo-images/2.jpg', title: 'You can zoom in the image' },
-                    { src: '../dist/demo-images/3.jpg', title: 'You can zoom in the image' },
+                    { src: '../demo/demo-images/1.jpg', title: 'You can zoom in the image' },
+                    { src: '../demo/demo-images/2.jpg', title: 'You can zoom in the image' },
+                    { src: '../demo/demo-images/3.jpg', title: 'You can zoom in the image' },
                 ],
             })
         })
