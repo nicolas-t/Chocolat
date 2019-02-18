@@ -44,40 +44,40 @@ Chocolat(document.querySelectorAll('#example1 .chocolat-image'), {})
 ### Parameters
 
 **container :**  
-type: `HTML Node`
-default: `window`  
+type: `HTML Node`  
+default: `window`   
 Sets whether viewer will open and fill the whole page (`default`), or whether it should open in a particular block of the page.  
 For example `#container2`, in this case the height and width of the block must be defined.
 Values can be : window, or a node.
 
 **linkImages :**  
-type: `boolean`
-default: `true`  
+type: `boolean`  
+default: `true`    
 Sets whether we can switch from one image to another, within the same call, without closing the viewer (`true`), or if the images remain independent (`false`). 
 
 **setTitle :**  
-type: `function`
+type: `function`  
 default: `() => ''`  
 Function returning the title of the set.
 
 **pagination :**  
-type: `function`
+type: `function`  
 default: `() => position + '/' + last`  
 Function returning the pagination (ex: 2/5).
 
 **description :**  
-type: `function`
+type: `function`  
 default: `() => this.settings.images[this.settings.currentImage].title`  
 Function returning the description of the image.
 
 **className :**  
-type: `string`
-default: `''`  
+type: `string`   
+default: `''`   
 Add custom css classes to the parent of the lightbox.
 
 **imageSize :**  
-type: `string`
-default: `'default'`  
+type: `string`  
+default: `'default'`   
 Can be `'default'`, `'contain'`, `'native'`, or `'cover'`.  
  - `default` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's not streched, only displayed at native dimensions.  
  - `'contain'` : if the image is bigger than the window it's resized to fit, else if the image is smaller than the window it's streched, to fit the window.  
@@ -85,28 +85,28 @@ Can be `'default'`, `'contain'`, `'native'`, or `'cover'`.
  - `'native'` : the image is never streched nor shrinked, always displayed at native dimensions  
 
 **fullScreen :**  
-type: `boolean`
-default: `false`  
+type: `boolean`  
+default: `false`   
 Allow fullscreen browsing (hides the browser window).
 
 **loop :**  
-type: `boolean`
+type: `boolean`  
 default: `false`  
 Last image + 1 leads to first image & first image - 1 leads to last image.
 
 **firstImage :**  
-type: `number`
-default: `0`  
+type: `number`  
+default: `0`   
 Index of the image that you want to start the series.
 
 **lastImage :**  
-type: `number`
+type: `number`  
 default: `this.settings.images.length - 1`  
 Index of the image that you want to end the series. 
 
 **images :**  
-type: `array`
-default: `undefined`  
+type: `array`  
+default: `undefined`    
 Array of objects representing the set images.
 ```js
 [
@@ -122,18 +122,18 @@ Array of objects representing the set images.
 If `undefined` (default) it's built based on DOM attributes.
 
 **enableZoom :**  
-type: `boolean`
-default: `true`  
+type: `boolean`  
+default: `true`    
 Disable or enable the zooming feature.  
 
 **afterInitialize :**  
-type: `function`
-default: `undefined`  
+type: `function`  
+default: `undefined`   
 Function (hook) called just after chocolat gets initialized.  
 
 **afterMarkup :**  
-type: `function`
-default: `undefined`  
+type: `function`  
+default: `undefined`    
 Function (hook) called just after markup is created. 
 You can use it to alter the default markup: to move the caption at the top of the image for example.
 ```js
@@ -146,14 +146,14 @@ Chocolat(document.querySelectorAll('.chocolat-image'), {
 ```
 
 **afterImageLoad :**  
-type: `function`
-default: `undefined`  
+type: `function`    
+default: `undefined`    
 Function (hook) called just after the image is loaded.
 
 
 **zoomedPaddingX :**  
-type: `function`
-default: `(canvasWidth, imgWidth) => 0`  
+type: `function`  
+default: `(canvasWidth, imgWidth) => 0`    
 Function returning the horizontal padding to add around the image when it's zoomed.
 It takes 2 arguments `canvasWidth` and `imgWidth`
 ```js
@@ -165,8 +165,8 @@ Chocolat(document.querySelectorAll('.chocolat-image'), {
 ```
 
 **zoomedPaddingY :**  
-type: `function`
-default: `(canvasHeight, imgHeight) => 0`  
+type: `function`  
+default: `(canvasHeight, imgHeight) => 0`    
 Function returning the vertical padding to add around the image when it's zoomed.
 It takes 2 arguments `canvasHeight` and `imgHeight`
 ```js
