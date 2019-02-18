@@ -229,7 +229,7 @@ export class Chocolat {
     }
 
     change(signe) {
-        this.zoomOut(0)
+        this.zoomOut()
         this.zoomable()
 
         var requestedImage = this.settings.currentImage + parseInt(signe)
@@ -539,7 +539,7 @@ export class Chocolat {
             this.debounce(50, () => {
                 const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
 
-                this.center(width, height, left, top, 0)
+                this.center(width, height, left, top)
                 this.zoomable()
             })
         })
@@ -574,22 +574,20 @@ export class Chocolat {
         this.elems.domContainer.classList.add('chocolat-zoomed')
         const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
 
-        return this.center(width, height, left, top, this.settings.duration)
+        return this.center(width, height, left, top)
     }
 
-    zoomOut(e, duration) {
+    zoomOut(e) {
         if (this.settings.initialZoomState === null || this.settings.currentImage === undefined) {
             return
         }
-        duration = duration || this.settings.duration
-
         this.settings.imageSize = this.settings.initialZoomState
         this.settings.initialZoomState = null
         this.elems.img.style.margin = 0
 
         this.elems.domContainer.classList.remove('chocolat-zoomed')
         const { width, height, left, top } = this.fit(this.elems.img, this.elems.wrapper)
-        return this.center(width, height, left, top, duration)
+        return this.center(width, height, left, top)
     }
 
     setDomContainer() {
