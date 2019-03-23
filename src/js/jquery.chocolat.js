@@ -288,7 +288,7 @@
         },
 
         destroy: function() {
-            this.element.removeData()
+            this.element.removeData('chocolat')
             this.element.find(this.settings.imageSelector).off('click.chocolat')
 
             if (!this.settings.initialized) {
