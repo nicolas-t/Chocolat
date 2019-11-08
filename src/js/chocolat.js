@@ -1,5 +1,5 @@
 export const defaults = {
-    container: window, // window or jquery object or jquery selector, or element
+    container: window, // window or element
     className: undefined,
     imageSize: 'default', // 'default', 'contain', 'cover' or 'native'
     initialZoomState: null,
@@ -8,9 +8,9 @@ export const defaults = {
     linkImages: true,
     duration: 300,
     setIndex: 0,
-    firstImage: 0,
-    lastImage: false,
-    currentImage: undefined,
+    firstImageIndex: 0,
+    lastImageIndex: false,
+    currentImageIndex: undefined,
     initialized: false,
     timer: false,
     timerDebounce: false,
@@ -21,11 +21,11 @@ export const defaults = {
         return ''
     },
     description: function() {
-        return this.settings.images[this.settings.currentImage].title
+        return this.settings.images[this.settings.currentImageIndex].title
     },
     pagination: function() {
-        var last = this.settings.lastImage + 1
-        var position = this.settings.currentImage + 1
+        var last = this.settings.lastImageIndex + 1
+        var position = this.settings.currentImageIndex + 1
 
         return position + '/' + last
     },
@@ -76,7 +76,7 @@ export class Chocolat {
             this.setDomContainer()
             this.markup()
             this.attachListeners()
-            this.settings.lastImage = this.settings.images.length - 1
+            this.settings.lastImageIndex = this.settings.images.length - 1
             this.settings.initialized = true
         }
 
@@ -103,7 +103,7 @@ export class Chocolat {
             this.openFullScreen()
         }
 
-        if (this.settings.currentImage === i) {
+        if (this.settings.currentImageIndex === i) {
             return Promise.resolve()
         }
 
@@ -129,7 +129,7 @@ export class Chocolat {
                     this.loadImage(this.settings.images[nextIndex].src, new Image())
                 }
 
-                this.settings.currentImage = i
+                this.settings.currentImageIndex = i
 
                 const place = this.place(imgLoader)
                 const appear = this.appear(i)
@@ -232,14 +232,14 @@ export class Chocolat {
         this.zoomOut()
         this.zoomable()
 
-        var requestedImage = this.settings.currentImage + parseInt(signe)
-        if (requestedImage > this.settings.lastImage) {
+        var requestedImage = this.settings.currentImageIndex + parseInt(signe)
+        if (requestedImage > this.settings.lastImageIndex) {
             if (this.settings.loop) {
                 return this.load(0)
             }
         } else if (requestedImage < 0) {
             if (this.settings.loop) {
-                return this.load(this.settings.lastImage)
+                return this.load(this.settings.lastImageIndex)
             }
         } else {
             return this.load(requestedImage)
@@ -252,13 +252,13 @@ export class Chocolat {
             this.elems.right.classList.add('active')
         } else if (this.settings.linkImages) {
             // right
-            if (this.settings.currentImage == this.settings.lastImage) {
+            if (this.settings.currentImageIndex == this.settings.lastImageIndex) {
                 this.elems.right.classList.remove('active')
             } else {
                 this.elems.right.classList.add('active')
             }
             // left
-            if (this.settings.currentImage === 0) {
+            if (this.settings.currentImageIndex === 0) {
                 this.elems.left.classList.remove('active')
             } else {
                 this.elems.left.classList.add('active')
@@ -275,7 +275,7 @@ export class Chocolat {
             return
         }
 
-        this.settings.currentImage = undefined
+        this.settings.currentImageIndex = undefined
 
         const promiseOverlay = this.transitionAsPromise(() => {
             this.elems.overlay.classList.remove('chocolat-visible')
@@ -302,7 +302,7 @@ export class Chocolat {
         if (this.settings.fullscreenOpen) {
             this.exitFullScreen()
         }
-        this.settings.currentImage = undefined
+        this.settings.currentImageIndex = undefined
         this.settings.initialized = false
 
         this.elems.domContainer.classList.remove(...this._cssClasses)
@@ -495,7 +495,7 @@ export class Chocolat {
                 return
             }
 
-            if (this.settings.currentImage === undefined) {
+            if (this.settings.currentImageIndex === undefined) {
                 return
             }
 
@@ -508,7 +508,7 @@ export class Chocolat {
             var height = this.elems.wrapper.clientHeight
             var width = this.elems.wrapper.clientWidth
 
-            var currentImage = this.settings.images[this.settings.currentImage]
+            var currentImageIndex = this.settings.images[this.settings.currentImageIndex]
             var imgWidth = this.elems.img.width
             var imgHeight = this.elems.img.height
 
@@ -533,7 +533,7 @@ export class Chocolat {
         })
 
         this.on(window, 'resize.chocolat', (e) => {
-            if (!this.settings.initialized || this.settings.currentImage === undefined) {
+            if (!this.settings.initialized || this.settings.currentImageIndex === undefined) {
                 return
             }
             this.debounce(50, () => {
@@ -546,7 +546,7 @@ export class Chocolat {
     }
 
     zoomable() {
-        var currentImage = this.settings.images[this.settings.currentImage]
+        var currentImageIndex = this.settings.images[this.settings.currentImageIndex]
         var wrapperWidth = this.elems.wrapper.clientWidth
         var wrapperHeight = this.elems.wrapper.clientHeight
 
@@ -578,7 +578,10 @@ export class Chocolat {
     }
 
     zoomOut(e) {
-        if (this.settings.initialZoomState === null || this.settings.currentImage === undefined) {
+        if (
+            this.settings.initialZoomState === null ||
+            this.settings.currentImageIndex === undefined
+        ) {
             return
         }
         this.settings.imageSize = this.settings.initialZoomState
@@ -678,7 +681,7 @@ export class Chocolat {
                 return this.open(i)
             },
             current: () => {
-                return this.settings.currentImage
+                return this.settings.currentImageIndex
             },
 
             place: () => {

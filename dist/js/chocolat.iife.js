@@ -3,7 +3,7 @@
 
     const defaults = {
       container: window,
-      // window or jquery object or jquery selector, or element
+      // window or element
       className: undefined,
       imageSize: 'default',
       // 'default', 'contain', 'cover' or 'native'
@@ -13,9 +13,9 @@
       linkImages: true,
       duration: 300,
       setIndex: 0,
-      firstImage: 0,
-      lastImage: false,
-      currentImage: undefined,
+      firstImageIndex: 0,
+      lastImageIndex: false,
+      currentImageIndex: undefined,
       initialized: false,
       timer: false,
       timerDebounce: false,
@@ -26,11 +26,11 @@
         return '';
       },
       description: function () {
-        return this.settings.images[this.settings.currentImage].title;
+        return this.settings.images[this.settings.currentImageIndex].title;
       },
       pagination: function () {
-        var last = this.settings.lastImage + 1;
-        var position = this.settings.currentImage + 1;
+        var last = this.settings.lastImageIndex + 1;
+        var position = this.settings.currentImageIndex + 1;
         return position + '/' + last;
       },
 
@@ -74,7 +74,7 @@
           this.setDomContainer();
           this.markup();
           this.attachListeners();
-          this.settings.lastImage = this.settings.images.length - 1;
+          this.settings.lastImageIndex = this.settings.images.length - 1;
           this.settings.initialized = true;
         }
 
@@ -100,7 +100,7 @@
           this.openFullScreen();
         }
 
-        if (this.settings.currentImage === i) {
+        if (this.settings.currentImageIndex === i) {
           return Promise.resolve();
         }
 
@@ -122,7 +122,7 @@
             this.loadImage(this.settings.images[nextIndex].src, new Image());
           }
 
-          this.settings.currentImage = i;
+          this.settings.currentImageIndex = i;
           const place = this.place(imgLoader);
           const appear = this.appear(i);
           return Promise.all([place, appear]);
@@ -220,17 +220,17 @@
       }
 
       change(signe) {
-        this.zoomOut(0);
+        this.zoomOut();
         this.zoomable();
-        var requestedImage = this.settings.currentImage + parseInt(signe);
+        var requestedImage = this.settings.currentImageIndex + parseInt(signe);
 
-        if (requestedImage > this.settings.lastImage) {
+        if (requestedImage > this.settings.lastImageIndex) {
           if (this.settings.loop) {
             return this.load(0);
           }
         } else if (requestedImage < 0) {
           if (this.settings.loop) {
-            return this.load(this.settings.lastImage);
+            return this.load(this.settings.lastImageIndex);
           }
         } else {
           return this.load(requestedImage);
@@ -243,14 +243,14 @@
           this.elems.right.classList.add('active');
         } else if (this.settings.linkImages) {
           // right
-          if (this.settings.currentImage == this.settings.lastImage) {
+          if (this.settings.currentImageIndex == this.settings.lastImageIndex) {
             this.elems.right.classList.remove('active');
           } else {
             this.elems.right.classList.add('active');
           } // left
 
 
-          if (this.settings.currentImage === 0) {
+          if (this.settings.currentImageIndex === 0) {
             this.elems.left.classList.remove('active');
           } else {
             this.elems.left.classList.add('active');
@@ -267,7 +267,7 @@
           return;
         }
 
-        this.settings.currentImage = undefined;
+        this.settings.currentImageIndex = undefined;
         const promiseOverlay = this.transitionAsPromise(() => {
           this.elems.overlay.classList.remove('chocolat-visible');
         }, this.elems.overlay);
@@ -296,7 +296,7 @@
           this.exitFullScreen();
         }
 
-        this.settings.currentImage = undefined;
+        this.settings.currentImageIndex = undefined;
         this.settings.initialized = false;
         this.elems.domContainer.classList.remove(...this._cssClasses);
         this.elems.wrapper.parentNode.removeChild(this.elems.wrapper);
@@ -467,7 +467,7 @@
             return;
           }
 
-          if (this.settings.currentImage === undefined) {
+          if (this.settings.currentImageIndex === undefined) {
             return;
           }
 
@@ -478,7 +478,7 @@
           };
           var height = this.elems.wrapper.clientHeight;
           var width = this.elems.wrapper.clientWidth;
-          var currentImage = this.settings.images[this.settings.currentImage];
+          var currentImageIndex = this.settings.images[this.settings.currentImageIndex];
           var imgWidth = this.elems.img.width;
           var imgHeight = this.elems.img.height;
           var coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
@@ -502,7 +502,7 @@
           this.elems.img.style.marginTop = -mvtY + 'px';
         });
         this.on(window, 'resize.chocolat', e => {
-          if (!this.settings.initialized || this.settings.currentImage === undefined) {
+          if (!this.settings.initialized || this.settings.currentImageIndex === undefined) {
             return;
           }
 
@@ -513,14 +513,14 @@
               left,
               top
             } = this.fit(this.elems.img, this.elems.wrapper);
-            this.center(width, height, left, top, 0);
+            this.center(width, height, left, top);
             this.zoomable();
           });
         });
       }
 
       zoomable() {
-        var currentImage = this.settings.images[this.settings.currentImage];
+        var currentImageIndex = this.settings.images[this.settings.currentImageIndex];
         var wrapperWidth = this.elems.wrapper.clientWidth;
         var wrapperHeight = this.elems.wrapper.clientHeight;
         var isImageZoomable = this.settings.enableZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
@@ -543,15 +543,14 @@
           left,
           top
         } = this.fit(this.elems.img, this.elems.wrapper);
-        return this.center(width, height, left, top, this.settings.duration);
+        return this.center(width, height, left, top);
       }
 
-      zoomOut(e, duration) {
-        if (this.settings.initialZoomState === null || this.settings.currentImage === undefined) {
+      zoomOut(e) {
+        if (this.settings.initialZoomState === null || this.settings.currentImageIndex === undefined) {
           return;
         }
 
-        duration = duration || this.settings.duration;
         this.settings.imageSize = this.settings.initialZoomState;
         this.settings.initialZoomState = null;
         this.elems.img.style.margin = 0;
@@ -562,7 +561,7 @@
           left,
           top
         } = this.fit(this.elems.img, this.elems.wrapper);
-        return this.center(width, height, left, top, duration);
+        return this.center(width, height, left, top);
       }
 
       setDomContainer() {
@@ -645,7 +644,7 @@
             return this.open(i);
           },
           current: () => {
-            return this.settings.currentImage;
+            return this.settings.currentImageIndex;
           },
           place: () => {
             return this.place(this.elems.img, this.settings.duration);

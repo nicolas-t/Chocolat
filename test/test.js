@@ -180,7 +180,9 @@ describe('Chocolat', function() {
         it('can define a description per image', function(done) {
             var description = function() {
                 return (
-                    'prefix ' + this.settings.images[this.settings.currentImage].title + ' suffix'
+                    'prefix ' +
+                    this.settings.images[this.settings.currentImageIndex].title +
+                    ' suffix'
                 )
             }
 
@@ -209,8 +211,8 @@ describe('Chocolat', function() {
 
         it('can define a pagination per image', function(done) {
             var pagination = function() {
-                var last = this.settings.lastImage + 1
-                var position = this.settings.currentImage + 1
+                var last = this.settings.lastImageIndex + 1
+                var position = this.settings.currentImageIndex + 1
 
                 return 'prefix ' + position + '/' + last + ' suffix'
             }
@@ -464,10 +466,10 @@ describe('Chocolat', function() {
                         .prev()
                         .then(function() {
                             expect(
-                                spyLoad.calledWithExactly(chocolat.api().get('lastImage'))
+                                spyLoad.calledWithExactly(chocolat.api().get('lastImageIndex'))
                             ).to.be.true
                             expect(chocolat.api().current()).to.equal(
-                                chocolat.api().get('lastImage')
+                                chocolat.api().get('lastImageIndex')
                             )
 
                             return done()
@@ -480,11 +482,11 @@ describe('Chocolat', function() {
                 loop: true,
             })
 
-            var lastImage = chocolat.settings.images.length - 1
+            var lastImageIndex = chocolat.settings.images.length - 1
 
             chocolat
                 .api()
-                .open(lastImage)
+                .open(lastImageIndex)
                 .then(function() {
                     var spyLoad = sinon.spy(chocolat, 'load')
 
