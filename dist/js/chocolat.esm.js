@@ -5,10 +5,9 @@ const defaults = {
   imageSize: 'default',
   // 'default', 'contain', 'cover' or 'native'
   initialZoomState: null,
-  fullScreen: false,
+  allowFullScreen: false,
   loop: false,
   linkImages: true,
-  duration: 300,
   setIndex: 0,
   firstImageIndex: 0,
   lastImageIndex: false,
@@ -17,7 +16,7 @@ const defaults = {
   timer: false,
   timerDebounce: false,
   images: [],
-  enableZoom: true,
+  allowZoom: true,
   imageSource: 'href',
   setTitle: function () {
     return '';
@@ -64,6 +63,43 @@ class Chocolat {
         e.preventDefault();
       });
     });
+    this.api = {
+      open: i => {
+        i = parseInt(i) || 0;
+        return this.init(i);
+      },
+      close: () => {
+        return this.close();
+      },
+      next: () => {
+        return this.change(1);
+      },
+      prev: () => {
+        return this.change(-1);
+      },
+      goto: i => {
+        return this.open(i);
+      },
+      current: () => {
+        return this.settings.currentImageIndex;
+      },
+      place: () => {
+        return this.place(this.elems.img);
+      },
+      destroy: () => {
+        return this.destroy();
+      },
+      set: (property, value) => {
+        this.settings[property] = value;
+        return value;
+      },
+      get: property => {
+        return this.settings[property];
+      },
+      getElem: name => {
+        return this.elems[name];
+      }
+    };
   }
 
   init(i) {
@@ -93,7 +129,7 @@ class Chocolat {
   }
 
   load(i) {
-    if (this.settings.fullScreen) {
+    if (this.settings.allowFullScreen) {
       this.openFullScreen();
     }
 
@@ -110,7 +146,7 @@ class Chocolat {
       if (this.elems !== undefined) {
         this.elems.loader.classList.add('chocolat-visible');
       }
-    }, this.settings.duration);
+    }, 300);
     const imgLoader = new Image();
     return this.loadImage(this.settings.images[i].src, imgLoader).then(() => {
       const nextIndex = i + 1;
@@ -520,7 +556,7 @@ class Chocolat {
     var currentImageIndex = this.settings.images[this.settings.currentImageIndex];
     var wrapperWidth = this.elems.wrapper.clientWidth;
     var wrapperHeight = this.elems.wrapper.clientHeight;
-    var isImageZoomable = this.settings.enableZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
+    var isImageZoomable = this.settings.allowZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
     var isImageStretched = this.elems.img.clientWidth > this.elems.img.naturalWidth || this.elems.img.clientHeight > this.elems.img.naturalHeight;
 
     if (isImageZoomable && !isImageStretched) {
@@ -619,47 +655,6 @@ class Chocolat {
         handleTransitionEnd();
       }
     });
-  }
-
-  api() {
-    return {
-      open: i => {
-        i = parseInt(i) || 0;
-        return this.init(i);
-      },
-      close: () => {
-        return this.close();
-      },
-      next: () => {
-        return this.change(1);
-      },
-      prev: () => {
-        return this.change(-1);
-      },
-      goto: i => {
-        // open alias
-        return this.open(i);
-      },
-      current: () => {
-        return this.settings.currentImageIndex;
-      },
-      place: () => {
-        return this.place(this.elems.img, this.settings.duration);
-      },
-      destroy: () => {
-        return this.destroy();
-      },
-      set: (property, value) => {
-        this.settings[property] = value;
-        return value;
-      },
-      get: property => {
-        return this.settings[property];
-      },
-      getElem: name => {
-        return this.elems[name];
-      }
-    };
   }
 
 }

@@ -173,7 +173,7 @@
                 e.preventDefault()
 
                 console.log('open start');
-                var def = instance.api().open()
+                var def = instance.api.open()
 
                 def.then(function(){
                     console.log('open done');
@@ -184,7 +184,7 @@
                 e.preventDefault()
 
                 console.log('close start');
-                var def = instance.api().close()
+                var def = instance.api.close()
 
                 def.then(function(){
                     console.log('close done');
@@ -194,7 +194,7 @@
                 e.preventDefault()
 
                 console.log('prev start');
-                var def = instance.api().prev()
+                var def = instance.api.prev()
 
                 def.then(function(){
                     console.log('prev done');
@@ -204,7 +204,7 @@
                 e.preventDefault()
 
                 console.log('next start');
-                var def = instance.api().next()
+                var def = instance.api.next()
 
                 def.then(function(){
                     console.log('next done');
@@ -215,8 +215,8 @@
                 e.preventDefault()
 
                 console.log('cover mode start')
-                instance.api().set('imageSize', 'cover')
-                var def = instance.api().place()
+                instance.api.set('imageSize', 'cover')
+                var def = instance.api.place()
 
                 def.then(function(){
                     console.log('cover mode done')
@@ -227,8 +227,8 @@
                 e.preventDefault()
 
                 console.log('contain mode start')
-                instance.api().set('imageSize', 'contain')
-                var def = instance.api().place()
+                instance.api.set('imageSize', 'contain')
+                var def = instance.api.place()
 
                 def.then(function(){
                     console.log('contain mode done')
