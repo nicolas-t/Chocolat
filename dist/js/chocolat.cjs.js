@@ -258,16 +258,16 @@ class Chocolat {
     };
   }
 
-  change(signe) {
+  change(step) {
     this.zoomOut();
     this.zoomable();
-    const requestedImage = this.settings.currentImageIndex + parseInt(signe);
+    const requestedImage = this.settings.currentImageIndex + parseInt(step);
 
     if (requestedImage > this.settings.lastImageIndex) {
       if (this.settings.loop) {
-        return this.load(0);
+        return this.load(this.settings.firstImageIndex);
       }
-    } else if (requestedImage < 0) {
+    } else if (requestedImage < this.settings.firstImageIndex) {
       if (this.settings.loop) {
         return this.load(this.settings.lastImageIndex);
       }
@@ -281,19 +281,8 @@ class Chocolat {
       this.elems.left.classList.add('active');
       this.elems.right.classList.add('active');
     } else if (this.settings.linkImages) {
-      // right
-      if (this.settings.currentImageIndex == this.settings.lastImageIndex) {
-        this.elems.right.classList.remove('active');
-      } else {
-        this.elems.right.classList.add('active');
-      } // left
-
-
-      if (this.settings.currentImageIndex === 0) {
-        this.elems.left.classList.remove('active');
-      } else {
-        this.elems.left.classList.add('active');
-      }
+      this.elems.right.classList.toggle('active', this.settings.currentImageIndex !== this.settings.lastImageIndex);
+      this.elems.left.classList.toggle('active', this.settings.currentImageIndex !== this.settings.firstImageIndex);
     } else {
       this.elems.left.classList.remove('active');
       this.elems.right.classList.remove('active');
@@ -319,7 +308,7 @@ class Chocolat {
   }
 
   destroy() {
-    for (var i = this.events.length - 1; i >= 0; i--) {
+    for (let i = this.events.length - 1; i >= 0; i--) {
       const {
         element,
         eventName
@@ -515,24 +504,23 @@ class Chocolat {
         top: rect.top + window.scrollY,
         left: rect.left + window.scrollX
       };
-      var height = this.elems.wrapper.clientHeight;
-      var width = this.elems.wrapper.clientWidth;
-      var currentImageIndex = this.images[this.settings.currentImageIndex];
-      var imgWidth = this.elems.img.width;
-      var imgHeight = this.elems.img.height;
-      var coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
-      var mvtX = 0;
+      const height = this.elems.wrapper.clientHeight;
+      const width = this.elems.wrapper.clientWidth;
+      const imgWidth = this.elems.img.width;
+      const imgHeight = this.elems.img.height;
+      const coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
+      let mvtX = 0;
 
       if (imgWidth > width) {
-        var paddingX = this.settings.zoomedPaddingX(imgWidth, width);
+        const paddingX = this.settings.zoomedPaddingX(imgWidth, width);
         mvtX = coord[0] / (width / 2);
         mvtX = ((imgWidth - width) / 2 + paddingX) * mvtX;
       }
 
-      var mvtY = 0;
+      let mvtY = 0;
 
       if (imgHeight > height) {
-        var paddingY = this.settings.zoomedPaddingY(imgHeight, height);
+        const paddingY = this.settings.zoomedPaddingY(imgHeight, height);
         mvtY = coord[1] / (height / 2);
         mvtY = ((imgHeight - height) / 2 + paddingY) * mvtY;
       }
@@ -559,11 +547,11 @@ class Chocolat {
   }
 
   zoomable() {
-    var currentImageIndex = this.images[this.settings.currentImageIndex];
-    var wrapperWidth = this.elems.wrapper.clientWidth;
-    var wrapperHeight = this.elems.wrapper.clientHeight;
-    var isImageZoomable = this.settings.allowZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
-    var isImageStretched = this.elems.img.clientWidth > this.elems.img.naturalWidth || this.elems.img.clientHeight > this.elems.img.naturalHeight;
+    const currentImageIndex = this.images[this.settings.currentImageIndex];
+    const wrapperWidth = this.elems.wrapper.clientWidth;
+    const wrapperHeight = this.elems.wrapper.clientHeight;
+    const isImageZoomable = this.settings.allowZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
+    const isImageStretched = this.elems.img.clientWidth > this.elems.img.naturalWidth || this.elems.img.clientHeight > this.elems.img.naturalHeight;
 
     if (isImageZoomable && !isImageStretched) {
       this.elems.domContainer.classList.add('chocolat-zoomable');
