@@ -5,8 +5,8 @@
       container: window,
       // window or element
       className: undefined,
-      imageSize: 'default',
-      // 'default', 'contain', 'cover' or 'native'
+      imageSize: 'scale-down',
+      // 'scale-down', 'contain', 'cover' or 'native'
       initialZoomState: null,
       allowFullScreen: false,
       loop: false,
@@ -26,8 +26,8 @@
         return this.images[this.settings.currentImageIndex].title;
       },
       pagination: function () {
-        var last = this.settings.lastImageIndex + 1;
-        var position = this.settings.currentImageIndex + 1;
+        const last = this.settings.lastImageIndex + 1;
+        const position = this.settings.currentImageIndex + 1;
         return position + '/' + last;
       },
 
@@ -245,7 +245,7 @@
             height = width * imgRatio;
           }
 
-          if (this.settings.imageSize === 'default' && (width >= imgWidth || height >= imgHeight)) {
+          if (this.settings.imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
             width = imgWidth;
             height = imgHeight;
           }
@@ -262,7 +262,7 @@
       change(signe) {
         this.zoomOut();
         this.zoomable();
-        var requestedImage = this.settings.currentImageIndex + parseInt(signe);
+        const requestedImage = this.settings.currentImageIndex + parseInt(signe);
 
         if (requestedImage > this.settings.lastImageIndex) {
           if (this.settings.loop) {
@@ -409,7 +409,7 @@
       }
 
       openFullScreen() {
-        var wrapper = this.elems.wrapper;
+        const wrapper = this.elems.wrapper;
 
         if (wrapper.requestFullscreen) {
           this.settings.fullscreenOpen = true;

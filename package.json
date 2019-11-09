@@ -1,7 +1,7 @@
 {
   "name": "chocolat",
-  "version": "0.5.0",
-  "description": "Responsive jQuery Lightbox Plugin",
+  "version": "1.0.0",
+  "description": "Responsive Lightbox Plugin",
   "main": "dist/js/chocolat.cjs.js",
   "module": "dist/js/chocolat.esm.js",
   "browser": "dist/js/chocolat.iife.js",
@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "yarn prettier && rollup -c",
+    "build": "npm run prettier && rollup -c",
     "dev": "rollup -c -w",
     "test": "mocha-chrome test/index.html",
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
@@ -38,7 +38,6 @@
     "url": "git+https://github.com/nicolas-t/Chocolat.git"
   },
   "keywords": [
-    "jquery",
     "lightbox",
     "plugin",
     "responsive"
