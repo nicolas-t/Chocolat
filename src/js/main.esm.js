@@ -2,7 +2,7 @@ import { Chocolat, defaults } from './chocolat.js'
 
 const instances = []
 
-export default function(options) {
+export default function(elements, options) {
     const settings = Object.assign({}, defaults, { images: [] }, options, {
         setIndex: instances.length,
     })

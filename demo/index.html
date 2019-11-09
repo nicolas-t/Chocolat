@@ -139,14 +139,13 @@
         </script>
         <script>
             // api demo
-            var instance = Chocolat([], {
-                setTitle : function () { return 'set title' },
-                loop: true,
-                images : [
+            var instance = Chocolat([
                     {src : 'demo-images/1.jpg', title : 'caption 1'},
                     {src : 'demo-images/6.jpg', title : 'caption 2'},
                     {src : 'demo-images/8.jpg', title : 'caption 3'},
-                ],
+                ], {
+                setTitle : function () { return 'set title' },
+                loop: true,
                 imageSize : 'contain',
                 container: document.querySelector('#container3'),
                 afterMarkup: function () {
@@ -173,9 +172,9 @@
                 e.preventDefault()
 
                 console.log('open start');
-                var def = instance.api.open()
+                var promise = instance.api.open()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('open done');
                 })
             })
@@ -184,9 +183,9 @@
                 e.preventDefault()
 
                 console.log('close start');
-                var def = instance.api.close()
+                var promise = instance.api.close()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('close done');
                 })
             })
@@ -194,9 +193,9 @@
                 e.preventDefault()
 
                 console.log('prev start');
-                var def = instance.api.prev()
+                var promise = instance.api.prev()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('prev done');
                 })
             })
@@ -204,9 +203,9 @@
                 e.preventDefault()
 
                 console.log('next start');
-                var def = instance.api.next()
+                var promise = instance.api.next()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('next done');
                 })
             })
@@ -216,9 +215,9 @@
 
                 console.log('cover mode start')
                 instance.api.set('imageSize', 'cover')
-                var def = instance.api.place()
+                var promise = instance.api.position()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('cover mode done')
                 })
             })
@@ -228,9 +227,9 @@
 
                 console.log('contain mode start')
                 instance.api.set('imageSize', 'contain')
-                var def = instance.api.place()
+                var promise = instance.api.position()
 
-                def.then(function(){
+                promise.then(function(){
                     console.log('contain mode done')
                 })
             })

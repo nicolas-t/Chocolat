@@ -170,11 +170,7 @@ describe('Chocolat', function() {
 
         it('can define a description per image', function(done) {
             var description = function() {
-                return (
-                    'prefix ' +
-                    this.settings.images[this.settings.currentImageIndex].title +
-                    ' suffix'
-                )
+                return 'prefix ' + this.images[this.settings.currentImageIndex].title + ' suffix'
             }
 
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
@@ -335,7 +331,7 @@ describe('Chocolat', function() {
 
         return it('should open fullscreen directly', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                fullScreen: true,
+                allowFullScreen: true,
             })
 
             // test only if browser fullscreenAPI is available
@@ -424,7 +420,7 @@ describe('Chocolat', function() {
                 loop: true,
             })
 
-            var lastImageIndex = chocolat.settings.images.length - 1
+            var lastImageIndex = chocolat.images.length - 1
 
             chocolat.api.open(lastImageIndex).then(function() {
                 var spyLoad = sinon.spy(chocolat, 'load')
@@ -605,14 +601,16 @@ describe('Chocolat', function() {
 
     describe('API', function() {
         before(function() {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                backgroundClose: false,
-                images: [
+            chocolat = Chocolat(
+                [
                     { src: '../demo/demo-images/1.jpg', title: 'You can zoom in the image' },
                     { src: '../demo/demo-images/2.jpg', title: 'You can zoom in the image' },
                     { src: '../demo/demo-images/3.jpg', title: 'You can zoom in the image' },
                 ],
-            })
+                {
+                    backgroundClose: false,
+                }
+            )
         })
 
         it('should have a open method', function() {
@@ -639,8 +637,8 @@ describe('Chocolat', function() {
             expect(typeof chocolat.api.current).to.equal('function')
         })
 
-        it('should have a place method', function() {
-            expect(typeof chocolat.api.place).to.equal('function')
+        it('should have a position method', function() {
+            expect(typeof chocolat.api.position).to.equal('function')
         })
 
         it('should have a destroy method', function() {
