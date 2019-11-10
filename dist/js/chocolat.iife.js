@@ -46,11 +46,11 @@
         imgWidth,
         containerHeight,
         containerWidth,
-        containerGlobalWidth,
-        containerGlobalHeight,
+        canvasWidth,
+        canvasHeight,
         imageSize
       } = options;
-      const containerGlobalRatio = containerGlobalHeight / containerGlobalWidth;
+      const canvasRatio = canvasHeight / canvasWidth;
       const containerRatio = containerHeight / containerWidth;
       const imgRatio = imgHeight / imgWidth;
 
@@ -66,11 +66,11 @@
         height = imgHeight;
         width = imgWidth;
       } else {
-        if (imgRatio > containerGlobalRatio) {
-          height = containerGlobalHeight;
+        if (imgRatio > canvasRatio) {
+          height = canvasHeight;
           width = height / imgRatio;
         } else {
-          width = containerGlobalWidth;
+          width = canvasWidth;
           height = width * imgRatio;
         }
 
@@ -82,9 +82,7 @@
 
       return {
         height: height,
-        width: width,
-        top: (containerHeight - height) / 2,
-        left: (containerWidth - width) / 2
+        width: width
       };
     }
     function openFullScreen(wrapper) {
@@ -288,30 +286,26 @@
         const fitOptions = {
           imgHeight: image.naturalHeight,
           imgWidth: image.naturalWidth,
-          containerHeight: this.elems.wrapper.clientHeight,
-          containerWidth: this.elems.wrapper.clientWidth,
-          containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
-          containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+          containerHeight: this.elems.container.clientHeight,
+          containerWidth: this.elems.container.clientWidth,
+          canvasWidth: this.elems.imageCanvas.clientWidth,
+          canvasHeight: this.elems.imageCanvas.clientHeight,
           imageSize: this.settings.imageSize
         };
         const {
           width,
-          height,
-          left,
-          top
+          height
         } = fit(fitOptions);
-        return this.center(width, height, left, top);
+        return this.center(width, height);
       }
 
-      center(width, height, left, top) {
+      center(width, height) {
         return transitionAsPromise(() => {
-          Object.assign(this.elems.content.style, {
+          Object.assign(this.elems.imageWrapper.style, {
             width: width + 'px',
-            height: height + 'px',
-            left: left + 'px',
-            top: top + 'px'
+            height: height + 'px'
           });
-        }, this.elems.content);
+        }, this.elems.imageWrapper);
       }
 
       appear(i) {
@@ -326,14 +320,6 @@
         }, this.elems.loader).then(() => {
           return loadImage(this.images[i].src, this.elems.img);
         });
-      }
-
-      getOutMarginW() {
-        return this.elems.left.offsetWidth + this.elems.right.offsetWidth;
-      }
-
-      getOutMarginH() {
-        return this.elems.top.offsetHeight + this.elems.bottom.offsetHeight;
       }
 
       change(step) {
@@ -429,30 +415,36 @@
         this.elems.loader = document.createElement('div');
         this.elems.loader.setAttribute('class', 'chocolat-loader');
         this.elems.wrapper.appendChild(this.elems.loader);
-        this.elems.content = document.createElement('div');
-        this.elems.content.setAttribute('class', 'chocolat-content');
-        this.elems.wrapper.appendChild(this.elems.content);
-        this.elems.img = document.createElement('img');
-        this.elems.img.setAttribute('class', 'chocolat-img');
-        this.elems.content.appendChild(this.elems.img);
+        this.elems.layout = document.createElement('div');
+        this.elems.layout.setAttribute('class', 'chocolat-layout');
+        this.elems.wrapper.appendChild(this.elems.layout);
         this.elems.top = document.createElement('div');
         this.elems.top.setAttribute('class', 'chocolat-top');
-        this.elems.wrapper.appendChild(this.elems.top);
+        this.elems.layout.appendChild(this.elems.top);
+        this.elems.center = document.createElement('div');
+        this.elems.center.setAttribute('class', 'chocolat-center');
+        this.elems.layout.appendChild(this.elems.center);
         this.elems.left = document.createElement('div');
         this.elems.left.setAttribute('class', 'chocolat-left');
-        this.elems.wrapper.appendChild(this.elems.left);
+        this.elems.center.appendChild(this.elems.left);
+        this.elems.imageCanvas = document.createElement('div');
+        this.elems.imageCanvas.setAttribute('class', 'chocolat-image-canvas');
+        this.elems.center.appendChild(this.elems.imageCanvas);
+        this.elems.imageWrapper = document.createElement('div');
+        this.elems.imageWrapper.setAttribute('class', 'chocolat-image-wrapper');
+        this.elems.imageCanvas.appendChild(this.elems.imageWrapper);
+        this.elems.img = document.createElement('img');
+        this.elems.img.setAttribute('class', 'chocolat-img');
+        this.elems.imageWrapper.appendChild(this.elems.img);
         this.elems.right = document.createElement('div');
         this.elems.right.setAttribute('class', 'chocolat-right');
-        this.elems.wrapper.appendChild(this.elems.right);
+        this.elems.center.appendChild(this.elems.right);
         this.elems.bottom = document.createElement('div');
         this.elems.bottom.setAttribute('class', 'chocolat-bottom');
-        this.elems.wrapper.appendChild(this.elems.bottom);
+        this.elems.layout.appendChild(this.elems.bottom);
         this.elems.close = document.createElement('span');
         this.elems.close.setAttribute('class', 'chocolat-close');
         this.elems.top.appendChild(this.elems.close);
-        this.elems.fullscreen = document.createElement('span');
-        this.elems.fullscreen.setAttribute('class', 'chocolat-fullscreen');
-        this.elems.bottom.appendChild(this.elems.fullscreen);
         this.elems.description = document.createElement('span');
         this.elems.description.setAttribute('class', 'chocolat-description');
         this.elems.bottom.appendChild(this.elems.description);
@@ -463,6 +455,9 @@
         this.elems.setTitle.setAttribute('class', 'chocolat-set-title');
         this.elems.setTitle.textContent = this.settings.setTitle();
         this.elems.bottom.appendChild(this.elems.setTitle);
+        this.elems.fullscreen = document.createElement('span');
+        this.elems.fullscreen.setAttribute('class', 'chocolat-fullscreen');
+        this.elems.bottom.appendChild(this.elems.fullscreen);
         this.settings.afterMarkup.call(this);
       }
 
@@ -565,17 +560,15 @@
               imgWidth: this.elems.img.naturalWidth,
               containerHeight: this.elems.wrapper.clientHeight,
               containerWidth: this.elems.wrapper.clientWidth,
-              containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
-              containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+              canvasWidth: this.elems.imageCanvas.clientWidth,
+              canvasHeight: this.elems.imageCanvas.clientHeight,
               imageSize: this.settings.imageSize
             };
             const {
               width,
-              height,
-              left,
-              top
+              height
             } = fit(fitOptions);
-            this.center(width, height, left, top);
+            this.center(width, height);
             this.zoomable();
           });
         });
@@ -604,17 +597,15 @@
           imgWidth: this.elems.img.naturalWidth,
           containerHeight: this.elems.wrapper.clientHeight,
           containerWidth: this.elems.wrapper.clientWidth,
-          containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
-          containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+          canvasWidth: this.elems.imageCanvas.clientWidth,
+          canvasHeight: this.elems.imageCanvas.clientHeight,
           imageSize: this.settings.imageSize
         };
         const {
           width,
-          height,
-          left,
-          top
+          height
         } = fit(fitOptions);
-        return this.center(width, height, left, top);
+        return this.center(width, height);
       }
 
       zoomOut(e) {
@@ -631,17 +622,15 @@
           imgWidth: this.elems.img.naturalWidth,
           containerHeight: this.elems.wrapper.clientHeight,
           containerWidth: this.elems.wrapper.clientWidth,
-          containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
-          containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+          canvasWidth: this.elems.imageCanvas.clientWidth,
+          canvasHeight: this.elems.imageCanvas.clientHeight,
           imageSize: this.settings.imageSize
         };
         const {
           width,
-          height,
-          left,
-          top
+          height
         } = fit(fitOptions);
-        return this.center(width, height, left, top);
+        return this.center(width, height);
       }
 
       on(element, eventName, cb) {

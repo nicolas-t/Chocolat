@@ -53,12 +53,12 @@ export function fit(options) {
         imgWidth,
         containerHeight,
         containerWidth,
-        containerGlobalWidth,
-        containerGlobalHeight,
+        canvasWidth,
+        canvasHeight,
         imageSize,
     } = options
 
-    const containerGlobalRatio = containerGlobalHeight / containerGlobalWidth
+    const canvasRatio = canvasHeight / canvasWidth
     const containerRatio = containerHeight / containerWidth
     const imgRatio = imgHeight / imgWidth
 
@@ -74,11 +74,11 @@ export function fit(options) {
         height = imgHeight
         width = imgWidth
     } else {
-        if (imgRatio > containerGlobalRatio) {
-            height = containerGlobalHeight
+        if (imgRatio > canvasRatio) {
+            height = canvasHeight
             width = height / imgRatio
         } else {
-            width = containerGlobalWidth
+            width = canvasWidth
             height = width * imgRatio
         }
         if (imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
@@ -90,8 +90,6 @@ export function fit(options) {
     return {
         height: height,
         width: width,
-        top: (containerHeight - height) / 2,
-        left: (containerWidth - width) / 2,
     }
 }
 

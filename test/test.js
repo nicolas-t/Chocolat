@@ -25,7 +25,11 @@ describe('Chocolat', function() {
             expect($('#container').find('.chocolat-wrapper').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-overlay').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-loader').length).to.equal(1)
-            expect($('#container .chocolat-wrapper').find('.chocolat-content').length).to.equal(1)
+            expect($('#container .chocolat-wrapper').find('.chocolat-layout').length).to.equal(1)
+            expect(
+                $('#container .chocolat-wrapper').find('.chocolat-image-canvas').length
+            ).to.equal(1)
+            expect($('#container .chocolat-wrapper').find('.chocolat-center').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-top').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-bottom').length).to.equal(1)
             expect($('#container .chocolat-wrapper').find('.chocolat-left').length).to.equal(1)
@@ -37,7 +41,7 @@ describe('Chocolat', function() {
             )
             expect($('#container .chocolat-bottom').find('.chocolat-fullscreen').length).to.equal(1)
             expect($('#container .chocolat-bottom').find('.chocolat-set-title').length).to.equal(1)
-            expect($('#container .chocolat-content').find('.chocolat-img').length).to.equal(1)
+            expect($('#container .chocolat-image-wrapper').find('.chocolat-img').length).to.equal(1)
         })
 
         it('should add css classes to parent when in container', function(done) {
@@ -402,30 +406,6 @@ describe('Chocolat', function() {
                 return done()
             })
         })
-
-        return it('should center the image', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                imageSize: 'cover',
-            })
-
-            chocolat.api.open().then(function() {
-                var dim = getExpectedDimensions(chocolat)
-
-                var $content = $(chocolat.api.getElem('content'))
-
-                var top = parseInt($content.css('top'), 10)
-                var left = parseInt($content.css('left'), 10)
-
-                var targetTop = (dim.containerHeight - dim.imgHeight) / 2
-                var targetLeft = (dim.containerWidth - dim.imgWidth) / 2
-
-                // 1px delta, because of rounded values
-                expect(top).to.be.closeTo(targetTop, 1)
-                expect(left).to.be.closeTo(targetLeft, 1)
-
-                return done()
-            })
-        })
     })
 
     describe('ImageSize contain', function() {
@@ -438,16 +418,16 @@ describe('Chocolat', function() {
             chocolat.api.open().then(function() {
                 var dim = getExpectedDimensions(chocolat)
 
-                if (dim.imgRatio > dim.containerPaddedRatio) {
-                    var targetWidth = dim.containerPaddedHeight / dim.imgRatio
+                if (dim.imgRatio > dim.canvasRatio) {
+                    var targetWidth = dim.canvasHeight / dim.imgRatio
                     // 1px delta, because of rounded values
                     expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                    expect(dim.imgHeight).to.be.closeTo(dim.containerPaddedHeight, 1)
+                    expect(dim.imgHeight).to.be.closeTo(dim.canvasHeight, 1)
                 } else {
-                    var targetHeight = dim.containerPaddedWidth * dim.imgRatio
+                    var targetHeight = dim.canvasWidth * dim.imgRatio
                     // 1px delta, because of rounded values
                     expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
-                    expect(dim.imgWidth).to.be.closeTo(dim.containerPaddedWidth, 1)
+                    expect(dim.imgWidth).to.be.closeTo(dim.canvasWidth, 1)
                 }
 
                 return done()
@@ -462,41 +442,17 @@ describe('Chocolat', function() {
             chocolat.api.open().then(function() {
                 var dim = getExpectedDimensions(chocolat)
 
-                if (dim.imgRatio > dim.containerPaddedRatio) {
-                    var targetWidth = dim.containerPaddedHeight / dim.imgRatio
+                if (dim.imgRatio > dim.canvasRatio) {
+                    var targetWidth = dim.canvasHeight / dim.imgRatio
                     // 1px delta, because of rounded values
                     expect(dim.imgWidth).to.be.closeTo(targetWidth, 1)
-                    expect(dim.imgHeight).to.be.closeTo(dim.containerPaddedHeight, 1)
+                    expect(dim.imgHeight).to.be.closeTo(dim.canvasHeight, 1)
                 } else {
-                    var targetHeight = dim.containerPaddedWidth * dim.imgRatio
+                    var targetHeight = dim.canvasWidth * dim.imgRatio
                     // 1px delta, because of rounded values
                     expect(dim.imgHeight).to.be.closeTo(targetHeight, 1)
-                    expect(dim.imgWidth).to.be.closeTo(dim.containerPaddedWidth, 1)
+                    expect(dim.imgWidth).to.be.closeTo(dim.canvasWidth, 1)
                 }
-
-                return done()
-            })
-        })
-
-        return it('should center the image', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                imageSize: 'contain',
-            })
-
-            chocolat.api.open().then(function() {
-                var dim = getExpectedDimensions(chocolat)
-
-                var $content = $(chocolat.api.getElem('content'))
-
-                var top = parseInt($content.css('top'), 10)
-                var left = parseInt($content.css('left'), 10)
-
-                var targetTop = (dim.containerHeight - dim.imgHeight) / 2
-                var targetLeft = (dim.containerWidth - dim.imgWidth) / 2
-
-                // 1px delta, because of rounded values
-                expect(top).to.be.closeTo(targetTop, 1)
-                expect(left).to.be.closeTo(targetLeft, 1)
 
                 return done()
             })
@@ -571,32 +527,25 @@ function getExpectedDimensions(chocolat) {
     var imgWidth = chocolat.api.getElem('img').width
     var imgHeight = chocolat.api.getElem('img').height
 
-    var containerWidth = chocolat.api.getElem('wrapper').clientWidth
-    var containerHeight = chocolat.api.getElem('wrapper').clientHeight
+    var containerWidth = chocolat.api.getElem('container').clientWidth
+    var containerHeight = chocolat.api.getElem('container').clientHeight
 
-    var containerOutMarginH =
-        chocolat.api.getElem('top').offsetHeight + chocolat.api.getElem('bottom').offsetHeight
-    var containerOutMarginW =
-        chocolat.api.getElem('left').offsetWidth + chocolat.api.getElem('right').offsetWidth
-
-    var containerPaddedWidth = containerWidth - containerOutMarginW
-    var containerPaddedHeight = containerHeight - containerOutMarginH
+    var canvasWidth = chocolat.api.getElem('imageCanvas').clientWidth
+    var canvasHeight = chocolat.api.getElem('imageCanvas').clientHeight
 
     var imgRatio = imgHeight / imgWidth
     var containerRatio = containerHeight / containerWidth
-    var containerPaddedRatio = containerPaddedHeight / containerPaddedWidth
+    var canvasRatio = canvasHeight / canvasWidth
 
     return {
         imgWidth: imgWidth,
         imgHeight: imgHeight,
         containerWidth: containerWidth,
         containerHeight: containerHeight,
-        containerOutMarginH: containerOutMarginH,
-        containerOutMarginW: containerOutMarginW,
-        containerPaddedWidth: containerPaddedWidth,
-        containerPaddedHeight: containerPaddedHeight,
+        canvasWidth: canvasWidth,
+        canvasHeight: canvasHeight,
         imgRatio: imgRatio,
         containerRatio: containerRatio,
-        containerPaddedRatio: containerPaddedRatio,
+        canvasRatio: canvasRatio,
     }
 }
