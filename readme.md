@@ -8,18 +8,16 @@ Chocolat is a responsive lightbox
 
 ## Documentation
 -----------
-
-[Documentation](https://chocolat.gitbook.io/chocolat/)
+You can access the full documentation at this page :   
+[Documentation](https://chocolat.gitbook.io/chocolat/)   
+If you have trouble using Chocolat, or want to report a bug, please open an issue here : 
+https://github.com/nicolas-t/Chocolat/issues/new
 
 
 ## Upgrading
 -----------
-
+A few breaking changes have been made between v0.4 and v1 :
 [Upgrading](https://chocolat.gitbook.io/chocolat/upgrading-from-v0.4)
-
-## Contributing
------------
-[Contributing](https://chocolat.gitbook.io/chocolat/contributing)
 
 
 ## License
