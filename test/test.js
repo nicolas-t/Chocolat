@@ -461,16 +461,11 @@ describe('Chocolat', function() {
 
     describe('API', function() {
         before(function() {
-            chocolat = Chocolat(
-                [
-                    { src: '../demo/demo-images/1.jpg', title: 'You can zoom in the image' },
-                    { src: '../demo/demo-images/2.jpg', title: 'You can zoom in the image' },
-                    { src: '../demo/demo-images/3.jpg', title: 'You can zoom in the image' },
-                ],
-                {
-                    backgroundClose: false,
-                }
-            )
+            chocolat = Chocolat([
+                { src: '../demo/demo-images/1.jpg', title: 'You can zoom in the image' },
+                { src: '../demo/demo-images/2.jpg', title: 'You can zoom in the image' },
+                { src: '../demo/demo-images/3.jpg', title: 'You can zoom in the image' },
+            ])
         })
 
         it('should have a open method', function() {

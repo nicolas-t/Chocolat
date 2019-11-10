@@ -125,6 +125,7 @@ const defaults = {
   lastImageIndex: false,
   currentImageIndex: undefined,
   allowZoom: true,
+  closeOnBackgroundClick: true,
   setTitle: function () {
     return '';
   },
@@ -272,7 +273,7 @@ class Chocolat {
       return Promise.all([position, appear]);
     }).then(() => {
       this.zoomable();
-      this.settings.afterImageLoad();
+      this.settings.afterImageLoad.call(this);
     });
   }
 
@@ -493,7 +494,7 @@ class Chocolat {
       this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
     });
 
-    if (this.settings.backgroundClose) {
+    if (this.settings.closeOnBackgroundClick) {
       this.off(this.elems.overlay, 'click.chocolat');
       this.on(this.elems.overlay, 'click.chocolat', this.close.bind(this));
     }
