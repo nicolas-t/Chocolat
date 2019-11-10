@@ -192,6 +192,10 @@ body.chocolat-open>.chocolat-content{
     position: relative;
 }
 
+.chocolat-zoomable.chocolat-zoomed .chocolat-img{
+    transition: margin 0s ease;
+}
+
 /* uncomment to hide controls when zoomed-in*/
 /*
 .chocolat-zoomable .chocolat-top,

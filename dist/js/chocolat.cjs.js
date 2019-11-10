@@ -1,22 +1,133 @@
 'use strict';
 
+let timerDebounce = undefined;
+function debounce(duration, callback) {
+  clearTimeout(timerDebounce);
+  timerDebounce = setTimeout(function () {
+    callback();
+  }, duration);
+  return timerDebounce;
+}
+function transitionAsPromise(triggeringFunc, el) {
+  return new Promise(resolve => {
+    const handleTransitionEnd = () => {
+      el.removeEventListener('transitionend', handleTransitionEnd);
+      resolve();
+    };
+
+    el.addEventListener('transitionend', handleTransitionEnd);
+    const classesBefore = el.getAttribute('class');
+    const stylesBefore = el.getAttribute('style');
+    triggeringFunc();
+
+    if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
+      handleTransitionEnd();
+    }
+  });
+}
+function loadImage(src, image) {
+  if ('decode' in image) {
+    image.src = src;
+    return image.decode();
+  } else {
+    return new Promise(function (resolve, reject) {
+      image.onload = resolve;
+      image.onerror = resolve;
+      image.src = src;
+    });
+  }
+}
+function fit(options) {
+  let height;
+  let width;
+  const {
+    imgHeight,
+    imgWidth,
+    containerHeight,
+    containerWidth,
+    containerGlobalWidth,
+    containerGlobalHeight,
+    imageSize
+  } = options;
+  const containerGlobalRatio = containerGlobalHeight / containerGlobalWidth;
+  const containerRatio = containerHeight / containerWidth;
+  const imgRatio = imgHeight / imgWidth;
+
+  if (imageSize == 'cover') {
+    if (imgRatio < containerRatio) {
+      height = containerHeight;
+      width = height / imgRatio;
+    } else {
+      width = containerWidth;
+      height = width * imgRatio;
+    }
+  } else if (imageSize == 'native') {
+    height = imgHeight;
+    width = imgWidth;
+  } else {
+    if (imgRatio > containerGlobalRatio) {
+      height = containerGlobalHeight;
+      width = height / imgRatio;
+    } else {
+      width = containerGlobalWidth;
+      height = width * imgRatio;
+    }
+
+    if (imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
+      width = imgWidth;
+      height = imgHeight;
+    }
+  }
+
+  return {
+    height: height,
+    width: width,
+    top: (containerHeight - height) / 2,
+    left: (containerWidth - width) / 2
+  };
+}
+function openFullScreen(wrapper) {
+  if (wrapper.requestFullscreen) {
+    wrapper.requestFullscreen();
+    return true;
+  } else if (wrapper.webkitRequestFullscreen) {
+    wrapper.webkitRequestFullscreen();
+    return true;
+  } else if (wrapper.msRequestFullscreen) {
+    wrapper.msRequestFullscreen();
+    return true;
+  } else {
+    return false;
+  }
+}
+function exitFullScreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+    return false;
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+    return false;
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+    return false;
+  } else {
+    return true;
+  }
+}
+
 const defaults = {
-  container: window,
+  container: document.body,
   // window or element
   className: undefined,
   imageSize: 'scale-down',
   // 'scale-down', 'contain', 'cover' or 'native'
-  initialZoomState: null,
-  allowFullScreen: false,
+  fullScreen: false,
   loop: false,
   linkImages: true,
   setIndex: 0,
   firstImageIndex: 0,
   lastImageIndex: false,
   currentImageIndex: undefined,
-  initialized: false,
-  timer: false,
-  timerDebounce: false,
   allowZoom: true,
   setTitle: function () {
     return '';
@@ -49,6 +160,12 @@ class Chocolat {
     this.elems = {};
     this.images = [];
     this.events = [];
+    this.state = {
+      fullScreenOpen: false,
+      initialZoomState: null,
+      initialized: false,
+      timer: false
+    };
     this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed'];
 
     if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) {
@@ -67,6 +184,12 @@ class Chocolat {
       });
     } else {
       this.images = elements;
+    }
+
+    if (this.settings.container instanceof Element || this.settings.container instanceof HTMLElement) {
+      this.elems.container = this.settings.container;
+    } else {
+      this.elems.container = document.body;
     }
 
     this.api = {
@@ -109,34 +232,20 @@ class Chocolat {
   }
 
   init(i) {
-    if (!this.settings.initialized) {
-      this.setDomContainer();
+    if (!this.state.initialized) {
       this.markup();
       this.attachListeners();
       this.settings.lastImageIndex = this.images.length - 1;
-      this.settings.initialized = true;
+      this.state.initialized = true;
     }
 
     this.settings.afterInitialize.call(this);
     return this.load(i);
   }
 
-  loadImage(src, image) {
-    if ('decode' in image) {
-      image.src = src;
-      return image.decode();
-    } else {
-      return new Promise(function (resolve, reject) {
-        image.onload = resolve;
-        image.onerror = resolve;
-        image.src = src;
-      });
-    }
-  }
-
   load(i) {
-    if (this.settings.allowFullScreen) {
-      this.openFullScreen();
+    if (this.settings.fullScreen) {
+      this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
     }
 
     if (this.settings.currentImageIndex === i) {
@@ -147,18 +256,18 @@ class Chocolat {
       this.elems.overlay.classList.add('chocolat-visible');
       this.elems.wrapper.classList.add('chocolat-visible');
     }, 0);
-    this.elems.domContainer.classList.add('chocolat-open');
-    this.settings.timer = setTimeout(() => {
+    this.elems.container.classList.add('chocolat-open');
+    this.state.timer = setTimeout(() => {
       if (this.elems !== undefined) {
         this.elems.loader.classList.add('chocolat-visible');
       }
     }, 300);
     const imgLoader = new Image();
-    return this.loadImage(this.images[i].src, imgLoader).then(() => {
+    return loadImage(this.images[i].src, imgLoader).then(() => {
       const nextIndex = i + 1;
 
       if (this.images[nextIndex] != undefined) {
-        this.loadImage(this.images[nextIndex].src, new Image());
+        loadImage(this.images[nextIndex].src, new Image());
       }
 
       this.settings.currentImageIndex = i;
@@ -175,17 +284,26 @@ class Chocolat {
     this.elems.description.textContent = this.settings.description.call(this);
     this.elems.pagination.textContent = this.settings.pagination.call(this);
     this.arrows();
+    const fitOptions = {
+      imgHeight: image.naturalHeight,
+      imgWidth: image.naturalWidth,
+      containerHeight: this.elems.wrapper.clientHeight,
+      containerWidth: this.elems.wrapper.clientWidth,
+      containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
+      containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+      imageSize: this.settings.imageSize
+    };
     const {
       width,
       height,
       left,
       top
-    } = this.fit(image, this.elems.wrapper);
+    } = fit(fitOptions);
     return this.center(width, height, left, top);
   }
 
   center(width, height, left, top) {
-    return this.transitionAsPromise(() => {
+    return transitionAsPromise(() => {
       Object.assign(this.elems.content.style, {
         width: width + 'px',
         height: height + 'px',
@@ -196,66 +314,25 @@ class Chocolat {
   }
 
   appear(i) {
-    clearTimeout(this.settings.timer);
+    clearTimeout(this.state.timer);
 
     if (!this.elems.loader.classList.contains('chocolat-visible')) {
-      return this.loadImage(this.images[i].src, this.elems.img);
+      return loadImage(this.images[i].src, this.elems.img);
     }
 
-    return this.transitionAsPromise(() => {
+    return transitionAsPromise(() => {
       this.elems.loader.classList.remove('chocolat-visible');
     }, this.elems.loader).then(() => {
-      return this.loadImage(this.images[i].src, this.elems.img);
+      return loadImage(this.images[i].src, this.elems.img);
     });
   }
 
-  fit(image, container) {
-    let height;
-    let width;
-    const imgHeight = image.naturalHeight;
-    const imgWidth = image.naturalWidth;
-    const holderHeight = container.clientHeight;
-    const holderWidth = container.clientWidth;
-    const holderOutMarginH = this.getOutMarginH();
-    const holderOutMarginW = this.getOutMarginW();
-    const holderGlobalWidth = holderWidth - holderOutMarginW;
-    const holderGlobalHeight = holderHeight - holderOutMarginH;
-    const holderGlobalRatio = holderGlobalHeight / holderGlobalWidth;
-    const holderRatio = holderHeight / holderWidth;
-    const imgRatio = imgHeight / imgWidth;
+  getOutMarginW() {
+    return this.elems.left.offsetWidth + this.elems.right.offsetWidth;
+  }
 
-    if (this.settings.imageSize == 'cover') {
-      if (imgRatio < holderRatio) {
-        height = holderHeight;
-        width = height / imgRatio;
-      } else {
-        width = holderWidth;
-        height = width * imgRatio;
-      }
-    } else if (this.settings.imageSize == 'native') {
-      height = imgHeight;
-      width = imgWidth;
-    } else {
-      if (imgRatio > holderGlobalRatio) {
-        height = holderGlobalHeight;
-        width = height / imgRatio;
-      } else {
-        width = holderGlobalWidth;
-        height = width * imgRatio;
-      }
-
-      if (this.settings.imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
-        width = imgWidth;
-        height = imgHeight;
-      }
-    }
-
-    return {
-      height: height,
-      width: width,
-      top: (holderHeight - height) / 2,
-      left: (holderWidth - width) / 2
-    };
+  getOutMarginH() {
+    return this.elems.top.offsetHeight + this.elems.bottom.offsetHeight;
   }
 
   change(step) {
@@ -290,20 +367,20 @@ class Chocolat {
   }
 
   close() {
-    if (this.settings.fullscreenOpen) {
-      this.exitFullScreen();
+    if (this.state.fullScreenOpen) {
+      this.state.fullScreenOpen = exitFullScreen();
       return;
     }
 
     this.settings.currentImageIndex = undefined;
-    const promiseOverlay = this.transitionAsPromise(() => {
+    const promiseOverlay = transitionAsPromise(() => {
       this.elems.overlay.classList.remove('chocolat-visible');
     }, this.elems.overlay);
-    const promiseWrapper = this.transitionAsPromise(() => {
+    const promiseWrapper = transitionAsPromise(() => {
       this.elems.wrapper.classList.remove('chocolat-visible');
     }, this.elems.wrapper);
     return Promise.all([promiseOverlay, promiseWrapper]).then(() => {
-      this.elems.domContainer.classList.remove('chocolat-open');
+      this.elems.container.classList.remove('chocolat-open');
     });
   }
 
@@ -316,43 +393,35 @@ class Chocolat {
       this.off(element, eventName);
     }
 
-    if (!this.settings.initialized) {
+    if (!this.state.initialized) {
       return;
     }
 
-    if (this.settings.fullscreenOpen) {
-      this.exitFullScreen();
+    if (this.state.fullScreenOpen) {
+      this.state.fullScreenOpen = exitFullScreen();
     }
 
     this.settings.currentImageIndex = undefined;
-    this.settings.initialized = false;
-    this.elems.domContainer.classList.remove(...this._cssClasses);
+    this.state.initialized = false;
+    this.elems.container.classList.remove(...this._cssClasses);
     this.elems.wrapper.parentNode.removeChild(this.elems.wrapper);
   }
 
-  getOutMarginW() {
-    return this.elems.left.offsetWidth + this.elems.right.offsetWidth;
-  }
-
-  getOutMarginH() {
-    return this.elems.top.offsetHeight + this.elems.bottom.offsetHeight;
-  }
-
   markup() {
-    this.elems.domContainer.classList.add('chocolat-open', this.settings.className);
+    this.elems.container.classList.add('chocolat-open', this.settings.className);
 
     if (this.settings.imageSize == 'cover') {
-      this.elems.domContainer.classList.add('chocolat-cover');
+      this.elems.container.classList.add('chocolat-cover');
     }
 
-    if (this.settings.container !== window) {
-      this.elems.domContainer.classList.add('chocolat-in-container');
+    if (this.elems.container !== document.body) {
+      this.elems.container.classList.add('chocolat-in-container');
     }
 
     this.elems.wrapper = document.createElement('div');
     this.elems.wrapper.setAttribute('id', 'chocolat-content-' + this.settings.setIndex);
     this.elems.wrapper.setAttribute('class', 'chocolat-wrapper');
-    this.elems.domContainer.appendChild(this.elems.wrapper);
+    this.elems.container.appendChild(this.elems.wrapper);
     this.elems.overlay = document.createElement('div');
     this.elems.overlay.setAttribute('class', 'chocolat-overlay');
     this.elems.wrapper.appendChild(this.elems.overlay);
@@ -396,48 +465,10 @@ class Chocolat {
     this.settings.afterMarkup.call(this);
   }
 
-  openFullScreen() {
-    const wrapper = this.elems.wrapper;
-
-    if (wrapper.requestFullscreen) {
-      this.settings.fullscreenOpen = true;
-      wrapper.requestFullscreen();
-    } else if (wrapper.mozRequestFullScreen) {
-      this.settings.fullscreenOpen = true;
-      wrapper.mozRequestFullScreen();
-    } else if (wrapper.webkitRequestFullscreen) {
-      this.settings.fullscreenOpen = true;
-      wrapper.webkitRequestFullscreen();
-    } else if (wrapper.msRequestFullscreen) {
-      wrapper.msRequestFullscreen();
-      this.settings.fullscreenOpen = true;
-    } else {
-      this.settings.fullscreenOpen = false;
-    }
-  }
-
-  exitFullScreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-      this.settings.fullscreenOpen = false;
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-      this.settings.fullscreenOpen = false;
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-      this.settings.fullscreenOpen = false;
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-      this.settings.fullscreenOpen = false;
-    } else {
-      this.settings.fullscreenOpen = true;
-    }
-  }
-
   attachListeners() {
     this.off(document, 'keydown.chocolat');
     this.on(document, 'keydown.chocolat', e => {
-      if (this.settings.initialized) {
+      if (this.state.initialized) {
         if (e.keyCode == 37) {
           this.change(-1);
         } else if (e.keyCode == 39) {
@@ -458,40 +489,34 @@ class Chocolat {
       this.change(-1);
     });
     this.off(this.elems.close, 'click.chocolat');
-    this.on(this.elems.close, 'click.chocolat', () => {
-      this.close();
-    });
+    this.on(this.elems.close, 'click.chocolat', this.close.bind(this));
     this.off(this.elems.fullscreen, 'click.chocolat');
     this.on(this.elems.fullscreen, 'click.chocolat', () => {
-      if (this.settings.fullscreenOpen) {
-        this.exitFullScreen();
+      if (this.state.fullScreenOpen) {
+        this.state.fullScreenOpen = exitFullScreen();
         return;
       }
 
-      this.openFullScreen();
+      this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
     });
 
     if (this.settings.backgroundClose) {
       this.off(this.elems.overlay, 'click.chocolat');
-      this.on(this.elems.overlay, 'click.chocolat', e => {
-        this.close();
-      });
+      this.on(this.elems.overlay, 'click.chocolat', this.close.bind(this));
     }
 
     this.off(this.elems.wrapper, 'click.chocolat');
-    this.on(this.elems.wrapper, 'click.chocolat', e => {
-      this.zoomOut(e);
-    });
+    this.on(this.elems.wrapper, 'click.chocolat', this.zoomOut.bind(this));
     const img = this.elems.wrapper.querySelector('.chocolat-img');
     this.off(img, 'click.chocolat');
     this.on(img, 'click.chocolat', e => {
-      if (this.settings.initialZoomState === null && this.elems.domContainer.classList.contains('chocolat-zoomable')) {
+      if (this.state.initialZoomState === null && this.elems.container.classList.contains('chocolat-zoomable')) {
         e.stopPropagation();
         this.zoomIn(e);
       }
     });
     this.on(this.elems.wrapper, 'mousemove.chocolat', e => {
-      if (this.settings.initialZoomState === null) {
+      if (this.state.initialZoomState === null) {
         return;
       }
 
@@ -529,17 +554,26 @@ class Chocolat {
       this.elems.img.style.marginTop = -mvtY + 'px';
     });
     this.on(window, 'resize.chocolat', e => {
-      if (!this.settings.initialized || this.settings.currentImageIndex === undefined) {
+      if (!this.state.initialized || this.settings.currentImageIndex === undefined) {
         return;
       }
 
-      this.debounce(50, () => {
+      debounce(50, () => {
+        const fitOptions = {
+          imgHeight: this.elems.img.naturalHeight,
+          imgWidth: this.elems.img.naturalWidth,
+          containerHeight: this.elems.wrapper.clientHeight,
+          containerWidth: this.elems.wrapper.clientWidth,
+          containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
+          containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+          imageSize: this.settings.imageSize
+        };
         const {
           width,
           height,
           left,
           top
-        } = this.fit(this.elems.img, this.elems.wrapper);
+        } = fit(fitOptions);
         this.center(width, height, left, top);
         this.zoomable();
       });
@@ -554,58 +588,59 @@ class Chocolat {
     const isImageStretched = this.elems.img.clientWidth > this.elems.img.naturalWidth || this.elems.img.clientHeight > this.elems.img.naturalHeight;
 
     if (isImageZoomable && !isImageStretched) {
-      this.elems.domContainer.classList.add('chocolat-zoomable');
+      this.elems.container.classList.add('chocolat-zoomable');
     } else {
-      this.elems.domContainer.classList.remove('chocolat-zoomable');
+      this.elems.container.classList.remove('chocolat-zoomable');
     }
   }
 
   zoomIn(e) {
-    this.settings.initialZoomState = this.settings.imageSize;
+    this.state.initialZoomState = this.settings.imageSize;
     this.settings.imageSize = 'native';
-    this.elems.domContainer.classList.add('chocolat-zoomed');
+    this.elems.container.classList.add('chocolat-zoomed');
+    const fitOptions = {
+      imgHeight: this.elems.img.naturalHeight,
+      imgWidth: this.elems.img.naturalWidth,
+      containerHeight: this.elems.wrapper.clientHeight,
+      containerWidth: this.elems.wrapper.clientWidth,
+      containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
+      containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+      imageSize: this.settings.imageSize
+    };
     const {
       width,
       height,
       left,
       top
-    } = this.fit(this.elems.img, this.elems.wrapper);
+    } = fit(fitOptions);
     return this.center(width, height, left, top);
   }
 
   zoomOut(e) {
-    if (this.settings.initialZoomState === null || this.settings.currentImageIndex === undefined) {
+    if (this.state.initialZoomState === null || this.settings.currentImageIndex === undefined) {
       return;
     }
 
-    this.settings.imageSize = this.settings.initialZoomState;
-    this.settings.initialZoomState = null;
+    this.settings.imageSize = this.state.initialZoomState;
+    this.state.initialZoomState = null;
     this.elems.img.style.margin = 0;
-    this.elems.domContainer.classList.remove('chocolat-zoomed');
+    this.elems.container.classList.remove('chocolat-zoomed');
+    const fitOptions = {
+      imgHeight: this.elems.img.naturalHeight,
+      imgWidth: this.elems.img.naturalWidth,
+      containerHeight: this.elems.wrapper.clientHeight,
+      containerWidth: this.elems.wrapper.clientWidth,
+      containerGlobalWidth: this.elems.wrapper.clientWidth - this.getOutMarginW(),
+      containerGlobalHeight: this.elems.wrapper.clientHeight - this.getOutMarginH(),
+      imageSize: this.settings.imageSize
+    };
     const {
       width,
       height,
       left,
       top
-    } = this.fit(this.elems.img, this.elems.wrapper);
+    } = fit(fitOptions);
     return this.center(width, height, left, top);
-  }
-
-  setDomContainer() {
-    // if container == window
-    // domContainer = body
-    if (this.settings.container === window) {
-      this.elems.domContainer = document.body;
-    } else {
-      this.elems.domContainer = this.settings.container;
-    }
-  }
-
-  debounce(duration, callback) {
-    clearTimeout(this.settings.timerDebounce);
-    this.settings.timerDebounce = setTimeout(function () {
-      callback();
-    }, duration);
   }
 
   on(element, eventName, cb) {
@@ -616,7 +651,6 @@ class Chocolat {
       cb
     });
     element.addEventListener(eventName.split('.')[0], this.events[length - 1].cb);
-    return this;
   }
 
   off(element, eventName) {
@@ -629,26 +663,6 @@ class Chocolat {
       element.removeEventListener(eventName.split('.')[0], this.events[index].cb);
       this.events.splice(index, 1);
     }
-
-    return this;
-  }
-
-  transitionAsPromise(triggeringFunc, el) {
-    return new Promise(resolve => {
-      const handleTransitionEnd = () => {
-        el.removeEventListener('transitionend', handleTransitionEnd);
-        resolve();
-      };
-
-      el.addEventListener('transitionend', handleTransitionEnd);
-      const classesBefore = el.getAttribute('class');
-      const stylesBefore = el.getAttribute('style');
-      triggeringFunc();
-
-      if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
-        handleTransitionEnd();
-      }
-    });
   }
 
 }

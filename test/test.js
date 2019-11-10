@@ -257,102 +257,6 @@ describe('Chocolat', function() {
         })
     })
 
-    describe('FullScreen', function() {
-        it('should open fullscreen when clicking .fullscreen', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-            // test only if browser fullscreenAPI is available
-            if (
-                typeof Element.prototype.requestFullscreen === 'undefined' &&
-                typeof Element.prototype.mozRequestFullScreen === 'undefined' &&
-                typeof Element.prototype.webkitRequestFullscreen === 'undefined' &&
-                typeof Element.prototype.msRequestFullscreen === 'undefined'
-            ) {
-                return done()
-            }
-
-            var spyOpen = sinon.spy(chocolat, 'openFullScreen')
-
-            chocolat.api.open().then(function() {
-                chocolat.elems.fullscreen.click()
-                expect(spyOpen.calledOnce).to.be.true
-                expect(chocolat.api.get('fullscreenOpen')).to.be.true
-                chocolat.elems.fullscreen.click()
-                expect(chocolat.api.get('fullscreenOpen')).to.be.false
-                return done()
-            })
-        })
-
-        it('should close fullscreen when clicking .fullscreen twice', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-
-            // test only if browser fullscreenAPI is available
-            if (
-                typeof Element.prototype.requestFullscreen === 'undefined' &&
-                typeof Element.prototype.mozRequestFullScreen === 'undefined' &&
-                typeof Element.prototype.webkitRequestFullscreen === 'undefined' &&
-                typeof Element.prototype.msRequestFullscreen === 'undefined'
-            ) {
-                return done()
-            }
-
-            var spyClose = sinon.spy(chocolat, 'exitFullScreen')
-
-            chocolat.api.open().then(function() {
-                chocolat.elems.fullscreen.click()
-                chocolat.elems.fullscreen.click()
-                expect(spyClose.calledOnce).to.be.true
-
-                return done()
-            })
-        })
-
-        it('should close fullscreen when closing chocolat', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
-
-            // test only if browser fullscreenAPI is available
-            if (
-                typeof Element.prototype.requestFullscreen === 'undefined' &&
-                typeof Element.prototype.mozRequestFullScreen === 'undefined' &&
-                typeof Element.prototype.webkitRequestFullscreen === 'undefined' &&
-                typeof Element.prototype.msRequestFullscreen === 'undefined'
-            ) {
-                return done()
-            }
-
-            var spyClose = sinon.spy(chocolat, 'exitFullScreen')
-
-            chocolat.api.open().then(function() {
-                chocolat.elems.fullscreen.click()
-                chocolat.elems.close.click()
-                expect(spyClose.calledOnce).to.be.true
-                return done()
-            })
-        })
-
-        return it('should open fullscreen directly', function(done) {
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
-                allowFullScreen: true,
-            })
-
-            // test only if browser fullscreenAPI is available
-            if (
-                typeof Element.prototype.requestFullscreen === 'undefined' &&
-                typeof Element.prototype.mozRequestFullScreen === 'undefined' &&
-                typeof Element.prototype.webkitRequestFullscreen === 'undefined' &&
-                typeof Element.prototype.msRequestFullscreen === 'undefined'
-            ) {
-                return done()
-            }
-
-            var spyOpen = sinon.spy(chocolat, 'openFullScreen')
-
-            chocolat.api.open().then(function() {
-                expect(spyOpen.calledOnce).to.be.true
-                return done()
-            })
-        })
-    })
-
     describe('Change image', function() {
         it('should go to next image', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'))
@@ -444,7 +348,7 @@ describe('Chocolat', function() {
             chocolat.api.open().then(function() {
                 expect(chocolat.api.get('imageSize')).to.equal('cover')
                 expect(
-                    chocolat.api.getElem('domContainer').classList.contains('chocolat-cover')
+                    chocolat.api.getElem('container').classList.contains('chocolat-cover')
                 ).to.be.true
                 return done()
             })
@@ -667,8 +571,8 @@ function getExpectedDimensions(chocolat) {
     var imgWidth = chocolat.api.getElem('img').width
     var imgHeight = chocolat.api.getElem('img').height
 
-    var containerWidth = $(chocolat.api.get('container')).width()
-    var containerHeight = $(chocolat.api.get('container')).height()
+    var containerWidth = chocolat.api.getElem('wrapper').clientWidth
+    var containerHeight = chocolat.api.getElem('wrapper').clientHeight
 
     var containerOutMarginH =
         chocolat.api.getElem('top').offsetHeight + chocolat.api.getElem('bottom').offsetHeight
