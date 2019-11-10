@@ -1,10 +1,9 @@
 {
   "name": "chocolat",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Responsive Lightbox Plugin",
   "main": "dist/js/chocolat.cjs.js",
   "module": "dist/js/chocolat.esm.js",
-  "browser": "dist/js/chocolat.iife.js",
   "directories": {
     "test": "test"
   },
