@@ -61,7 +61,7 @@
 }
 
 .chocolat-image-wrapper {
-    transition: top 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease; /* center */
+    transition: width 0s ease, height 0s ease; /* center */
     position: fixed;
     width: 0px;
     height: 0px;
@@ -97,8 +97,13 @@
     right: 0;
 }
 .chocolat-image-canvas {
+    transition: opacity 0s;
+    opacity: 0;
     flex-grow: 1;
     align-self: stretch;
+}
+.chocolat-image-canvas.chocolat-visible {
+    opacity: 1;
 }
 .chocolat-center {
     flex-grow: 1;

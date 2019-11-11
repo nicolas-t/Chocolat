@@ -28,21 +28,45 @@ export function transitionAsPromise(triggeringFunc, el) {
         ) {
             handleTransitionEnd()
         }
+        if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
+            handleTransitionEnd()
+        }
     })
 }
 
-export function loadImage(src, image) {
+// export function loadImage(src, image) {
+//     if ('decode' in image) {
+//         image.src = src
+//         return image.decode()
+//     } else {
+//         return new Promise(function(resolve, reject) {
+//             image.onload = resolve
+//             image.onerror = resolve
+//             image.src = src
+//         })
+//     }
+// }
+
+export function loadImage(path) {
+    let image = new Image()
     if ('decode' in image) {
-        image.src = src
-        return image.decode()
+        return new Promise((resolve, reject) => {
+            image.src = path
+            image.decode().then(() => {
+                resolve(image)
+            }).catch(() => {
+                reject(image)
+            })
+        })
     } else {
-        return new Promise(function(resolve, reject) {
-            image.onload = resolve
-            image.onerror = resolve
-            image.src = src
+        return new Promise((resolve, reject) => {
+            image.onload  = resolve(image)
+            image.onerror = reject(image)
+            image.src = path
         })
     }
 }
+
 
 export function fit(options) {
     let height

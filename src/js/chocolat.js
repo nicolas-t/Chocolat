@@ -157,12 +157,12 @@ export class Chocolat {
         return this.load(i)
     }
 
-    load(i) {
+    load(index) {
         if (this.settings.fullScreen) {
             this.state.fullScreenOpen = openFullScreen(this.elems.wrapper)
         }
 
-        if (this.settings.currentImageIndex === i) {
+        if (this.settings.currentImageIndex === index) {
             return Promise.resolve()
         }
 
@@ -174,25 +174,30 @@ export class Chocolat {
         this.elems.container.classList.add('chocolat-open')
 
         this.state.timer = setTimeout(() => {
-            if (this.elems !== undefined) {
-                this.elems.loader.classList.add('chocolat-visible')
-            }
-        }, 300)
+            this.elems.loader.classList.add('chocolat-visible')
+        }, 1000)
 
-        const imgLoader = new Image()
-
-        return loadImage(this.images[i].src, imgLoader)
-            .then(() => {
-                const nextIndex = i + 1
+        return loadImage(this.images[index].src).then((image) => {
+                return transitionAsPromise(() => {
+                    this.elems.imageCanvas.classList.remove('chocolat-visible')
+                }, this.elems.imageCanvas).then(() => {
+                    return Promise.resolve(image)
+                })
+            })
+            .then((image) => {
+                const nextIndex = index + 1
                 if (this.images[nextIndex] != undefined) {
-                    loadImage(this.images[nextIndex].src, new Image())
+                    loadImage(this.images[nextIndex].src)
                 }
 
-                this.settings.currentImageIndex = i
+                this.settings.currentImageIndex = index
+                this.elems.description.textContent = this.settings.description.call(this)
+                this.elems.pagination.textContent = this.settings.pagination.call(this)
+                this.arrows()
 
-                const position = this.position(imgLoader)
-                const appear = this.appear(i)
-                return Promise.all([position, appear])
+                return this.position(image).then(() => {
+                    return this.appear(image)
+                })
             })
             .then(() => {
                 this.zoomable()
@@ -200,14 +205,10 @@ export class Chocolat {
             })
     }
 
-    position(image) {
-        this.elems.description.textContent = this.settings.description.call(this)
-        this.elems.pagination.textContent = this.settings.pagination.call(this)
-        this.arrows()
-
+    position({ naturalHeight, naturalWidth }) {
         const fitOptions = {
-            imgHeight: image.naturalHeight,
-            imgWidth: image.naturalWidth,
+            imgHeight: naturalHeight,
+            imgWidth: naturalWidth,
             containerHeight: this.elems.container.clientHeight,
             containerWidth: this.elems.container.clientWidth,
             canvasWidth: this.elems.imageCanvas.clientWidth,
@@ -228,18 +229,20 @@ export class Chocolat {
         }, this.elems.imageWrapper)
     }
 
-    appear(i) {
+    appear(image) {
         clearTimeout(this.state.timer)
+        this.elems.loader.classList.remove('chocolat-visible')
 
-        if (!this.elems.loader.classList.contains('chocolat-visible')) {
-            return loadImage(this.images[i].src, this.elems.img)
-        }
+        this.elems.img = image
+        this.elems.imageWrapper.innerHTML = '';
+        this.elems.img.setAttribute('class', 'chocolat-img')
+        this.elems.imageWrapper.appendChild(this.elems.img)
 
-        return transitionAsPromise(() => {
-            this.elems.loader.classList.remove('chocolat-visible')
-        }, this.elems.loader).then(() => {
-            return loadImage(this.images[i].src, this.elems.img)
-        })
+        const fadeInPromise = transitionAsPromise(() => {
+            this.elems.imageCanvas.classList.add('chocolat-visible')
+        }, this.elems.imageCanvas)
+
+        return fadeInPromise
     }
 
     change(step) {

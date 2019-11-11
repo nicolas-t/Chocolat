@@ -24,6 +24,10 @@
         if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
           handleTransitionEnd();
         }
+
+        if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
+          handleTransitionEnd();
+        }
       });
     } // export function loadImage(src, image) {
     //     if ('decode' in image) {
@@ -278,14 +282,15 @@
         }, 0);
         this.elems.container.classList.add('chocolat-open');
         this.state.timer = setTimeout(() => {
-          if (this.elems !== undefined) {
-            this.elems.loader.classList.add('chocolat-visible');
-          }
-        }, 300);
-        this.elems.description.textContent = this.settings.description.call(this);
-        this.elems.pagination.textContent = this.settings.pagination.call(this);
-        this.arrows();
+          this.elems.loader.classList.add('chocolat-visible');
+        }, 1000);
         return loadImage(this.images[index].src).then(image => {
+          return transitionAsPromise(() => {
+            this.elems.imageCanvas.classList.remove('chocolat-visible');
+          }, this.elems.imageCanvas).then(() => {
+            return Promise.resolve(image);
+          });
+        }).then(image => {
           const nextIndex = index + 1;
 
           if (this.images[nextIndex] != undefined) {
@@ -293,8 +298,12 @@
           }
 
           this.settings.currentImageIndex = index;
-          this.appear(image);
-          return this.position(image);
+          this.elems.description.textContent = this.settings.description.call(this);
+          this.elems.pagination.textContent = this.settings.pagination.call(this);
+          this.arrows();
+          return this.position(image).then(() => {
+            return this.appear(image);
+          });
         }).then(() => {
           this.zoomable();
           this.settings.afterImageLoad.call(this);
@@ -334,9 +343,13 @@
         clearTimeout(this.state.timer);
         this.elems.loader.classList.remove('chocolat-visible');
         this.elems.img = image;
-        this.elems.img.setAttribute('class', 'chocolat-img');
         this.elems.imageWrapper.innerHTML = '';
+        this.elems.img.setAttribute('class', 'chocolat-img');
         this.elems.imageWrapper.appendChild(this.elems.img);
+        const fadeInPromise = transitionAsPromise(() => {
+          this.elems.imageCanvas.classList.add('chocolat-visible');
+        }, this.elems.imageCanvas);
+        return fadeInPromise;
       }
 
       change(step) {

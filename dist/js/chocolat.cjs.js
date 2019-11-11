@@ -23,17 +23,41 @@ function transitionAsPromise(triggeringFunc, el) {
     if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
       handleTransitionEnd();
     }
+
+    if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
+      handleTransitionEnd();
+    }
   });
-}
-function loadImage(src, image) {
+} // export function loadImage(src, image) {
+//     if ('decode' in image) {
+//         image.src = src
+//         return image.decode()
+//     } else {
+//         return new Promise(function(resolve, reject) {
+//             image.onload = resolve
+//             image.onerror = resolve
+//             image.src = src
+//         })
+//     }
+// }
+
+function loadImage(path) {
+  let image = new Image();
+
   if ('decode' in image) {
-    image.src = src;
-    return image.decode();
+    return new Promise((resolve, reject) => {
+      image.src = path;
+      image.decode().then(() => {
+        resolve(image);
+      }).catch(() => {
+        reject(image);
+      });
+    });
   } else {
-    return new Promise(function (resolve, reject) {
-      image.onload = resolve;
-      image.onerror = resolve;
-      image.src = src;
+    return new Promise((resolve, reject) => {
+      image.onload = resolve(image);
+      image.onerror = reject(image);
+      image.src = path;
     });
   }
 }
@@ -242,12 +266,12 @@ class Chocolat {
     return this.load(i);
   }
 
-  load(i) {
+  load(index) {
     if (this.settings.fullScreen) {
       this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
     }
 
-    if (this.settings.currentImageIndex === i) {
+    if (this.settings.currentImageIndex === index) {
       return Promise.resolve();
     }
 
@@ -257,35 +281,41 @@ class Chocolat {
     }, 0);
     this.elems.container.classList.add('chocolat-open');
     this.state.timer = setTimeout(() => {
-      if (this.elems !== undefined) {
-        this.elems.loader.classList.add('chocolat-visible');
-      }
-    }, 300);
-    const imgLoader = new Image();
-    return loadImage(this.images[i].src, imgLoader).then(() => {
-      const nextIndex = i + 1;
+      this.elems.loader.classList.add('chocolat-visible');
+    }, 1000);
+    return loadImage(this.images[index].src).then(image => {
+      return transitionAsPromise(() => {
+        this.elems.imageCanvas.classList.remove('chocolat-visible');
+      }, this.elems.imageCanvas).then(() => {
+        return Promise.resolve(image);
+      });
+    }).then(image => {
+      const nextIndex = index + 1;
 
       if (this.images[nextIndex] != undefined) {
-        loadImage(this.images[nextIndex].src, new Image());
+        loadImage(this.images[nextIndex].src);
       }
 
-      this.settings.currentImageIndex = i;
-      const position = this.position(imgLoader);
-      const appear = this.appear(i);
-      return Promise.all([position, appear]);
+      this.settings.currentImageIndex = index;
+      this.elems.description.textContent = this.settings.description.call(this);
+      this.elems.pagination.textContent = this.settings.pagination.call(this);
+      this.arrows();
+      return this.position(image).then(() => {
+        return this.appear(image);
+      });
     }).then(() => {
       this.zoomable();
       this.settings.afterImageLoad.call(this);
     });
   }
 
-  position(image) {
-    this.elems.description.textContent = this.settings.description.call(this);
-    this.elems.pagination.textContent = this.settings.pagination.call(this);
-    this.arrows();
+  position({
+    naturalHeight,
+    naturalWidth
+  }) {
     const fitOptions = {
-      imgHeight: image.naturalHeight,
-      imgWidth: image.naturalWidth,
+      imgHeight: naturalHeight,
+      imgWidth: naturalWidth,
       containerHeight: this.elems.container.clientHeight,
       containerWidth: this.elems.container.clientWidth,
       canvasWidth: this.elems.imageCanvas.clientWidth,
@@ -308,18 +338,17 @@ class Chocolat {
     }, this.elems.imageWrapper);
   }
 
-  appear(i) {
+  appear(image) {
     clearTimeout(this.state.timer);
-
-    if (!this.elems.loader.classList.contains('chocolat-visible')) {
-      return loadImage(this.images[i].src, this.elems.img);
-    }
-
-    return transitionAsPromise(() => {
-      this.elems.loader.classList.remove('chocolat-visible');
-    }, this.elems.loader).then(() => {
-      return loadImage(this.images[i].src, this.elems.img);
-    });
+    this.elems.loader.classList.remove('chocolat-visible');
+    this.elems.img = image;
+    this.elems.imageWrapper.innerHTML = '';
+    this.elems.img.setAttribute('class', 'chocolat-img');
+    this.elems.imageWrapper.appendChild(this.elems.img);
+    const fadeInPromise = transitionAsPromise(() => {
+      this.elems.imageCanvas.classList.add('chocolat-visible');
+    }, this.elems.imageCanvas);
+    return fadeInPromise;
   }
 
   change(step) {
