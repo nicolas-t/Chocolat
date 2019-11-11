@@ -7,10 +7,13 @@ import pkg from './package.json'
 export default [
     // browser-friendly UMD build
     {
-        entry: 'src/js/main.iife.js',
+        input: 'src/js/main.iife.js',
         dest: pkg.browser,
-        format: 'iife',
-        moduleName: 'chocolat',
+        output: {
+            name: 'chocolat',
+            format: 'iife',
+            file: 'dist/js/chocolat.js'
+        },
         plugins: [
             resolve(),
             commonjs(),
@@ -31,7 +34,7 @@ export default [
     // builds from a single configuration where possible, using
     // the `targets` option which can specify `dest` and `format`)
     {
-        entry: 'src/js/main.esm.js',
+        input: 'src/js/main.esm.js',
         external: ['es6-promise/auto'],
         targets: [
             { dest: pkg.main, format: 'cjs' },
