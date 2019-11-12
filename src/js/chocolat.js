@@ -558,14 +558,12 @@ export class Chocolat {
 
         const isImageZoomable =
             this.settings.allowZoom &&
-            (image.naturalWidth > wrapperWidth ||
-                image.naturalHeight > wrapperHeight)
+            (image.naturalWidth > wrapperWidth || image.naturalHeight > wrapperHeight)
                 ? true
                 : false
 
         const isImageStretched =
-            image.clientWidth > image.naturalWidth ||
-            image.clientHeight > image.naturalHeight
+            image.clientWidth > image.naturalWidth || image.clientHeight > image.naturalHeight
 
         return isImageZoomable && !isImageStretched
     }
