@@ -288,7 +288,7 @@ class Chocolat {
       fadeOutPromise = transitionAsPromise(() => {
         this.elems.imageCanvas.classList.remove('chocolat-visible');
       }, this.elems.imageCanvas);
-    }, 100);
+    }, 80);
     return loadImage(this.images[index].src).then(loadedImage => {
       image = loadedImage;
 
@@ -315,7 +315,7 @@ class Chocolat {
         return this.appear(image);
       });
     }).then(() => {
-      this.zoomable();
+      this.elems.container.classList.toggle('chocolat-zoomable', this.zoomable(image, this.elems.wrapper));
       this.settings.afterImageLoad.call(this);
     });
   }
@@ -337,10 +337,6 @@ class Chocolat {
       width,
       height
     } = fit(fitOptions);
-    return this.center(width, height);
-  }
-
-  center(width, height) {
     return transitionAsPromise(() => {
       Object.assign(this.elems.imageWrapper.style, {
         width: width + 'px',
@@ -362,7 +358,6 @@ class Chocolat {
 
   change(step) {
     this.zoomOut();
-    this.zoomable();
     const requestedImage = this.settings.currentImageIndex + parseInt(step);
 
     if (requestedImage > this.settings.lastImageIndex) {
@@ -540,13 +535,26 @@ class Chocolat {
     }
 
     this.off(this.elems.wrapper, 'click.chocolat');
-    this.on(this.elems.wrapper, 'click.chocolat', this.zoomOut.bind(this));
-    const img = this.elems.wrapper.querySelector('.chocolat-img');
-    this.off(img, 'click.chocolat');
-    this.on(img, 'click.chocolat', e => {
+    this.on(this.elems.wrapper, 'click.chocolat', () => {
+      if (this.state.initialZoomState === null || this.settings.currentImageIndex === undefined) {
+        return;
+      }
+
+      this.elems.container.classList.add('chocolat-zooming-out');
+      this.zoomOut().then(() => {
+        this.elems.container.classList.remove('chocolat-zoomed');
+        this.elems.container.classList.remove('chocolat-zooming-out');
+      });
+    });
+    this.off(this.elems.imageWrapper, 'click.chocolat');
+    this.on(this.elems.imageWrapper, 'click.chocolat', e => {
       if (this.state.initialZoomState === null && this.elems.container.classList.contains('chocolat-zoomable')) {
         e.stopPropagation();
-        this.zoomIn(e);
+        this.elems.container.classList.add('chocolat-zooming-in');
+        this.zoomIn(e).then(() => {
+          this.elems.container.classList.add('chocolat-zoomed');
+          this.elems.container.classList.remove('chocolat-zooming-in');
+        });
       }
     });
     this.on(this.elems.wrapper, 'mousemove.chocolat', e => {
@@ -593,82 +601,36 @@ class Chocolat {
       }
 
       debounce(50, () => {
-        const fitOptions = {
-          imgHeight: this.elems.img.naturalHeight,
-          imgWidth: this.elems.img.naturalWidth,
-          containerHeight: this.elems.wrapper.clientHeight,
-          containerWidth: this.elems.wrapper.clientWidth,
-          canvasWidth: this.elems.imageCanvas.clientWidth,
-          canvasHeight: this.elems.imageCanvas.clientHeight,
-          imageSize: this.settings.imageSize
-        };
         const {
           width,
           height
         } = fit(fitOptions);
-        this.center(width, height);
-        this.zoomable();
+        this.position(this.elems.img).then(() => {
+          this.elems.container.classList.toggle('chocolat-zoomable', this.zoomable(this.elems.img, this.elems.wrapper));
+        });
       });
     });
   }
 
-  zoomable() {
-    const currentImageIndex = this.images[this.settings.currentImageIndex];
-    const wrapperWidth = this.elems.wrapper.clientWidth;
-    const wrapperHeight = this.elems.wrapper.clientHeight;
-    const isImageZoomable = this.settings.allowZoom && (this.elems.img.naturalWidth > wrapperWidth || this.elems.img.naturalHeight > wrapperHeight) ? true : false;
-    const isImageStretched = this.elems.img.clientWidth > this.elems.img.naturalWidth || this.elems.img.clientHeight > this.elems.img.naturalHeight;
-
-    if (isImageZoomable && !isImageStretched) {
-      this.elems.container.classList.add('chocolat-zoomable');
-    } else {
-      this.elems.container.classList.remove('chocolat-zoomable');
-    }
+  zoomable(image, wrapper) {
+    const wrapperWidth = wrapper.clientWidth;
+    const wrapperHeight = wrapper.clientHeight;
+    const isImageZoomable = this.settings.allowZoom && (image.naturalWidth > wrapperWidth || image.naturalHeight > wrapperHeight) ? true : false;
+    const isImageStretched = image.clientWidth > image.naturalWidth || image.clientHeight > image.naturalHeight;
+    return isImageZoomable && !isImageStretched;
   }
 
   zoomIn(e) {
     this.state.initialZoomState = this.settings.imageSize;
     this.settings.imageSize = 'native';
-    this.elems.container.classList.add('chocolat-zoomed');
-    const fitOptions = {
-      imgHeight: this.elems.img.naturalHeight,
-      imgWidth: this.elems.img.naturalWidth,
-      containerHeight: this.elems.wrapper.clientHeight,
-      containerWidth: this.elems.wrapper.clientWidth,
-      canvasWidth: this.elems.imageCanvas.clientWidth,
-      canvasHeight: this.elems.imageCanvas.clientHeight,
-      imageSize: this.settings.imageSize
-    };
-    const {
-      width,
-      height
-    } = fit(fitOptions);
-    return this.center(width, height);
+    return this.position(this.elems.img);
   }
 
   zoomOut(e) {
-    if (this.state.initialZoomState === null || this.settings.currentImageIndex === undefined) {
-      return;
-    }
-
-    this.settings.imageSize = this.state.initialZoomState;
+    this.settings.imageSize = this.state.initialZoomState || this.settings.imageSize;
     this.state.initialZoomState = null;
     this.elems.img.style.margin = 0;
-    this.elems.container.classList.remove('chocolat-zoomed');
-    const fitOptions = {
-      imgHeight: this.elems.img.naturalHeight,
-      imgWidth: this.elems.img.naturalWidth,
-      containerHeight: this.elems.wrapper.clientHeight,
-      containerWidth: this.elems.wrapper.clientWidth,
-      canvasWidth: this.elems.imageCanvas.clientWidth,
-      canvasHeight: this.elems.imageCanvas.clientHeight,
-      imageSize: this.settings.imageSize
-    };
-    const {
-      width,
-      height
-    } = fit(fitOptions);
-    return this.center(width, height);
+    return this.position(this.elems.img);
   }
 
   on(element, eventName, cb) {

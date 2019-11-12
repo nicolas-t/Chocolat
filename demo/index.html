@@ -37,14 +37,17 @@
            Full window, contain, click the numbers to open:
         </h2>
         <div id="example0">
-            <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
+            <a class="chocolat-image" href="https://nicolasturlais.com/0full.jpg" title="HO">
                 1
             </a>
             <a class="chocolat-image" href="demo-images/6.jpg" title="HAI">
                 2
             </a>
-            <a class="chocolat-image" href="demo-images/3.jpg" title="IO">
+            <a class="chocolat-image" href="https://nicolasturlais.com/1full.jpg" title="IO">
                 3
+            </a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="HAI">
+                4
             </a>
         </div>
 
@@ -117,6 +120,7 @@
         <script>
             // standard demos
             Chocolat(document.querySelectorAll('#example0 .chocolat-image'), {
+                loop: true,
                 imageSize: 'contain',
             })
 
