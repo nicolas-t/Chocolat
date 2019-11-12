@@ -52,21 +52,23 @@ export function loadImage(path) {
     if ('decode' in image) {
         return new Promise((resolve, reject) => {
             image.src = path
-            image.decode().then(() => {
-                resolve(image)
-            }).catch(() => {
-                reject(image)
-            })
+            image
+                .decode()
+                .then(() => {
+                    resolve(image)
+                })
+                .catch(() => {
+                    reject(image)
+                })
         })
     } else {
         return new Promise((resolve, reject) => {
-            image.onload  = resolve(image)
+            image.onload = resolve(image)
             image.onerror = reject(image)
             image.src = path
         })
     }
 }
-
 
 export function fit(options) {
     let height

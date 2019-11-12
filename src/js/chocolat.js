@@ -187,7 +187,8 @@ export class Chocolat {
             }, this.elems.imageCanvas)
         }, 100)
 
-        return loadImage(this.images[index].src).then((loadedImage) => {
+        return loadImage(this.images[index].src)
+            .then((loadedImage) => {
                 image = loadedImage
                 if (fadeOutTimer) {
                     clearTimeout(fadeOutTimer)
@@ -246,7 +247,7 @@ export class Chocolat {
 
     appear(image) {
         this.elems.img = image
-        this.elems.imageWrapper.innerHTML = '';
+        this.elems.imageWrapper.innerHTML = ''
         this.elems.img.setAttribute('class', 'chocolat-img')
         this.elems.imageWrapper.appendChild(this.elems.img)
 

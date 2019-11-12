@@ -278,16 +278,27 @@ class Chocolat {
       this.elems.wrapper.classList.add('chocolat-visible');
     }, 0);
     this.elems.container.classList.add('chocolat-open');
-    this.state.timer = setTimeout(() => {
+    let loaderTimer = setTimeout(() => {
       this.elems.loader.classList.add('chocolat-visible');
     }, 1000);
-    return loadImage(this.images[index].src).then(image => {
-      return transitionAsPromise(() => {
+    let fadeOutPromise;
+    let image;
+    let fadeOutTimer = setTimeout(() => {
+      fadeOutTimer = undefined;
+      fadeOutPromise = transitionAsPromise(() => {
         this.elems.imageCanvas.classList.remove('chocolat-visible');
-      }, this.elems.imageCanvas).then(() => {
-        return Promise.resolve(image);
-      });
-    }).then(image => {
+      }, this.elems.imageCanvas);
+    }, 100);
+    return loadImage(this.images[index].src).then(loadedImage => {
+      image = loadedImage;
+
+      if (fadeOutTimer) {
+        clearTimeout(fadeOutTimer);
+        return Promise.resolve();
+      } else {
+        return fadeOutPromise;
+      }
+    }).then(() => {
       const nextIndex = index + 1;
 
       if (this.images[nextIndex] != undefined) {
@@ -299,6 +310,8 @@ class Chocolat {
       this.elems.pagination.textContent = this.settings.pagination.call(this);
       this.arrows();
       return this.position(image).then(() => {
+        this.elems.loader.classList.remove('chocolat-visible');
+        clearTimeout(loaderTimer);
         return this.appear(image);
       });
     }).then(() => {
@@ -337,8 +350,6 @@ class Chocolat {
   }
 
   appear(image) {
-    clearTimeout(this.state.timer);
-    this.elems.loader.classList.remove('chocolat-visible');
     this.elems.img = image;
     this.elems.imageWrapper.innerHTML = '';
     this.elems.img.setAttribute('class', 'chocolat-img');
