@@ -173,18 +173,30 @@ export class Chocolat {
 
         this.elems.container.classList.add('chocolat-open')
 
-        this.state.timer = setTimeout(() => {
+        let loaderTimer = setTimeout(() => {
             this.elems.loader.classList.add('chocolat-visible')
         }, 1000)
 
-        return loadImage(this.images[index].src).then((image) => {
-                return transitionAsPromise(() => {
-                    this.elems.imageCanvas.classList.remove('chocolat-visible')
-                }, this.elems.imageCanvas).then(() => {
-                    return Promise.resolve(image)
-                })
+        let fadeOutPromise
+        let image
+
+        let fadeOutTimer = setTimeout(() => {
+            fadeOutTimer = undefined
+            fadeOutPromise = transitionAsPromise(() => {
+                this.elems.imageCanvas.classList.remove('chocolat-visible')
+            }, this.elems.imageCanvas)
+        }, 100)
+
+        return loadImage(this.images[index].src).then((loadedImage) => {
+                image = loadedImage
+                if (fadeOutTimer) {
+                    clearTimeout(fadeOutTimer)
+                    return Promise.resolve()
+                } else {
+                    return fadeOutPromise
+                }
             })
-            .then((image) => {
+            .then(() => {
                 const nextIndex = index + 1
                 if (this.images[nextIndex] != undefined) {
                     loadImage(this.images[nextIndex].src)
@@ -196,6 +208,9 @@ export class Chocolat {
                 this.arrows()
 
                 return this.position(image).then(() => {
+                    this.elems.loader.classList.remove('chocolat-visible')
+                    clearTimeout(loaderTimer)
+
                     return this.appear(image)
                 })
             })
@@ -230,9 +245,6 @@ export class Chocolat {
     }
 
     appear(image) {
-        clearTimeout(this.state.timer)
-        this.elems.loader.classList.remove('chocolat-visible')
-
         this.elems.img = image
         this.elems.imageWrapper.innerHTML = '';
         this.elems.img.setAttribute('class', 'chocolat-img')
