@@ -24,6 +24,7 @@
         if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
           handleTransitionEnd();
         }
+<<<<<<< HEAD
 
         if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
           handleTransitionEnd();
@@ -59,6 +60,19 @@
           image.onload = resolve(image);
           image.onerror = reject(image);
           image.src = path;
+=======
+      });
+    }
+    function loadImage(src, image) {
+      if ('decode' in image) {
+        image.src = src;
+        return image.decode();
+      } else {
+        return new Promise(function (resolve, reject) {
+          image.onload = resolve;
+          image.onerror = resolve;
+          image.src = src;
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
         });
       }
     }
@@ -267,12 +281,20 @@
         return this.load(i);
       }
 
+<<<<<<< HEAD
       load(index) {
+=======
+      load(i) {
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
         if (this.settings.fullScreen) {
           this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
         }
 
+<<<<<<< HEAD
         if (this.settings.currentImageIndex === index) {
+=======
+        if (this.settings.currentImageIndex === i) {
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
           return Promise.resolve();
         }
 
@@ -282,6 +304,7 @@
         }, 0);
         this.elems.container.classList.add('chocolat-open');
         this.state.timer = setTimeout(() => {
+<<<<<<< HEAD
           this.elems.loader.classList.add('chocolat-visible');
         }, 1000);
         return loadImage(this.images[index].src).then(image => {
@@ -304,12 +327,31 @@
           return this.position(image).then(() => {
             return this.appear(image);
           });
+=======
+          if (this.elems !== undefined) {
+            this.elems.loader.classList.add('chocolat-visible');
+          }
+        }, 300);
+        const imgLoader = new Image();
+        return loadImage(this.images[i].src, imgLoader).then(() => {
+          const nextIndex = i + 1;
+
+          if (this.images[nextIndex] != undefined) {
+            loadImage(this.images[nextIndex].src, new Image());
+          }
+
+          this.settings.currentImageIndex = i;
+          const position = this.position(imgLoader);
+          const appear = this.appear(i);
+          return Promise.all([position, appear]);
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
         }).then(() => {
           this.zoomable();
           this.settings.afterImageLoad.call(this);
         });
       }
 
+<<<<<<< HEAD
       position({
         naturalHeight,
         naturalWidth
@@ -317,6 +359,15 @@
         const fitOptions = {
           imgHeight: naturalHeight,
           imgWidth: naturalWidth,
+=======
+      position(image) {
+        this.elems.description.textContent = this.settings.description.call(this);
+        this.elems.pagination.textContent = this.settings.pagination.call(this);
+        this.arrows();
+        const fitOptions = {
+          imgHeight: image.naturalHeight,
+          imgWidth: image.naturalWidth,
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
           containerHeight: this.elems.container.clientHeight,
           containerWidth: this.elems.container.clientWidth,
           canvasWidth: this.elems.imageCanvas.clientWidth,
@@ -339,6 +390,7 @@
         }, this.elems.imageWrapper);
       }
 
+<<<<<<< HEAD
       appear(image) {
         clearTimeout(this.state.timer);
         this.elems.loader.classList.remove('chocolat-visible');
@@ -350,6 +402,20 @@
           this.elems.imageCanvas.classList.add('chocolat-visible');
         }, this.elems.imageCanvas);
         return fadeInPromise;
+=======
+      appear(i) {
+        clearTimeout(this.state.timer);
+
+        if (!this.elems.loader.classList.contains('chocolat-visible')) {
+          return loadImage(this.images[i].src, this.elems.img);
+        }
+
+        return transitionAsPromise(() => {
+          this.elems.loader.classList.remove('chocolat-visible');
+        }, this.elems.loader).then(() => {
+          return loadImage(this.images[i].src, this.elems.img);
+        });
+>>>>>>> 3eeccef717b732606491dc6f1154fa8c379170cf
       }
 
       change(step) {
