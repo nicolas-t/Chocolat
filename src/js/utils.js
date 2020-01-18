@@ -34,24 +34,19 @@ export function transitionAsPromise(triggeringFunc, el) {
     })
 }
 
-// export function loadImage(src, image) {
-//     if ('decode' in image) {
-//         image.src = src
-//         return image.decode()
-//     } else {
-//         return new Promise(function(resolve, reject) {
-//             image.onload = resolve
-//             image.onerror = resolve
-//             image.src = src
-//         })
-//     }
-// }
+export function loadImage(img) {
+    const path = img.src
+    const image = new Image()
+    image.src = path
+    if (img.srcset) {
+        image.srcset = img.srcset
+    }
+    if (img.sizes) {
+        image.sizes = img.sizes
+    }
 
-export function loadImage(path) {
-    let image = new Image()
     if ('decode' in image) {
         return new Promise((resolve, reject) => {
-            image.src = path
             image
                 .decode()
                 .then(() => {
@@ -65,7 +60,6 @@ export function loadImage(path) {
         return new Promise((resolve, reject) => {
             image.onload = resolve(image)
             image.onerror = reject(image)
-            image.src = path
         })
     }
 }

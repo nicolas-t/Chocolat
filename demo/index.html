@@ -111,6 +111,24 @@
         <a class="api-close" href="#">Close</a>
         <!-- Container (notice the relative width) :  -->
         <div id="container3" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
+
+        <h2>Usage with srcset and sizes attributes. Full window, contained.</h2>
+        <p>Be careful while using "cover" and data-sizes="100vw", the image could be wider than the viewport width.</p>
+        <div id="example4">
+            <a class="chocolat-image" href="demo/demo-images/1920x1080.png" title="responsive"
+               data-srcset="demo/demo-images/320x180.png 320w,
+                            demo/demo-images/640x360.png 640w,
+                            demo/demo-images/960x540.png 960w,
+                            demo/demo-images/1280x720.png 1280w,
+                            demo/demo-images/1920x1080.png 1920w"
+               data-sizes="100vw">
+                <img src="demo/demo-images/75x50.png" style="width:75px; height:50px" alt="">
+            </a>
+        </div>
+
+
+
+
         <script>
             // standard demos
             Chocolat(document.querySelectorAll('#example0 .chocolat-image'), {
@@ -132,6 +150,10 @@
             Chocolat(document.querySelectorAll('#example3 .chocolat-image'), {
                 container: document.querySelector('#container2'),
                 imageSize: 'cover',
+            })
+            Chocolat(document.querySelectorAll('#example4 .chocolat-image'), {
+                imageSize: 'contain',
+                loop: true,
             })
         </script>
         <script>

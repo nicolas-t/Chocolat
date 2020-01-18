@@ -74,6 +74,8 @@ export class Chocolat {
                 this.images.push({
                     title: el.getAttribute('title'),
                     src: el.getAttribute('href'),
+                    srcset: el.getAttribute('data-srcset'),
+                    sizes: el.getAttribute('data-sizes'),
                     height: undefined,
                     width: undefined,
                 })
@@ -189,7 +191,7 @@ export class Chocolat {
             }, this.elems.imageCanvas)
         }, 80)
 
-        return loadImage(this.images[index].src)
+        return loadImage(this.images[index])
             .then((loadedImage) => {
                 image = loadedImage
                 if (fadeOutTimer) {
@@ -202,7 +204,7 @@ export class Chocolat {
             .then(() => {
                 const nextIndex = index + 1
                 if (this.images[nextIndex] != undefined) {
-                    loadImage(this.images[nextIndex].src)
+                    loadImage(this.images[nextIndex])
                 }
 
                 this.settings.currentImageIndex = index
