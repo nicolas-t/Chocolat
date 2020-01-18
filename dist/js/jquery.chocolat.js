@@ -30,6 +30,8 @@
             that.settings.images.push({
                 title: $(this).attr('title'),
                 src: $(this).attr(that.settings.imageSource),
+                srcset: $(this).attr(that.settings.srcset),
+                sizes: $(this).attr(that.settings.sizes),
                 height: false,
                 width: false,
             })
@@ -72,6 +74,8 @@
             imgLoader.onload = function() {
                 def.resolve(imgLoader)
             }
+            imgLoader.srcset = this.settings.images[i].srcset
+            imgLoader.sizes = this.settings.images[i].sizes
             imgLoader.src = this.settings.images[i].src
 
             return def
@@ -152,7 +156,10 @@
             clearTimeout(this.settings.timer)
 
             this.elems.loader.stop().fadeOut(300, function() {
-                that.elems.img.attr('src', that.settings.images[i].src)
+                that.elems.img
+                    .attr('srcset', that.settings.images[i].srcset)
+                    .attr('sizes', that.settings.images[i].sizes)
+                    .attr('src', that.settings.images[i].src)
             })
         },
 
@@ -288,7 +295,7 @@
         },
 
         destroy: function() {
-            this.element.removeData()
+            this.element.removeData('chocolat')
             this.element.find(this.settings.imageSelector).off('click.chocolat')
 
             if (!this.settings.initialized) {
@@ -704,6 +711,8 @@
         images: [],
         enableZoom: true,
         imageSource: 'href',
+        srcset: 'data-srcset',
+        sizes: 'data-sizes',
         afterInitialize: function() {},
         afterMarkup: function() {},
         afterImageLoad: function() {},
