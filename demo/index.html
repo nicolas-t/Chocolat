@@ -7,7 +7,7 @@
         <style>
             body {
                 text-align: center;
-                font-family: Arial;
+                font-family: Arial, sans-serif;
                 font-size: 12px;
             }
             h2 {
@@ -20,9 +20,6 @@
                 border:0;
                 color: #2645FF;
                 text-decoration: none;
-            }
-            .demo {
-
             }
         </style>
         <title>Chocolat — demo</title>
@@ -37,13 +34,13 @@
            Full window, contain, click the numbers to open:
         </h2>
         <div id="example0">
-            <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
+            <a class="chocolat-image" href="demo/demo-images/5.jpg" title="HO">
                 1
             </a>
-            <a class="chocolat-image" href="demo-images/6.jpg" title="HAI">
+            <a class="chocolat-image" href="demo/demo-images/6.jpg" title="HAI">
                 2
             </a>
-            <a class="chocolat-image" href="demo-images/3.jpg" title="IO">
+            <a class="chocolat-image" href="demo/demo-images/3.jpg" title="IO">
                 3
             </a>
         </div>
@@ -52,10 +49,10 @@
             Full window, cover, looping :
         </h2>
         <div id="example1">
-            <a class="chocolat-image" href="demo-images/1.jpg" title="foo">
+            <a class="chocolat-image" href="demo/demo-images/1.jpg" title="foo">
                 C
             </a>
-            <a class="chocolat-image" href="demo-images/2.jpg" title="bar">
+            <a class="chocolat-image" href="demo/demo-images/2.jpg" title="bar">
                 D
             </a>
         </div>
@@ -65,14 +62,14 @@
         </h2>
 
         <div id="example3">
-            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
-                <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
+            <a class="chocolat-image" href="demo/demo-images/3.jpg" title="Rose">
+                <img src="demo/demo-images/3.jpg" style="width:75px; height:50px" alt="">
             </a>
-            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
-                <img src="demo-images/4.jpg" style="width:75px; height:50px" alt="">
+            <a class="chocolat-image" href="demo/demo-images/4.jpg" title="Black">
+                <img src="demo/demo-images/4.jpg" style="width:75px; height:50px" alt="">
             </a>
-            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
-                <img src="demo-images/5.jpg" style="width:75px; height:50px" alt="">
+            <a class="chocolat-image" href="demo/demo-images/5.jpg" title="Yellow">
+                <img src="demo/demo-images/5.jpg" style="width:75px; height:50px" alt="">
             </a>
         </div>
         <!-- Container (notice the relative width) :  -->
@@ -83,13 +80,13 @@
         </h2>
 
         <div id="example2">
-            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+            <a class="chocolat-image" href="demo/demo-images/3.jpg" title="Rose">
                 A
             </a>
-            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+            <a class="chocolat-image" href="demo/demo-images/4.jpg" title="Black">
                 B
             </a>
-            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+            <a class="chocolat-image" href="demo/demo-images/5.jpg" title="Yellow">
                 C
             </a>
         </div>
@@ -140,9 +137,9 @@
         <script>
             // api demo
             var instance = Chocolat([
-                    {src : 'demo-images/1.jpg', title : 'caption 1'},
-                    {src : 'demo-images/6.jpg', title : 'caption 2'},
-                    {src : 'demo-images/8.jpg', title : 'caption 3'},
+                    {src : 'demo/demo-images/1.jpg', title : 'caption 1'},
+                    {src : 'demo/demo-images/6.jpg', title : 'caption 2'},
+                    {src : 'demo/demo-images/8.jpg', title : 'caption 3'},
                 ], {
                 setTitle : function () { return 'set title' },
                 loop: true,
