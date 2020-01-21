@@ -603,6 +603,15 @@ class Chocolat {
       }
 
       debounce(50, () => {
+        const fitOptions = {
+          imgHeight: this.elems.img.naturalHeight,
+          imgWidth: this.elems.img.naturalWidth,
+          containerHeight: this.elems.wrapper.clientHeight,
+          containerWidth: this.elems.wrapper.clientWidth,
+          canvasWidth: this.elems.imageCanvas.clientWidth,
+          canvasHeight: this.elems.imageCanvas.clientHeight,
+          imageSize: this.settings.imageSize
+        };
         const {
           width,
           height
