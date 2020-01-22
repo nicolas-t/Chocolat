@@ -34,15 +34,15 @@ export function transitionAsPromise(triggeringFunc, el) {
     })
 }
 
-export function loadImage(img) {
-    const path = img.src
+export function loadImage({ src, srcset, sizes }) {
     const image = new Image()
-    image.src = path
-    if (img.srcset) {
-        image.srcset = img.srcset
+
+    image.src = src
+    if (srcset) {
+        image.srcset = srcset
     }
-    if (img.sizes) {
-        image.sizes = img.sizes
+    if (sizes) {
+        image.sizes = sizes
     }
 
     if ('decode' in image) {

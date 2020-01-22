@@ -76,8 +76,6 @@ export class Chocolat {
                     src: el.getAttribute('href'),
                     srcset: el.getAttribute('data-srcset'),
                     sizes: el.getAttribute('data-sizes'),
-                    height: undefined,
-                    width: undefined,
                 })
 
                 this.off(el, 'click.chocolat')

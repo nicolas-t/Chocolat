@@ -29,17 +29,20 @@ function transitionAsPromise(triggeringFunc, el) {
     }
   });
 }
-function loadImage(img) {
-  const path = img.src;
+function loadImage({
+  src,
+  srcset,
+  sizes
+}) {
   const image = new Image();
-  image.src = path;
+  image.src = src;
 
-  if (img.srcset) {
-    image.srcset = img.srcset;
+  if (srcset) {
+    image.srcset = srcset;
   }
 
-  if (img.sizes) {
-    image.sizes = img.sizes;
+  if (sizes) {
+    image.sizes = sizes;
   }
 
   if ('decode' in image) {
@@ -193,9 +196,7 @@ class Chocolat {
           title: el.getAttribute('title'),
           src: el.getAttribute('href'),
           srcset: el.getAttribute('data-srcset'),
-          sizes: el.getAttribute('data-sizes'),
-          height: undefined,
-          width: undefined
+          sizes: el.getAttribute('data-sizes')
         });
         this.off(el, 'click.chocolat');
         this.on(el, 'click.chocolat', e => {
