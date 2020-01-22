@@ -29,25 +29,22 @@
           handleTransitionEnd();
         }
       });
-    } // export function loadImage(src, image) {
-    //     if ('decode' in image) {
-    //         image.src = src
-    //         return image.decode()
-    //     } else {
-    //         return new Promise(function(resolve, reject) {
-    //             image.onload = resolve
-    //             image.onerror = resolve
-    //             image.src = src
-    //         })
-    //     }
-    // }
+    }
+    function loadImage(img) {
+      const path = img.src;
+      const image = new Image();
+      image.src = path;
 
-    function loadImage(path) {
-      let image = new Image();
+      if (img.srcset) {
+        image.srcset = img.srcset;
+      }
+
+      if (img.sizes) {
+        image.sizes = img.sizes;
+      }
 
       if ('decode' in image) {
         return new Promise((resolve, reject) => {
-          image.src = path;
           image.decode().then(() => {
             resolve(image);
           }).catch(() => {
@@ -58,7 +55,6 @@
         return new Promise((resolve, reject) => {
           image.onload = resolve(image);
           image.onerror = reject(image);
-          image.src = path;
         });
       }
     }
@@ -197,6 +193,8 @@
             this.images.push({
               title: el.getAttribute('title'),
               src: el.getAttribute('href'),
+              srcset: el.getAttribute('data-srcset'),
+              sizes: el.getAttribute('data-sizes'),
               height: undefined,
               width: undefined
             });
@@ -292,7 +290,7 @@
             this.elems.imageCanvas.classList.remove('chocolat-visible');
           }, this.elems.imageCanvas);
         }, 80);
-        return loadImage(this.images[index].src).then(loadedImage => {
+        return loadImage(this.images[index]).then(loadedImage => {
           image = loadedImage;
 
           if (fadeOutTimer) {
@@ -305,7 +303,7 @@
           const nextIndex = index + 1;
 
           if (this.images[nextIndex] != undefined) {
-            loadImage(this.images[nextIndex].src);
+            loadImage(this.images[nextIndex]);
           }
 
           this.settings.currentImageIndex = index;

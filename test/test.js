@@ -70,7 +70,7 @@ describe('Chocolat', function() {
             })
         })
 
-        it('should add custom css classe', function(done) {
+        it('should add custom css classes', function(done) {
             chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
                 className: 'custom-class-name',
             })
@@ -202,7 +202,7 @@ describe('Chocolat', function() {
                 return 'prefix ' + position + '/' + last + ' suffix'
             }
 
-            chocolat = Chocolat(document.querySelectorAll('.chocolat-image'), {
+            chocolat = Chocolat(document.querySelectorAll('#example0 .chocolat-image'), {
                 container: document.querySelector('#container'),
                 pagination: pagination,
             })
@@ -510,6 +510,36 @@ describe('Chocolat', function() {
 
         it('should have a getElem method', function() {
             expect(typeof chocolat.api.getElem).to.equal('function')
+        })
+    })
+
+    describe('srcset and sizes attributes', function() {
+        before(function() {
+            chocolat = Chocolat(document.querySelectorAll('#example1 .chocolat-image'), {})
+        })
+        it('Should include the same srcset and sizes attributes from the trigger link (data-srcset and data-sizes)', function() {
+            const trigger = document.querySelector('#example1 .chocolat-image')
+
+            chocolat.api.open().then(function() {
+                const openedImg = document.querySelector('.chocolat-image-wrapper img.chocolat-img')
+
+                expect(openedImg.getAttribute('srcset')).to.be.equal(
+                    trigger.getAttribute('data-srcset')
+                )
+                expect(openedImg.getAttribute('sizes')).to.be.equal(
+                    trigger.getAttribute('data-sizes')
+                )
+            })
+        })
+        it('Should not add empty srcset or sizes attributes', function() {
+            const trigger = document.querySelector('#example0 .chocolat-image')
+
+            chocolat.api.open().then(function() {
+                const openedImg = document.querySelector('.chocolat-image-wrapper img.chocolat-img')
+
+                expect(openedImg.getAttribute('srcset')).to.be.null()
+                expect(openedImg.getAttribute('sizes')).to.be.null()
+            })
         })
     })
 })
