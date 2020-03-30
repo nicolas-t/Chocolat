@@ -54,6 +54,7 @@ export class Chocolat {
             initialZoomState: null,
             initialized: false,
             timer: false,
+            visible: false,
         }
 
         this._cssClasses = [
@@ -160,6 +161,8 @@ export class Chocolat {
     }
 
     load(index) {
+        this.state.visible = true
+
         if (this.settings.fullScreen) {
             this.state.fullScreenOpen = openFullScreen(this.elems.wrapper)
         }
@@ -261,6 +264,10 @@ export class Chocolat {
     }
 
     change(step) {
+        if (!this.state.visible) {
+            return
+        }
+
         this.zoomOut()
 
         const requestedImage = this.settings.currentImageIndex + parseInt(step)
@@ -302,7 +309,7 @@ export class Chocolat {
             return
         }
 
-        this.settings.currentImageIndex = undefined
+        this.state.visible = false
 
         const promiseOverlay = transitionAsPromise(() => {
             this.elems.overlay.classList.remove('chocolat-visible')
@@ -330,6 +337,7 @@ export class Chocolat {
             this.state.fullScreenOpen = exitFullScreen()
         }
         this.settings.currentImageIndex = undefined
+        this.state.visible = false
         this.state.initialized = false
 
         this.elems.container.classList.remove(...this._cssClasses)
@@ -464,10 +472,7 @@ export class Chocolat {
 
         this.off(this.elems.wrapper, 'click.chocolat')
         this.on(this.elems.wrapper, 'click.chocolat', () => {
-            if (
-                this.state.initialZoomState === null ||
-                this.settings.currentImageIndex === undefined
-            ) {
+            if (this.state.initialZoomState === null || !this.state.visible) {
                 return
             }
 
@@ -495,11 +500,7 @@ export class Chocolat {
         })
 
         this.on(this.elems.wrapper, 'mousemove.chocolat', (e) => {
-            if (this.state.initialZoomState === null) {
-                return
-            }
-
-            if (this.settings.currentImageIndex === undefined) {
+            if (this.state.initialZoomState === null || !this.state.visible) {
                 return
             }
 
@@ -536,7 +537,7 @@ export class Chocolat {
         })
 
         this.on(window, 'resize.chocolat', (e) => {
-            if (!this.state.initialized || this.settings.currentImageIndex === undefined) {
+            if (!this.state.initialized || !this.state.visible) {
                 return
             }
             debounce(50, () => {
