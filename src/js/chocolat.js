@@ -252,7 +252,8 @@ export class Chocolat {
 
     appear(image) {
         this.elems.img = image
-        this.elems.imageWrapper.innerHTML = ''
+        // Not sure if needed to avoid white flickering ?
+        // this.elems.imageWrapper.innerHTML = ''
         this.elems.img.setAttribute('class', 'chocolat-img')
         this.elems.imageWrapper.appendChild(this.elems.img)
 
