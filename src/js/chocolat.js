@@ -161,7 +161,16 @@ export class Chocolat {
     }
 
     load(index) {
-        this.state.visible = true
+        if (!this.state.visible) {
+            this.state.visible = true
+
+            setTimeout(() => {
+                this.elems.overlay.classList.add('chocolat-visible')
+                this.elems.wrapper.classList.add('chocolat-visible')
+            }, 0)
+
+            this.elems.container.classList.add('chocolat-open')
+        }
 
         if (this.settings.fullScreen) {
             this.state.fullScreenOpen = openFullScreen(this.elems.wrapper)
@@ -170,13 +179,6 @@ export class Chocolat {
         if (this.settings.currentImageIndex === index) {
             return Promise.resolve()
         }
-
-        setTimeout(() => {
-            this.elems.overlay.classList.add('chocolat-visible')
-            this.elems.wrapper.classList.add('chocolat-visible')
-        }, 0)
-
-        this.elems.container.classList.add('chocolat-open')
 
         let loaderTimer = setTimeout(() => {
             this.elems.loader.classList.add('chocolat-visible')
@@ -251,9 +253,8 @@ export class Chocolat {
     }
 
     appear(image) {
+        this.elems.imageWrapper.removeChild(this.elems.img)
         this.elems.img = image
-        // Not sure if needed to avoid white flickering ?
-        // this.elems.imageWrapper.innerHTML = ''
         this.elems.img.setAttribute('class', 'chocolat-img')
         this.elems.imageWrapper.appendChild(this.elems.img)
 
