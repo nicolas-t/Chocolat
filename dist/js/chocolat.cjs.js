@@ -186,7 +186,8 @@ class Chocolat {
       fullScreenOpen: false,
       initialZoomState: null,
       initialized: false,
-      timer: false
+      timer: false,
+      visible: false
     };
     this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed', 'chocolat-zooming-in', 'chocolat-zooming-out'];
 
@@ -266,6 +267,8 @@ class Chocolat {
   }
 
   load(index) {
+    this.state.visible = true;
+
     if (this.settings.fullScreen) {
       this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
     }
@@ -347,8 +350,9 @@ class Chocolat {
   }
 
   appear(image) {
-    this.elems.img = image;
-    this.elems.imageWrapper.innerHTML = '';
+    this.elems.img = image; // Not sure if needed to avoid white flickering ?
+    // this.elems.imageWrapper.innerHTML = ''
+
     this.elems.img.setAttribute('class', 'chocolat-img');
     this.elems.imageWrapper.appendChild(this.elems.img);
     const fadeInPromise = transitionAsPromise(() => {
@@ -358,6 +362,10 @@ class Chocolat {
   }
 
   change(step) {
+    if (!this.state.visible) {
+      return;
+    }
+
     this.zoomOut();
     const requestedImage = this.settings.currentImageIndex + parseInt(step);
 
@@ -393,7 +401,7 @@ class Chocolat {
       return;
     }
 
-    this.settings.currentImageIndex = undefined;
+    this.state.visible = false;
     const promiseOverlay = transitionAsPromise(() => {
       this.elems.overlay.classList.remove('chocolat-visible');
     }, this.elems.overlay);
@@ -423,6 +431,7 @@ class Chocolat {
     }
 
     this.settings.currentImageIndex = undefined;
+    this.state.visible = false;
     this.state.initialized = false;
     this.elems.container.classList.remove(...this._cssClasses);
     this.elems.wrapper.parentNode.removeChild(this.elems.wrapper);
@@ -537,7 +546,7 @@ class Chocolat {
 
     this.off(this.elems.wrapper, 'click.chocolat');
     this.on(this.elems.wrapper, 'click.chocolat', () => {
-      if (this.state.initialZoomState === null || this.settings.currentImageIndex === undefined) {
+      if (this.state.initialZoomState === null || !this.state.visible) {
         return;
       }
 
@@ -559,11 +568,7 @@ class Chocolat {
       }
     });
     this.on(this.elems.wrapper, 'mousemove.chocolat', e => {
-      if (this.state.initialZoomState === null) {
-        return;
-      }
-
-      if (this.settings.currentImageIndex === undefined) {
+      if (this.state.initialZoomState === null || !this.state.visible) {
         return;
       }
 
@@ -597,7 +602,7 @@ class Chocolat {
       this.elems.img.style.marginTop = -mvtY + 'px';
     });
     this.on(window, 'resize.chocolat', e => {
-      if (!this.state.initialized || this.settings.currentImageIndex === undefined) {
+      if (!this.state.initialized || !this.state.visible) {
         return;
       }
 
