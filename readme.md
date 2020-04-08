@@ -16,7 +16,7 @@ You can access the full documentation at this page :
 
 ## Upgrading
 -----------
-A few breaking changes have been made between v0.4 and v1 :
+A few breaking changes have been made between v0.4 and v1 :  
 [Upgrading](https://chocolat.gitbook.io/chocolat/upgrading-from-v0.4)
 
 
