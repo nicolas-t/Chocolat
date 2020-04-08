@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Chocolat tests</title>
-    <link rel="stylesheet" media="all" href="lib/mocha.css">
-    <link rel="stylesheet" media="all" href="../dist/css/chocolat.css">
-</head>
-<body>
-    <div style="width: 299px;height: 500px;background: silver;margin-left: 250px;margin-top: 250px;" id="container"></div>
+    <head>
+        <meta charset="utf-8" />
+        <title>Chocolat tests</title>
+        <link rel="stylesheet" media="all" href="../node_modules/mocha/mocha.css" />
+        <link rel="stylesheet" media="all" href="../dist/css/chocolat.css" />
+    </head>
+    <body>
+        <div
+            style="width: 299px;height: 500px;background: silver;margin-left: 250px;margin-top: 250px;"
+            id="container"
+        ></div>
 
-    <div id="example0">
-        <a class="chocolat-image" href="../dist/demo-images/1.jpg" title="foo">
-            1
-        </a>
-        <a class="chocolat-image" href="../dist/demo-images/2.jpg" title="baz">
-            2
-        </a>
-        <a class="chocolat-image" href="../dist/demo-images/3.jpg" title="bar">
-            3
-        </a>
-    </div>
+        <div id="example0">
+            <a class="chocolat-image" href="../demo/demo-images/1.jpg" title="foo"> 1 </a>
+            <a class="chocolat-image" href="../demo/demo-images/2.jpg" title="baz"> 2 </a>
+            <a class="chocolat-image" href="../demo/demo-images/3.jpg" title="bar"> 3 </a>
+        </div>
 
-    <div id="mocha"><p><a href=".">Index</a></p></div>
-    <div id="messages"></div>
-    <div id="fixtures"></div>
-    <script src="lib/mocha.js"></script>
-    <script src="lib/sinon.js"></script>
-    <script src="lib/chai.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="../dist/js/jquery.chocolat.js"></script>
-    <script>
-      mocha.setup('bdd')
-      mocha.reporter('html');
-      expect = chai.expect;
-    </script>
-    <script src="test.chocolat.js"></script>
-    <script>
-      if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-      else { mocha.run(); }
-    </script>
-</body>
+        <!-- To test srcset and sizes -->
+        <div id="example1">
+            <a
+                class="chocolat-image"
+                href="../demo/demo-images/1920x1080.png"
+                title="responsive"
+                data-srcset="../demo/demo-images/320x180.png 320w,
+                            ../demo/demo-images/640x360.png 640w,
+                            ../demo/demo-images/960x540.png 960w,
+                            ../demo/demo-images/1280x720.png 1280w,
+                            ../demo/demo-images/1920x1080.png 1920w"
+                data-sizes="100vw"
+            >
+                <img src="../demo/demo-images/75x50.png" style="width:75px; height:50px" alt="" />
+            </a>
+        </div>
+
+        <div id="mocha">
+            <p><a href=".">Index</a></p>
+        </div>
+
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        <script src="../node_modules/sinon/pkg/sinon.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="../dist/js/chocolat.js"></script>
+        <script>
+            mocha.setup('bdd')
+            mocha.reporter('html')
+            expect = chai.expect
+        </script>
+        <script src="test.js"></script>
+        <script>
+            mocha.run()
+        </script>
+    </body>
 </html>

@@ -1,14 +1,10 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
 install:
-  - npm install
+  - yarn install
 before_script:
-  - phantomjs --version
-  - mocha-phantomjs --version
-  - gulp compile-coffee &
   - sleep 5
 script:
   - prettier-check src/js/*.js test/*.js
-  - mocha-phantomjs test/index.html
+  - yarn test

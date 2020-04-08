@@ -1,38 +1,42 @@
 {
   "name": "chocolat",
-  "version": "0.4.21",
-  "description": " Responsive jQuery Lightbox Plugin",
-  "main": "dist/js/jquery.chocolat.js",
+  "version": "1.0.0-beta.7",
+  "description": "Responsive Lightbox Plugin",
+  "main": "dist/js/chocolat.cjs.js",
+  "module": "dist/js/chocolat.esm.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "gulp build",
-    "test": "./node_modules/.bin/mocha-phantomjs test/index.html",
+    "build": "npm run prettier && rollup -c",
+    "dev": "rollup -c -w",
+    "test": "mocha-chrome test/index.html",
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
   },
   "dependencies": {
-    "jquery": "^3.0"
+    "es6-promise": "^4.2.5"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "gulp": "^3.9.0",
-    "gulp-bump": "^0.3.1",
-    "gulp-mocha-phantomjs": "^0.12.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.2.0",
-    "gulp-util": "^3.0.6",
-    "mocha-phantomjs": "3.5.3",
-    "phantomjs": "^1.9.1",
+    "@babel/core": "^7.2.2",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "jquery": "^3.3.1",
+    "mocha": "^5.2.0",
+    "mocha-chrome": "^1.1.0",
     "prettier": "1.15.2",
-    "prettier-check": "^2.0.0"
+    "prettier-check": "^2.0.0",
+    "rollup": "^0.68.1",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-copy": "^0.2.3",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "sinon": "^7.2.2"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicolas-t/Chocolat.git"
   },
   "keywords": [
-    "jquery",
     "lightbox",
     "plugin",
     "responsive"
@@ -41,7 +45,7 @@
   "licenses": [
     {
       "type": "GPLv3",
-      "url": "http://chocolat.insipi.de"
+      "url": "https://github.com/nicolas-t/Chocolat/blob/master/LICENSE"
     }
   ],
   "bugs": {

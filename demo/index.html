@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="../dist/css/chocolat.css" />
+        <script type="text/javascript" src="../dist/js/chocolat.js"></script>
+        <style>
+            body {
+                text-align: center;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+            }
+            h2 {
+                padding-top:20px;
+                font-size: 14px;
+                font-weight: normal;
+                border-top:1px solid #eeeeee;
+            }
+            a {
+                border:0;
+                color: #2645FF;
+                text-decoration: none;
+            }
+        </style>
+        <title>Chocolat — demo</title>
+
+    </head>
+    <body>
+        <div style="text-align: center;background: #E8E8E8; padding: 10px;margin-bottom: 10px;">
+            <a href="https://github.com/nicolas-t/Chocolat"> Chocolat on github</a>
+        </div>
+
+        <h2>
+           Full window, contain, click the numbers to open:
+        </h2>
+        <div id="example0">
+            <a class="chocolat-image" href="demo-images/5.jpg" title="HO">
+                1
+            </a>
+            <a class="chocolat-image" href="demo-images/6.jpg" title="HAI">
+                2
+            </a>
+            <a class="chocolat-image" href="demo-images/3.jpg" title="IO">
+                3
+            </a>
+        </div>
+
+        <h2>
+            Full window, cover, looping :
+        </h2>
+        <div id="example1">
+            <a class="chocolat-image" href="demo-images/1.jpg" title="foo">
+                C
+            </a>
+            <a class="chocolat-image" href="demo-images/2.jpg" title="bar">
+                D
+            </a>
+        </div>
+
+        <h2>
+            Display in a container, cover, with thumbnails :
+        </h2>
+
+        <div id="example3">
+            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+                <img src="demo-images/3.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+                <img src="demo-images/4.jpg" style="width:75px; height:50px" alt="">
+            </a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+                <img src="demo-images/5.jpg" style="width:75px; height:50px" alt="">
+            </a>
+        </div>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container2" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
+
+        <h2>
+            Display in a container, looping :
+        </h2>
+
+        <div id="example2">
+            <a class="chocolat-image" href="demo-images/3.jpg" title="Rose">
+                A
+            </a>
+            <a class="chocolat-image" href="demo-images/4.jpg" title="Black">
+                B
+            </a>
+            <a class="chocolat-image" href="demo-images/5.jpg" title="Yellow">
+                C
+            </a>
+        </div>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container1" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
+
+
+        <h2>
+            API use, in container, see code source <br>
+            Open console to have details abouts events
+        </h2>
+
+        <a class="api-open" href="#">Open</a> then try <br>
+        <a class="api-next" href="#">Next</a>
+        <a class="api-prev" href="#">Prev</a>
+        <br>
+        <a class="api-cover" href="#">Enter cover mode</a> /
+        <a class="api-contain" href="#">Enter contain mode</a>
+
+        <br>
+        <br>
+        <a class="api-close" href="#">Close</a>
+        <!-- Container (notice the relative width) :  -->
+        <div id="container3" style="width: 80%; max-width:1000px; height: 600px; background: #E0E0E0; margin:auto;"></div>
+
+        <h2>Usage with srcset and sizes attributes. Full window, contained.</h2>
+        <p>Be careful while using "cover" and data-sizes="100vw", the image could be wider than the viewport width.</p>
+        <div id="example4">
+            <a class="chocolat-image" href="demo-images/1920x1080.png" title="responsive"
+               data-srcset="demo-images/320x180.png 320w,
+                            demo-images/640x360.png 640w,
+                            demo-images/960x540.png 960w,
+                            demo-images/1280x720.png 1280w,
+                            demo-images/1920x1080.png 1920w"
+               data-sizes="100vw">
+                <img src="demo-images/75x50.png" style="width:75px; height:50px" alt="">
+            </a>
+        </div>
+
+
+        <script>
+            // standard demos
+            Chocolat(document.querySelectorAll('#example0 .chocolat-image'), {
+                imageSize: 'contain',
+            })
+
+            Chocolat(document.querySelectorAll('#example1 .chocolat-image'), {
+                loop: true,
+                imageSize: 'cover',
+                overlayOpacity: 0.9
+            })
+
+            Chocolat(document.querySelectorAll('#example2 .chocolat-image'), {
+                container: document.querySelector('#container1'),
+                imageSize: 'contain',
+                loop: true,
+            })
+
+            Chocolat(document.querySelectorAll('#example3 .chocolat-image'), {
+                container: document.querySelector('#container2'),
+                imageSize: 'cover',
+            })
+            Chocolat(document.querySelectorAll('#example4 .chocolat-image'), {
+                imageSize: 'contain',
+            })
+        </script>
+        <script>
+            // api demo
+            var instance = Chocolat([
+                    {src : 'demo-images/1.jpg', title : 'caption 1'},
+                    {src : 'demo-images/6.jpg', title : 'caption 2'},
+                    {src : 'demo-images/8.jpg', title : 'caption 3'},
+                ], {
+                setTitle : function () { return 'set title' },
+                loop: true,
+                imageSize : 'contain',
+                container: document.querySelector('#container3'),
+                afterMarkup: function () {
+                    console.log('afterMarkup hook is called')
+                },
+                afterImageLoad: function () {
+                    console.log('afterImageLoad hook is called')
+                },
+                afterInitialize: function () {
+                    console.log('afterInitialize hook is called')
+                },
+                zoomedPaddingX: function (imgWidth, canvasWidth) {
+                    // add a padding around the zoomed image
+                    // default to 0
+                    return canvasWidth / 4;
+                },
+                zoomedPaddingY: function (imgHeight, canvasHeight) {
+                    // add a padding around the zoomed image
+                    // default to 0
+                    return canvasHeight / 4;
+                }
+            });
+            document.querySelector('.api-open').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('open start');
+                var promise = instance.api.open()
+
+                promise.then(function(){
+                    console.log('open done');
+                })
+            })
+
+            document.querySelector('.api-close').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('close start');
+                var promise = instance.api.close()
+
+                promise.then(function(){
+                    console.log('close done');
+                })
+            })
+            document.querySelector('.api-prev').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('prev start');
+                var promise = instance.api.prev()
+
+                promise.then(function(){
+                    console.log('prev done');
+                })
+            })
+            document.querySelector('.api-next').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('next start');
+                var promise = instance.api.next()
+
+                promise.then(function(){
+                    console.log('next done');
+                })
+            })
+
+            document.querySelector('.api-cover').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('cover mode start')
+                instance.api.set('imageSize', 'cover')
+                var promise = instance.api.position()
+
+                promise.then(function(){
+                    console.log('cover mode done')
+                })
+            })
+
+            document.querySelector('.api-contain').addEventListener('click', function(e) {
+                e.preventDefault()
+
+                console.log('contain mode start')
+                instance.api.set('imageSize', 'contain')
+                var promise = instance.api.position()
+
+                promise.then(function(){
+                    console.log('contain mode done')
+                })
+            })
+        </script>
+    </body>
+
+</html>
