@@ -23,5 +23,5 @@ A few breaking changes have been made between v0.4 and v1 :
 ## Contributing
 -----------
 
-If you have trouble using Chocolat, or want to report a bug, please open an issue here : 
+If you have trouble using Chocolat, or want to report a bug, please open an issue here :  
 https://github.com/nicolas-t/Chocolat/issues/new
