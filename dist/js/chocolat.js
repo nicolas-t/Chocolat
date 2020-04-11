@@ -170,6 +170,10 @@
 
       afterImageLoad() {},
 
+      afterOpenFullScreen() {},
+
+      afterExitFullScreen() {},
+
       zoomedPaddingX: function (canvasWidth, imgWidth) {
         return 0;
       },
@@ -279,6 +283,7 @@
 
         if (this.settings.fullScreen) {
           this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
+          this.settings.afterOpenFullScreen.call(this);
         }
 
         if (this.settings.currentImageIndex === index) {
@@ -400,6 +405,7 @@
       close() {
         if (this.state.fullScreenOpen) {
           this.state.fullScreenOpen = exitFullScreen();
+          this.settings.afterExitFullScreen.call(this);
           return;
         }
 
@@ -430,6 +436,7 @@
 
         if (this.state.fullScreenOpen) {
           this.state.fullScreenOpen = exitFullScreen();
+          this.settings.afterExitFullScreen.call(this);
         }
 
         this.settings.currentImageIndex = undefined;
@@ -535,10 +542,12 @@
         this.on(this.elems.fullscreen, 'click.chocolat', () => {
           if (this.state.fullScreenOpen) {
             this.state.fullScreenOpen = exitFullScreen();
+            this.settings.afterExitFullScreen.call(this);
             return;
           }
 
           this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
+          this.settings.afterOpenFullScreen.call(this);
         });
 
         if (this.settings.closeOnBackgroundClick) {

@@ -167,6 +167,10 @@ const defaults = {
 
   afterImageLoad() {},
 
+  afterOpenFullScreen() {},
+
+  afterExitFullScreen() {},
+
   zoomedPaddingX: function (canvasWidth, imgWidth) {
     return 0;
   },
@@ -276,6 +280,7 @@ class Chocolat {
 
     if (this.settings.fullScreen) {
       this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
+      this.settings.afterOpenFullScreen.call(this);
     }
 
     if (this.settings.currentImageIndex === index) {
@@ -397,6 +402,7 @@ class Chocolat {
   close() {
     if (this.state.fullScreenOpen) {
       this.state.fullScreenOpen = exitFullScreen();
+      this.settings.afterExitFullScreen.call(this);
       return;
     }
 
@@ -427,6 +433,7 @@ class Chocolat {
 
     if (this.state.fullScreenOpen) {
       this.state.fullScreenOpen = exitFullScreen();
+      this.settings.afterExitFullScreen.call(this);
     }
 
     this.settings.currentImageIndex = undefined;
@@ -532,10 +539,12 @@ class Chocolat {
     this.on(this.elems.fullscreen, 'click.chocolat', () => {
       if (this.state.fullScreenOpen) {
         this.state.fullScreenOpen = exitFullScreen();
+        this.settings.afterExitFullScreen.call(this);
         return;
       }
 
       this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
+      this.settings.afterOpenFullScreen.call(this);
     });
 
     if (this.settings.closeOnBackgroundClick) {
