@@ -365,6 +365,10 @@ class Chocolat {
       return;
     }
 
+    if (!this.settings.linkImages) {
+      return;
+    }
+
     this.zoomOut();
     const requestedImage = this.settings.currentImageIndex + parseInt(step);
 
