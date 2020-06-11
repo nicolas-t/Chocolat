@@ -35,6 +35,7 @@ export const defaults = {
     afterInitialize() {},
     afterMarkup() {},
     afterImageLoad() {},
+    afterClose() {},
     zoomedPaddingX: function(canvasWidth, imgWidth) {
         return 0
     },
@@ -327,6 +328,7 @@ export class Chocolat {
 
         return Promise.all([promiseOverlay, promiseWrapper]).then(() => {
             this.elems.container.classList.remove('chocolat-open')
+            this.settings.afterClose.call(this)
         })
     }
 

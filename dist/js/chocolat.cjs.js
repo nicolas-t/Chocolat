@@ -169,6 +169,8 @@ const defaults = {
 
   afterImageLoad() {},
 
+  afterClose() {},
+
   zoomedPaddingX: function (canvasWidth, imgWidth) {
     return 0;
   },
@@ -415,6 +417,7 @@ class Chocolat {
     }, this.elems.wrapper);
     return Promise.all([promiseOverlay, promiseWrapper]).then(() => {
       this.elems.container.classList.remove('chocolat-open');
+      this.settings.afterClose.call(this);
     });
   }
 
