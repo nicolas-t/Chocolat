@@ -115,30 +115,24 @@ export function fit(options) {
 
 export function openFullScreen(wrapper) {
     if (wrapper.requestFullscreen) {
-        wrapper.requestFullscreen()
-        return true
+        return wrapper.requestFullscreen()
     } else if (wrapper.webkitRequestFullscreen) {
-        wrapper.webkitRequestFullscreen()
-        return true
+        return wrapper.webkitRequestFullscreen()
     } else if (wrapper.msRequestFullscreen) {
-        wrapper.msRequestFullscreen()
-        return true
+        return wrapper.msRequestFullscreen()
     } else {
-        return false
+        return Promise.reject()
     }
 }
 
 export function exitFullScreen() {
     if (document.exitFullscreen) {
-        document.exitFullscreen()
-        return false
+        return document.exitFullscreen()
     } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-        return false
+        return document.webkitExitFullscreen()
     } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-        return false
+        return document.msExitFullscreen()
     } else {
-        return true
+        return Promise.reject()
     }
 }

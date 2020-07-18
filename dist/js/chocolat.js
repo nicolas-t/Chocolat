@@ -110,30 +110,24 @@
     }
     function openFullScreen(wrapper) {
       if (wrapper.requestFullscreen) {
-        wrapper.requestFullscreen();
-        return true;
+        return wrapper.requestFullscreen();
       } else if (wrapper.webkitRequestFullscreen) {
-        wrapper.webkitRequestFullscreen();
-        return true;
+        return wrapper.webkitRequestFullscreen();
       } else if (wrapper.msRequestFullscreen) {
-        wrapper.msRequestFullscreen();
-        return true;
+        return wrapper.msRequestFullscreen();
       } else {
-        return false;
+        return Promise.reject();
       }
     }
     function exitFullScreen() {
       if (document.exitFullscreen) {
-        document.exitFullscreen();
-        return false;
+        return document.exitFullscreen();
       } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-        return false;
+        return document.webkitExitFullscreen();
       } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-        return false;
+        return document.msExitFullscreen();
       } else {
-        return true;
+        return Promise.reject();
       }
     }
 
@@ -405,7 +399,7 @@
 
       close() {
         if (this.state.fullScreenOpen) {
-          this.state.fullScreenOpen = exitFullScreen();
+          exitFullScreen();
           return;
         }
 
@@ -541,11 +535,19 @@
         this.off(this.elems.fullscreen, 'click.chocolat');
         this.on(this.elems.fullscreen, 'click.chocolat', () => {
           if (this.state.fullScreenOpen) {
-            this.state.fullScreenOpen = exitFullScreen();
+            exitFullScreen();
             return;
           }
 
-          this.state.fullScreenOpen = openFullScreen(this.elems.wrapper);
+          openFullScreen(this.elems.wrapper);
+        });
+        this.off(document, 'fullscreenchange.chocolat');
+        this.on(document, 'fullscreenchange.chocolat', () => {
+          if (document.fullscreenElement) {
+            this.state.fullScreenOpen = true;
+          } else {
+            this.state.fullScreenOpen = false;
+          }
         });
 
         if (this.settings.closeOnBackgroundClick) {

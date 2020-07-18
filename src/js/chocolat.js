@@ -312,7 +312,7 @@ export class Chocolat {
 
     close() {
         if (this.state.fullScreenOpen) {
-            this.state.fullScreenOpen = exitFullScreen()
+            exitFullScreen()
             return
         }
 
@@ -466,11 +466,20 @@ export class Chocolat {
         this.off(this.elems.fullscreen, 'click.chocolat')
         this.on(this.elems.fullscreen, 'click.chocolat', () => {
             if (this.state.fullScreenOpen) {
-                this.state.fullScreenOpen = exitFullScreen()
+                exitFullScreen()
                 return
             }
 
-            this.state.fullScreenOpen = openFullScreen(this.elems.wrapper)
+            openFullScreen(this.elems.wrapper)
+        })
+
+        this.off(document, 'fullscreenchange.chocolat')
+        this.on(document, 'fullscreenchange.chocolat', () => {
+            if (document.fullscreenElement) {
+                this.state.fullScreenOpen = true
+            } else {
+                this.state.fullScreenOpen = false
+            }
         })
 
         if (this.settings.closeOnBackgroundClick) {
