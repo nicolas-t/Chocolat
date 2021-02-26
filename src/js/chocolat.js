@@ -174,7 +174,7 @@ export class Chocolat {
         }
 
         if (this.settings.fullScreen) {
-            this.state.fullScreenOpen = openFullScreen(this.elems.wrapper)
+            openFullScreen(this.elems.wrapper)
         }
 
         if (this.settings.currentImageIndex === index) {
@@ -342,7 +342,7 @@ export class Chocolat {
             return
         }
         if (this.state.fullScreenOpen) {
-            this.state.fullScreenOpen = exitFullScreen()
+            exitFullScreen()
         }
         this.settings.currentImageIndex = undefined
         this.state.visible = false
@@ -475,13 +475,28 @@ export class Chocolat {
 
         this.off(document, 'fullscreenchange.chocolat')
         this.on(document, 'fullscreenchange.chocolat', () => {
-            if (document.fullscreenElement) {
+            if (
+                document.fullscreenElement ||
+                document.webkitCurrentFullScreenElement ||
+                document.webkitFullscreenElement
+            ) {
                 this.state.fullScreenOpen = true
             } else {
                 this.state.fullScreenOpen = false
             }
         })
-
+        this.off(document, 'webkitfullscreenchange.chocolat')
+        this.on(document, 'webkitfullscreenchange.chocolat', () => {
+            if (
+                document.fullscreenElement ||
+                document.webkitCurrentFullScreenElement ||
+                document.webkitFullscreenElement
+            ) {
+                this.state.fullScreenOpen = true
+            } else {
+                this.state.fullScreenOpen = false
+            }
+        })
         if (this.settings.closeOnBackgroundClick) {
             this.off(this.elems.overlay, 'click.chocolat')
             this.on(this.elems.overlay, 'click.chocolat', this.close.bind(this))
