@@ -1,257 +1,313 @@
 (function () {
-    'use strict';
+  'use strict';
 
-    let timerDebounce = undefined;
-    function debounce(duration, callback) {
-      clearTimeout(timerDebounce);
-      timerDebounce = setTimeout(function () {
-        callback();
-      }, duration);
-      return timerDebounce;
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
     }
-    function transitionAsPromise(triggeringFunc, el) {
-      return new Promise(resolve => {
-        const handleTransitionEnd = () => {
-          el.removeEventListener('transitionend', handleTransitionEnd);
-          resolve();
-        };
+  }
 
-        el.addEventListener('transitionend', handleTransitionEnd);
-        const classesBefore = el.getAttribute('class');
-        const stylesBefore = el.getAttribute('style');
-        triggeringFunc();
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
 
-        if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
-          handleTransitionEnd();
-        }
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
 
-        if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
-          handleTransitionEnd();
-        }
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  var timerDebounce = undefined;
+  function debounce(duration, callback) {
+    clearTimeout(timerDebounce);
+    timerDebounce = setTimeout(function () {
+      callback();
+    }, duration);
+    return timerDebounce;
+  }
+  function transitionAsPromise(triggeringFunc, el) {
+    return new Promise(function (resolve) {
+      var handleTransitionEnd = function handleTransitionEnd() {
+        el.removeEventListener('transitionend', handleTransitionEnd);
+        resolve();
+      };
+
+      el.addEventListener('transitionend', handleTransitionEnd);
+      var classesBefore = el.getAttribute('class');
+      var stylesBefore = el.getAttribute('style');
+      triggeringFunc();
+
+      if (classesBefore === el.getAttribute('class') && stylesBefore === el.getAttribute('style')) {
+        handleTransitionEnd();
+      }
+
+      if (parseFloat(getComputedStyle(el)['transitionDuration']) === 0) {
+        handleTransitionEnd();
+      }
+    });
+  }
+  function loadImage(_ref) {
+    var src = _ref.src,
+        srcset = _ref.srcset,
+        sizes = _ref.sizes;
+    var image = new Image();
+    image.src = src;
+
+    if (srcset) {
+      image.srcset = srcset;
+    }
+
+    if (sizes) {
+      image.sizes = sizes;
+    }
+
+    if ('decode' in image) {
+      return new Promise(function (resolve, reject) {
+        image.decode().then(function () {
+          resolve(image);
+        })["catch"](function () {
+          reject(image);
+        });
+      });
+    } else {
+      return new Promise(function (resolve, reject) {
+        image.onload = resolve(image);
+        image.onerror = reject(image);
       });
     }
-    function loadImage({
-      src,
-      srcset,
-      sizes
-    }) {
-      const image = new Image();
-      image.src = src;
+  }
+  function fit(options) {
+    var height;
+    var width;
+    var imgHeight = options.imgHeight,
+        imgWidth = options.imgWidth,
+        containerHeight = options.containerHeight,
+        containerWidth = options.containerWidth,
+        canvasWidth = options.canvasWidth,
+        canvasHeight = options.canvasHeight,
+        imageSize = options.imageSize;
+    var canvasRatio = canvasHeight / canvasWidth;
+    var containerRatio = containerHeight / containerWidth;
+    var imgRatio = imgHeight / imgWidth;
 
-      if (srcset) {
-        image.srcset = srcset;
+    if (imageSize == 'cover') {
+      if (imgRatio < containerRatio) {
+        height = containerHeight;
+        width = height / imgRatio;
+      } else {
+        width = containerWidth;
+        height = width * imgRatio;
+      }
+    } else if (imageSize == 'native') {
+      height = imgHeight;
+      width = imgWidth;
+    } else {
+      if (imgRatio > canvasRatio) {
+        height = canvasHeight;
+        width = height / imgRatio;
+      } else {
+        width = canvasWidth;
+        height = width * imgRatio;
       }
 
-      if (sizes) {
-        image.sizes = sizes;
+      if (imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
+        width = imgWidth;
+        height = imgHeight;
       }
+    }
 
-      if ('decode' in image) {
-        return new Promise((resolve, reject) => {
-          image.decode().then(() => {
-            resolve(image);
-          }).catch(() => {
-            reject(image);
+    return {
+      height: height,
+      width: width
+    };
+  }
+  function openFullScreen(wrapper) {
+    if (wrapper.requestFullscreen) {
+      return wrapper.requestFullscreen();
+    } else if (wrapper.webkitRequestFullscreen) {
+      return wrapper.webkitRequestFullscreen();
+    } else if (wrapper.msRequestFullscreen) {
+      return wrapper.msRequestFullscreen();
+    } else {
+      return Promise.reject();
+    }
+  }
+  function exitFullScreen() {
+    if (document.exitFullscreen) {
+      return document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      return document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      return document.msExitFullscreen();
+    } else {
+      return Promise.reject();
+    }
+  }
+
+  var defaults = {
+    container: document.body,
+    // window or element
+    className: undefined,
+    imageSize: 'scale-down',
+    // 'scale-down', 'contain', 'cover' or 'native'
+    fullScreen: false,
+    loop: false,
+    linkImages: true,
+    setIndex: 0,
+    firstImageIndex: 0,
+    lastImageIndex: false,
+    currentImageIndex: undefined,
+    allowZoom: true,
+    closeOnBackgroundClick: true,
+    setTitle: function setTitle() {
+      return '';
+    },
+    description: function description() {
+      return this.images[this.settings.currentImageIndex].title;
+    },
+    pagination: function pagination() {
+      var last = this.settings.lastImageIndex + 1;
+      var position = this.settings.currentImageIndex + 1;
+      return position + '/' + last;
+    },
+    afterInitialize: function afterInitialize() {},
+    afterMarkup: function afterMarkup() {},
+    afterImageLoad: function afterImageLoad() {},
+    afterClose: function afterClose() {},
+    zoomedPaddingX: function zoomedPaddingX(canvasWidth, imgWidth) {
+      return 0;
+    },
+    zoomedPaddingY: function zoomedPaddingY(canvasHeight, imgHeight) {
+      return 0;
+    }
+  };
+  var Chocolat = /*#__PURE__*/function () {
+    function Chocolat(elements, settings) {
+      var _this = this;
+
+      _classCallCheck(this, Chocolat);
+
+      this.settings = settings;
+      this.elems = {};
+      this.images = [];
+      this.events = [];
+      this.state = {
+        fullScreenOpen: false,
+        initialZoomState: null,
+        initialized: false,
+        timer: false,
+        visible: false
+      };
+      this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed', 'chocolat-zooming-in', 'chocolat-zooming-out'];
+
+      if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) {
+        elements.forEach(function (el, i) {
+          _this.images.push({
+            title: el.getAttribute('title'),
+            src: el.getAttribute('href'),
+            srcset: el.getAttribute('data-srcset'),
+            sizes: el.getAttribute('data-sizes')
+          });
+
+          _this.off(el, 'click.chocolat');
+
+          _this.on(el, 'click.chocolat', function (e) {
+            _this.init(i);
+
+            e.preventDefault();
           });
         });
       } else {
-        return new Promise((resolve, reject) => {
-          image.onload = resolve(image);
-          image.onerror = reject(image);
-        });
+        this.images = elements;
       }
-    }
-    function fit(options) {
-      let height;
-      let width;
-      const {
-        imgHeight,
-        imgWidth,
-        containerHeight,
-        containerWidth,
-        canvasWidth,
-        canvasHeight,
-        imageSize
-      } = options;
-      const canvasRatio = canvasHeight / canvasWidth;
-      const containerRatio = containerHeight / containerWidth;
-      const imgRatio = imgHeight / imgWidth;
 
-      if (imageSize == 'cover') {
-        if (imgRatio < containerRatio) {
-          height = containerHeight;
-          width = height / imgRatio;
-        } else {
-          width = containerWidth;
-          height = width * imgRatio;
-        }
-      } else if (imageSize == 'native') {
-        height = imgHeight;
-        width = imgWidth;
+      if (this.settings.container instanceof Element || this.settings.container instanceof HTMLElement) {
+        this.elems.container = this.settings.container;
       } else {
-        if (imgRatio > canvasRatio) {
-          height = canvasHeight;
-          width = height / imgRatio;
-        } else {
-          width = canvasWidth;
-          height = width * imgRatio;
-        }
-
-        if (imageSize === 'scale-down' && (width >= imgWidth || height >= imgHeight)) {
-          width = imgWidth;
-          height = imgHeight;
-        }
+        this.elems.container = document.body;
       }
 
-      return {
-        height: height,
-        width: width
+      this.api = {
+        open: function open(i) {
+          i = parseInt(i) || 0;
+          return _this.init(i);
+        },
+        close: function close() {
+          return _this.close();
+        },
+        next: function next() {
+          return _this.change(1);
+        },
+        prev: function prev() {
+          return _this.change(-1);
+        },
+        "goto": function goto(i) {
+          return _this.open(i);
+        },
+        current: function current() {
+          return _this.settings.currentImageIndex;
+        },
+        position: function position() {
+          return _this.position(_this.elems.img);
+        },
+        destroy: function destroy() {
+          return _this.destroy();
+        },
+        set: function set(property, value) {
+          _this.settings[property] = value;
+          return value;
+        },
+        get: function get(property) {
+          return _this.settings[property];
+        },
+        getElem: function getElem(name) {
+          return _this.elems[name];
+        }
       };
     }
-    function openFullScreen(wrapper) {
-      if (wrapper.requestFullscreen) {
-        return wrapper.requestFullscreen();
-      } else if (wrapper.webkitRequestFullscreen) {
-        return wrapper.webkitRequestFullscreen();
-      } else if (wrapper.msRequestFullscreen) {
-        return wrapper.msRequestFullscreen();
-      } else {
-        return Promise.reject();
-      }
-    }
-    function exitFullScreen() {
-      if (document.exitFullscreen) {
-        return document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        return document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        return document.msExitFullscreen();
-      } else {
-        return Promise.reject();
-      }
-    }
 
-    const defaults = {
-      container: document.body,
-      // window or element
-      className: undefined,
-      imageSize: 'scale-down',
-      // 'scale-down', 'contain', 'cover' or 'native'
-      fullScreen: false,
-      loop: false,
-      linkImages: true,
-      setIndex: 0,
-      firstImageIndex: 0,
-      lastImageIndex: false,
-      currentImageIndex: undefined,
-      allowZoom: true,
-      closeOnBackgroundClick: true,
-      setTitle: function () {
-        return '';
-      },
-      description: function () {
-        return this.images[this.settings.currentImageIndex].title;
-      },
-      pagination: function () {
-        const last = this.settings.lastImageIndex + 1;
-        const position = this.settings.currentImageIndex + 1;
-        return position + '/' + last;
-      },
-
-      afterInitialize() {},
-
-      afterMarkup() {},
-
-      afterImageLoad() {},
-
-      afterClose() {},
-
-      zoomedPaddingX: function (canvasWidth, imgWidth) {
-        return 0;
-      },
-      zoomedPaddingY: function (canvasHeight, imgHeight) {
-        return 0;
-      }
-    };
-    class Chocolat {
-      constructor(elements, settings) {
-        this.settings = settings;
-        this.elems = {};
-        this.images = [];
-        this.events = [];
-        this.state = {
-          fullScreenOpen: false,
-          initialZoomState: null,
-          initialized: false,
-          timer: false,
-          visible: false
-        };
-        this._cssClasses = ['chocolat-open', 'chocolat-in-container', 'chocolat-cover', 'chocolat-zoomable', 'chocolat-zoomed', 'chocolat-zooming-in', 'chocolat-zooming-out'];
-
-        if (NodeList.prototype.isPrototypeOf(elements) || HTMLCollection.prototype.isPrototypeOf(elements)) {
-          elements.forEach((el, i) => {
-            this.images.push({
-              title: el.getAttribute('title'),
-              src: el.getAttribute('href'),
-              srcset: el.getAttribute('data-srcset'),
-              sizes: el.getAttribute('data-sizes')
-            });
-            this.off(el, 'click.chocolat');
-            this.on(el, 'click.chocolat', e => {
-              this.init(i);
-              e.preventDefault();
-            });
-          });
-        } else {
-          this.images = elements;
-        }
-
-        if (this.settings.container instanceof Element || this.settings.container instanceof HTMLElement) {
-          this.elems.container = this.settings.container;
-        } else {
-          this.elems.container = document.body;
-        }
-
-        this.api = {
-          open: i => {
-            i = parseInt(i) || 0;
-            return this.init(i);
-          },
-          close: () => {
-            return this.close();
-          },
-          next: () => {
-            return this.change(1);
-          },
-          prev: () => {
-            return this.change(-1);
-          },
-          goto: i => {
-            return this.open(i);
-          },
-          current: () => {
-            return this.settings.currentImageIndex;
-          },
-          position: () => {
-            return this.position(this.elems.img);
-          },
-          destroy: () => {
-            return this.destroy();
-          },
-          set: (property, value) => {
-            this.settings[property] = value;
-            return value;
-          },
-          get: property => {
-            return this.settings[property];
-          },
-          getElem: name => {
-            return this.elems[name];
-          }
-        };
-      }
-
-      init(i) {
+    _createClass(Chocolat, [{
+      key: "init",
+      value: function init(i) {
         if (!this.state.initialized) {
           this.markup();
           this.attachListeners();
@@ -262,13 +318,17 @@
         this.settings.afterInitialize.call(this);
         return this.load(i);
       }
+    }, {
+      key: "load",
+      value: function load(index) {
+        var _this2 = this;
 
-      load(index) {
         if (!this.state.visible) {
           this.state.visible = true;
-          setTimeout(() => {
-            this.elems.overlay.classList.add('chocolat-visible');
-            this.elems.wrapper.classList.add('chocolat-visible');
+          setTimeout(function () {
+            _this2.elems.overlay.classList.add('chocolat-visible');
+
+            _this2.elems.wrapper.classList.add('chocolat-visible');
           }, 0);
           this.elems.container.classList.add('chocolat-open');
         }
@@ -281,18 +341,18 @@
           return Promise.resolve();
         }
 
-        let loaderTimer = setTimeout(() => {
-          this.elems.loader.classList.add('chocolat-visible');
+        var loaderTimer = setTimeout(function () {
+          _this2.elems.loader.classList.add('chocolat-visible');
         }, 1000);
-        let fadeOutPromise;
-        let image;
-        let fadeOutTimer = setTimeout(() => {
+        var fadeOutPromise;
+        var image;
+        var fadeOutTimer = setTimeout(function () {
           fadeOutTimer = undefined;
-          fadeOutPromise = transitionAsPromise(() => {
-            this.elems.imageCanvas.classList.remove('chocolat-visible');
-          }, this.elems.imageCanvas);
+          fadeOutPromise = transitionAsPromise(function () {
+            _this2.elems.imageCanvas.classList.remove('chocolat-visible');
+          }, _this2.elems.imageCanvas);
         }, 80);
-        return loadImage(this.images[index]).then(loadedImage => {
+        return loadImage(this.images[index]).then(function (loadedImage) {
           image = loadedImage;
 
           if (fadeOutTimer) {
@@ -301,33 +361,39 @@
           } else {
             return fadeOutPromise;
           }
-        }).then(() => {
-          const nextIndex = index + 1;
+        }).then(function () {
+          var nextIndex = index + 1;
 
-          if (this.images[nextIndex] != undefined) {
-            loadImage(this.images[nextIndex]);
+          if (_this2.images[nextIndex] != undefined) {
+            loadImage(_this2.images[nextIndex]);
           }
 
-          this.settings.currentImageIndex = index;
-          this.elems.description.textContent = this.settings.description.call(this);
-          this.elems.pagination.textContent = this.settings.pagination.call(this);
-          this.arrows();
-          return this.position(image).then(() => {
-            this.elems.loader.classList.remove('chocolat-visible');
+          _this2.settings.currentImageIndex = index;
+          _this2.elems.description.textContent = _this2.settings.description.call(_this2);
+          _this2.elems.pagination.textContent = _this2.settings.pagination.call(_this2);
+
+          _this2.arrows();
+
+          return _this2.position(image).then(function () {
+            _this2.elems.loader.classList.remove('chocolat-visible');
+
             clearTimeout(loaderTimer);
-            return this.appear(image);
+            return _this2.appear(image);
           });
-        }).then(() => {
-          this.elems.container.classList.toggle('chocolat-zoomable', this.zoomable(image, this.elems.wrapper));
-          this.settings.afterImageLoad.call(this);
+        }).then(function () {
+          _this2.elems.container.classList.toggle('chocolat-zoomable', _this2.zoomable(image, _this2.elems.wrapper));
+
+          _this2.settings.afterImageLoad.call(_this2);
         });
       }
+    }, {
+      key: "position",
+      value: function position(_ref) {
+        var _this3 = this;
 
-      position({
-        naturalHeight,
-        naturalWidth
-      }) {
-        const fitOptions = {
+        var naturalHeight = _ref.naturalHeight,
+            naturalWidth = _ref.naturalWidth;
+        var fitOptions = {
           imgHeight: naturalHeight,
           imgWidth: naturalWidth,
           containerHeight: this.elems.container.clientHeight,
@@ -336,30 +402,35 @@
           canvasHeight: this.elems.imageCanvas.clientHeight,
           imageSize: this.settings.imageSize
         };
-        const {
-          width,
-          height
-        } = fit(fitOptions);
-        return transitionAsPromise(() => {
-          Object.assign(this.elems.imageWrapper.style, {
+
+        var _fit = fit(fitOptions),
+            width = _fit.width,
+            height = _fit.height;
+
+        return transitionAsPromise(function () {
+          Object.assign(_this3.elems.imageWrapper.style, {
             width: width + 'px',
             height: height + 'px'
           });
         }, this.elems.imageWrapper);
       }
+    }, {
+      key: "appear",
+      value: function appear(image) {
+        var _this4 = this;
 
-      appear(image) {
         this.elems.imageWrapper.removeChild(this.elems.img);
         this.elems.img = image;
         this.elems.img.setAttribute('class', 'chocolat-img');
         this.elems.imageWrapper.appendChild(this.elems.img);
-        const fadeInPromise = transitionAsPromise(() => {
-          this.elems.imageCanvas.classList.add('chocolat-visible');
+        var fadeInPromise = transitionAsPromise(function () {
+          _this4.elems.imageCanvas.classList.add('chocolat-visible');
         }, this.elems.imageCanvas);
         return fadeInPromise;
       }
-
-      change(step) {
+    }, {
+      key: "change",
+      value: function change(step) {
         if (!this.state.visible) {
           return;
         }
@@ -369,7 +440,7 @@
         }
 
         this.zoomOut();
-        const requestedImage = this.settings.currentImageIndex + parseInt(step);
+        var requestedImage = this.settings.currentImageIndex + parseInt(step);
 
         if (requestedImage > this.settings.lastImageIndex) {
           if (this.settings.loop) {
@@ -383,8 +454,9 @@
           return this.load(requestedImage);
         }
       }
-
-      arrows() {
+    }, {
+      key: "arrows",
+      value: function arrows() {
         if (this.settings.loop) {
           this.elems.left.classList.add('active');
           this.elems.right.classList.add('active');
@@ -396,32 +468,38 @@
           this.elems.right.classList.remove('active');
         }
       }
+    }, {
+      key: "close",
+      value: function close() {
+        var _this5 = this;
 
-      close() {
         if (this.state.fullScreenOpen) {
           exitFullScreen();
           return;
         }
 
         this.state.visible = false;
-        const promiseOverlay = transitionAsPromise(() => {
-          this.elems.overlay.classList.remove('chocolat-visible');
+        var promiseOverlay = transitionAsPromise(function () {
+          _this5.elems.overlay.classList.remove('chocolat-visible');
         }, this.elems.overlay);
-        const promiseWrapper = transitionAsPromise(() => {
-          this.elems.wrapper.classList.remove('chocolat-visible');
+        var promiseWrapper = transitionAsPromise(function () {
+          _this5.elems.wrapper.classList.remove('chocolat-visible');
         }, this.elems.wrapper);
-        return Promise.all([promiseOverlay, promiseWrapper]).then(() => {
-          this.elems.container.classList.remove('chocolat-open');
-          this.settings.afterClose.call(this);
+        return Promise.all([promiseOverlay, promiseWrapper]).then(function () {
+          _this5.elems.container.classList.remove('chocolat-open');
+
+          _this5.settings.afterClose.call(_this5);
         });
       }
+    }, {
+      key: "destroy",
+      value: function destroy() {
+        var _this$elems$container;
 
-      destroy() {
-        for (let i = this.events.length - 1; i >= 0; i--) {
-          const {
-            element,
-            eventName
-          } = this.events[i];
+        for (var i = this.events.length - 1; i >= 0; i--) {
+          var _this$events$i = this.events[i],
+              element = _this$events$i.element,
+              eventName = _this$events$i.eventName;
           this.off(element, eventName);
         }
 
@@ -436,11 +514,14 @@
         this.settings.currentImageIndex = undefined;
         this.state.visible = false;
         this.state.initialized = false;
-        this.elems.container.classList.remove(...this._cssClasses);
+
+        (_this$elems$container = this.elems.container.classList).remove.apply(_this$elems$container, _toConsumableArray(this._cssClasses));
+
         this.elems.wrapper.parentNode.removeChild(this.elems.wrapper);
       }
-
-      markup() {
+    }, {
+      key: "markup",
+      value: function markup() {
         this.elems.container.classList.add('chocolat-open', this.settings.className);
 
         if (this.settings.imageSize == 'cover') {
@@ -506,55 +587,58 @@
         this.elems.bottom.appendChild(this.elems.fullscreen);
         this.settings.afterMarkup.call(this);
       }
+    }, {
+      key: "attachListeners",
+      value: function attachListeners() {
+        var _this6 = this;
 
-      attachListeners() {
         this.off(document, 'keydown.chocolat');
-        this.on(document, 'keydown.chocolat', e => {
-          if (this.state.initialized) {
+        this.on(document, 'keydown.chocolat', function (e) {
+          if (_this6.state.initialized) {
             if (e.keyCode == 37) {
-              this.change(-1);
+              _this6.change(-1);
             } else if (e.keyCode == 39) {
-              this.change(1);
+              _this6.change(1);
             } else if (e.keyCode == 27) {
-              this.close();
+              _this6.close();
             }
           }
         });
-        const right = this.elems.wrapper.querySelector('.chocolat-right');
+        var right = this.elems.wrapper.querySelector('.chocolat-right');
         this.off(right, 'click.chocolat');
-        this.on(right, 'click.chocolat', () => {
-          this.change(+1);
+        this.on(right, 'click.chocolat', function () {
+          _this6.change(+1);
         });
-        const left = this.elems.wrapper.querySelector('.chocolat-left');
+        var left = this.elems.wrapper.querySelector('.chocolat-left');
         this.off(left, 'click.chocolat');
-        this.on(left, 'click.chocolat', () => {
-          this.change(-1);
+        this.on(left, 'click.chocolat', function () {
+          _this6.change(-1);
         });
         this.off(this.elems.close, 'click.chocolat');
         this.on(this.elems.close, 'click.chocolat', this.close.bind(this));
         this.off(this.elems.fullscreen, 'click.chocolat');
-        this.on(this.elems.fullscreen, 'click.chocolat', () => {
-          if (this.state.fullScreenOpen) {
+        this.on(this.elems.fullscreen, 'click.chocolat', function () {
+          if (_this6.state.fullScreenOpen) {
             exitFullScreen();
             return;
           }
 
-          openFullScreen(this.elems.wrapper);
+          openFullScreen(_this6.elems.wrapper);
         });
         this.off(document, 'fullscreenchange.chocolat');
-        this.on(document, 'fullscreenchange.chocolat', () => {
+        this.on(document, 'fullscreenchange.chocolat', function () {
           if (document.fullscreenElement || document.webkitCurrentFullScreenElement || document.webkitFullscreenElement) {
-            this.state.fullScreenOpen = true;
+            _this6.state.fullScreenOpen = true;
           } else {
-            this.state.fullScreenOpen = false;
+            _this6.state.fullScreenOpen = false;
           }
         });
         this.off(document, 'webkitfullscreenchange.chocolat');
-        this.on(document, 'webkitfullscreenchange.chocolat', () => {
+        this.on(document, 'webkitfullscreenchange.chocolat', function () {
           if (document.fullscreenElement || document.webkitCurrentFullScreenElement || document.webkitFullscreenElement) {
-            this.state.fullScreenOpen = true;
+            _this6.state.fullScreenOpen = true;
           } else {
-            this.state.fullScreenOpen = false;
+            _this6.state.fullScreenOpen = false;
           }
         });
 
@@ -564,122 +648,134 @@
         }
 
         this.off(this.elems.wrapper, 'click.chocolat');
-        this.on(this.elems.wrapper, 'click.chocolat', () => {
-          if (this.state.initialZoomState === null || !this.state.visible) {
+        this.on(this.elems.wrapper, 'click.chocolat', function () {
+          if (_this6.state.initialZoomState === null || !_this6.state.visible) {
             return;
           }
 
-          this.elems.container.classList.add('chocolat-zooming-out');
-          this.zoomOut().then(() => {
-            this.elems.container.classList.remove('chocolat-zoomed');
-            this.elems.container.classList.remove('chocolat-zooming-out');
+          _this6.elems.container.classList.add('chocolat-zooming-out');
+
+          _this6.zoomOut().then(function () {
+            _this6.elems.container.classList.remove('chocolat-zoomed');
+
+            _this6.elems.container.classList.remove('chocolat-zooming-out');
           });
         });
         this.off(this.elems.imageWrapper, 'click.chocolat');
-        this.on(this.elems.imageWrapper, 'click.chocolat', e => {
-          if (this.state.initialZoomState === null && this.elems.container.classList.contains('chocolat-zoomable')) {
+        this.on(this.elems.imageWrapper, 'click.chocolat', function (e) {
+          if (_this6.state.initialZoomState === null && _this6.elems.container.classList.contains('chocolat-zoomable')) {
             e.stopPropagation();
-            this.elems.container.classList.add('chocolat-zooming-in');
-            this.zoomIn(e).then(() => {
-              this.elems.container.classList.add('chocolat-zoomed');
-              this.elems.container.classList.remove('chocolat-zooming-in');
+
+            _this6.elems.container.classList.add('chocolat-zooming-in');
+
+            _this6.zoomIn(e).then(function () {
+              _this6.elems.container.classList.add('chocolat-zoomed');
+
+              _this6.elems.container.classList.remove('chocolat-zooming-in');
             });
           }
         });
-        this.on(this.elems.wrapper, 'mousemove.chocolat', e => {
-          if (this.state.initialZoomState === null || !this.state.visible) {
+        this.on(this.elems.wrapper, 'mousemove.chocolat', function (e) {
+          if (_this6.state.initialZoomState === null || !_this6.state.visible) {
             return;
           }
 
-          const rect = this.elems.wrapper.getBoundingClientRect();
-          const pos = {
+          var rect = _this6.elems.wrapper.getBoundingClientRect();
+
+          var pos = {
             top: rect.top + window.scrollY,
             left: rect.left + window.scrollX
           };
-          const height = this.elems.wrapper.clientHeight;
-          const width = this.elems.wrapper.clientWidth;
-          const imgWidth = this.elems.img.width;
-          const imgHeight = this.elems.img.height;
-          const coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
-          let mvtX = 0;
+          var height = _this6.elems.wrapper.clientHeight;
+          var width = _this6.elems.wrapper.clientWidth;
+          var imgWidth = _this6.elems.img.width;
+          var imgHeight = _this6.elems.img.height;
+          var coord = [e.pageX - width / 2 - pos.left, e.pageY - height / 2 - pos.top];
+          var mvtX = 0;
 
           if (imgWidth > width) {
-            const paddingX = this.settings.zoomedPaddingX(imgWidth, width);
+            var paddingX = _this6.settings.zoomedPaddingX(imgWidth, width);
+
             mvtX = coord[0] / (width / 2);
             mvtX = ((imgWidth - width) / 2 + paddingX) * mvtX;
           }
 
-          let mvtY = 0;
+          var mvtY = 0;
 
           if (imgHeight > height) {
-            const paddingY = this.settings.zoomedPaddingY(imgHeight, height);
+            var paddingY = _this6.settings.zoomedPaddingY(imgHeight, height);
+
             mvtY = coord[1] / (height / 2);
             mvtY = ((imgHeight - height) / 2 + paddingY) * mvtY;
           }
 
-          this.elems.img.style.marginLeft = -mvtX + 'px';
-          this.elems.img.style.marginTop = -mvtY + 'px';
+          _this6.elems.img.style.marginLeft = -mvtX + 'px';
+          _this6.elems.img.style.marginTop = -mvtY + 'px';
         });
-        this.on(window, 'resize.chocolat', e => {
-          if (!this.state.initialized || !this.state.visible) {
+        this.on(window, 'resize.chocolat', function (e) {
+          if (!_this6.state.initialized || !_this6.state.visible) {
             return;
           }
 
-          debounce(50, () => {
-            const fitOptions = {
-              imgHeight: this.elems.img.naturalHeight,
-              imgWidth: this.elems.img.naturalWidth,
-              containerHeight: this.elems.wrapper.clientHeight,
-              containerWidth: this.elems.wrapper.clientWidth,
-              canvasWidth: this.elems.imageCanvas.clientWidth,
-              canvasHeight: this.elems.imageCanvas.clientHeight,
-              imageSize: this.settings.imageSize
+          debounce(50, function () {
+            var fitOptions = {
+              imgHeight: _this6.elems.img.naturalHeight,
+              imgWidth: _this6.elems.img.naturalWidth,
+              containerHeight: _this6.elems.wrapper.clientHeight,
+              containerWidth: _this6.elems.wrapper.clientWidth,
+              canvasWidth: _this6.elems.imageCanvas.clientWidth,
+              canvasHeight: _this6.elems.imageCanvas.clientHeight,
+              imageSize: _this6.settings.imageSize
             };
-            const {
-              width,
-              height
-            } = fit(fitOptions);
-            this.position(this.elems.img).then(() => {
-              this.elems.container.classList.toggle('chocolat-zoomable', this.zoomable(this.elems.img, this.elems.wrapper));
+
+            var _fit2 = fit(fitOptions);
+
+            _this6.position(_this6.elems.img).then(function () {
+              _this6.elems.container.classList.toggle('chocolat-zoomable', _this6.zoomable(_this6.elems.img, _this6.elems.wrapper));
             });
           });
         });
       }
-
-      zoomable(image, wrapper) {
-        const wrapperWidth = wrapper.clientWidth;
-        const wrapperHeight = wrapper.clientHeight;
-        const isImageZoomable = this.settings.allowZoom && (image.naturalWidth > wrapperWidth || image.naturalHeight > wrapperHeight) ? true : false;
-        const isImageStretched = image.clientWidth > image.naturalWidth || image.clientHeight > image.naturalHeight;
+    }, {
+      key: "zoomable",
+      value: function zoomable(image, wrapper) {
+        var wrapperWidth = wrapper.clientWidth;
+        var wrapperHeight = wrapper.clientHeight;
+        var isImageZoomable = this.settings.allowZoom && (image.naturalWidth > wrapperWidth || image.naturalHeight > wrapperHeight) ? true : false;
+        var isImageStretched = image.clientWidth > image.naturalWidth || image.clientHeight > image.naturalHeight;
         return isImageZoomable && !isImageStretched;
       }
-
-      zoomIn(e) {
+    }, {
+      key: "zoomIn",
+      value: function zoomIn(e) {
         this.state.initialZoomState = this.settings.imageSize;
         this.settings.imageSize = 'native';
         return this.position(this.elems.img);
       }
-
-      zoomOut(e) {
+    }, {
+      key: "zoomOut",
+      value: function zoomOut(e) {
         this.settings.imageSize = this.state.initialZoomState || this.settings.imageSize;
         this.state.initialZoomState = null;
         this.elems.img.style.margin = 0;
         return this.position(this.elems.img);
       }
-
-      on(element, eventName, cb) {
+    }, {
+      key: "on",
+      value: function on(element, eventName, cb) {
         // const eventName = this.settings.setIndex + '-' + eventName
-        const length = this.events.push({
-          element,
-          eventName,
-          cb
+        var length = this.events.push({
+          element: element,
+          eventName: eventName,
+          cb: cb
         });
         element.addEventListener(eventName.split('.')[0], this.events[length - 1].cb);
       }
-
-      off(element, eventName) {
+    }, {
+      key: "off",
+      value: function off(element, eventName) {
         // const eventName = this.settings.setIndex + '-' + eventName
-        const index = this.events.findIndex(event => {
+        var index = this.events.findIndex(function (event) {
           return event.element === element && event.eventName === eventName;
         });
 
@@ -688,20 +784,22 @@
           this.events.splice(index, 1);
         }
       }
+    }]);
 
-    }
+    return Chocolat;
+  }();
 
-    const instances = [];
+  var instances = [];
 
-    window.Chocolat = function (elements, options) {
-      const settings = Object.assign({}, defaults, {
-        images: []
-      }, options, {
-        setIndex: instances.length
-      });
-      const instance = new Chocolat(elements, settings);
-      instances.push(instance);
-      return instance;
-    };
+  window.Chocolat = function (elements, options) {
+    var settings = Object.assign({}, defaults, {
+      images: []
+    }, options, {
+      setIndex: instances.length
+    });
+    var instance = new Chocolat(elements, settings);
+    instances.push(instance);
+    return instance;
+  };
 
 }());
