@@ -1,6 +1,6 @@
 {
   "name": "chocolat",
-  "version": "1.0.5-beta.0",
+  "version": "1.0.5-beta.2",
   "description": "Responsive Lightbox Plugin",
   "main": "dist/js/chocolat.cjs.js",
   "module": "dist/js/chocolat.esm.js",
@@ -14,6 +14,7 @@
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
   },
   "dependencies": {
+    "core-js": "^3.18.3",
     "es6-promise": "^4.2.5"
   },
   "devDependencies": {
