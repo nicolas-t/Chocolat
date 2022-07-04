@@ -22,7 +22,6 @@ export default [
             }),
             copy({
                 'src/css': 'dist/css',
-                'src/images': 'dist/images',
                 verbose: true
             }),
         ]
