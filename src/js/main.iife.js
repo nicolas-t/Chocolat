@@ -1,5 +1,7 @@
 import { Chocolat, defaults } from './chocolat.js'
 
+import '../css/chocolat.css'
+
 const instances = []
 
 window.Chocolat = function(elements, options) {

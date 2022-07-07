@@ -1,14 +1,16 @@
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
-import copy from 'rollup-plugin-copy'
 import pkg from './package.json'
+import url from 'postcss-url';
+import postcss from 'rollup-plugin-postcss';
 
 export default [
     // browser-friendly UMD build
     {
         input: 'src/js/main.iife.js',
         dest: pkg.browser,
+        paths: ['src/css'],
         output: {
             name: 'chocolat',
             format: 'iife',
@@ -20,9 +22,13 @@ export default [
             babel({
                 exclude: ['node_modules/**']
             }),
-            copy({
-                'src/css': 'dist/css',
-                verbose: true
+            postcss({
+                extract: './dist/css/chocolat.css',
+                plugins: [
+                    url({
+                        url: 'inline',
+                    }),
+                ],
             }),
         ]
     },
