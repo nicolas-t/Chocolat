@@ -60,9 +60,9 @@
     top: 50%;
     margin-left: -19px;
     margin-top: -19px;
-    z-index: 999;
+    z-index: 11;
     background: var(--chocolat-icon-loader);
-    opacity: 1;
+    opacity: 0;
 }
 .chocolat-loader.chocolat-visible {
     opacity: 1;
