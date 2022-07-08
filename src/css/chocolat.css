@@ -1,12 +1,3 @@
-@keyframes loading {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 :root {
     --chocolat-icon-left: url('./../icons/icon-left.svg');
     --chocolat-icon-right: url('./../icons/icon-right.svg');
@@ -62,20 +53,19 @@
 }
 .chocolat-loader {
     transition: opacity 0.3s;
-    height: 32px;
-    width: 32px;
+    height: 38px;
+    width: 38px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -16px;
-    margin-top: -16px;
+    margin-left: -19px;
+    margin-top: -19px;
     z-index: 11;
     background: var(--chocolat-icon-loader);
     opacity: 0;
 }
 .chocolat-loader.chocolat-visible {
     opacity: 1;
-    animation: loading 1s steps(12, end) infinite;
 }
 
 .chocolat-image-wrapper {

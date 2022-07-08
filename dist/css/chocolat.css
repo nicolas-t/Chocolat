@@ -1,17 +1,8 @@
-@keyframes loading {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 :root {
     --chocolat-icon-left: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 32 32%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22%3E    %3Ccircle cx%3D%2216%22 cy%3D%2216%22 r%3D%2216%22 fill-opacity%3D%22.2%22%2F%3E    %3Cpath d%3D%22M15.3 20.7 10.7 16l4.6-4.7m7.4 4.7h-12%22 fill%3D%22none%22 stroke%3D%22%23fff%22 stroke-width%3D%221.3%22%2F%3E%3C%2Fsvg%3E");
     --chocolat-icon-right: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 32 32%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22%3E    %3Ccircle cx%3D%2216%22 cy%3D%2216%22 r%3D%2216%22 fill-opacity%3D%22.2%22%2F%3E    %3Cpath d%3D%22m16.7 11.3 4.6 4.7-4.6 4.7M9.3 16h12%22 fill%3D%22none%22 stroke%3D%22%23fff%22 stroke-width%3D%221.3%22%2F%3E%3C%2Fsvg%3E");
     --chocolat-icon-close: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 32 32%22 stroke-linecap%3D%22round%22%3E    %3Ccircle cx%3D%2216%22 cy%3D%2216%22 r%3D%2216%22 fill-opacity%3D%22.2%22%2F%3E    %3Cpath d%3D%22m12 12 8 8m0-8-8 8%22 fill%3D%22none%22 stroke%3D%22%23fff%22 stroke-width%3D%221.3%22%2F%3E%3C%2Fsvg%3E");
-    --chocolat-icon-loader: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 32 32%22 stroke-linecap%3D%22round%22%3E    %3Cg fill%3D%22none%22 stroke%3D%22%23000%22 stroke-width%3D%223%22%3E        %3Cpath d%3D%22m23 3.9-2.5 4.3%22 stroke-opacity%3D%22.1%22%2F%3E        %3Cpath d%3D%22m28.1 9-4.3 2.5%22 stroke-opacity%3D%22.2%22%2F%3E        %3Cpath d%3D%22M30 16h-5%22 stroke-opacity%3D%22.3%22%2F%3E        %3Cpath d%3D%22m28.1 23-4.3-2.5m-.8 7.6-2.5-4.3%22 stroke-opacity%3D%22.4%22%2F%3E        %3Cpath d%3D%22M16 30v-5%22 stroke-opacity%3D%22.5%22%2F%3E        %3Cpath d%3D%22m9 28.1 2.5-4.3%22 stroke-opacity%3D%22.6%22%2F%3E        %3Cpath d%3D%22m3.9 23 4.3-2.5%22 stroke-opacity%3D%22.7%22%2F%3E        %3Cpath d%3D%22M2 16h5M3.9 9l4.3 2.5%22 stroke-opacity%3D%22.8%22%2F%3E        %3Cpath d%3D%22m9 3.9 2.5 4.3%22 stroke-opacity%3D%22.9%22%2F%3E        %3Cpath d%3D%22M16 2v5%22%2F%3E    %3C%2Fg%3E%3C%2Fsvg%3E");
+    --chocolat-icon-loader: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width%3D%2238%22 height%3D%2238%22%3E  %3Cg transform%3D%22translate(1 1)%22 stroke-width%3D%222%22 fill%3D%22none%22 fill-rule%3D%22evenodd%22%3E    %3Ccircle stroke-opacity%3D%22.2%22 stroke%3D%22%23000%22 cx%3D%2218%22 cy%3D%2218%22 r%3D%2218%22%2F%3E    %3Cpath d%3D%22M36 18C36 8 28 0 18 0%22 stroke%3D%22%23fff%22%3E      %3CanimateTransform attributeName%3D%22transform%22 type%3D%22rotate%22 from%3D%220 18 18%22 to%3D%22360 18 18%22 dur%3D%221s%22 repeatCount%3D%22indefinite%22%2F%3E    %3C%2Fpath%3E  %3C%2Fg%3E%3C%2Fsvg%3E");
     --chocolat-icon-fullscreen: url("data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 16 16%22%3E    %3Cg stroke%3D%22%23fff%22 fill%3D%22none%22%3E        %3Cpath d%3D%22M.5 2.5h15v11H.5z%22%2F%3E        %3Cpath d%3D%22M7.5 7.5h8v6h-8z%22%2F%3E    %3C%2Fg%3E%3C%2Fsvg%3E");
 }
 
@@ -62,20 +53,19 @@
 }
 .chocolat-loader {
     transition: opacity 0.3s;
-    height: 32px;
-    width: 32px;
+    height: 38px;
+    width: 38px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -16px;
-    margin-top: -16px;
-    z-index: 11;
+    margin-left: -19px;
+    margin-top: -19px;
+    z-index: 999;
     background: var(--chocolat-icon-loader);
-    opacity: 0;
+    opacity: 1;
 }
 .chocolat-loader.chocolat-visible {
     opacity: 1;
-    animation: loading 1s steps(12, end) infinite;
 }
 
 .chocolat-image-wrapper {

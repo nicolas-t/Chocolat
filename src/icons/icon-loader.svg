@@ -1,14 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" stroke-linecap="round">
-    <g fill="none" stroke="#000" stroke-width="3">
-        <path d="m23 3.9-2.5 4.3" stroke-opacity=".1"/>
-        <path d="m28.1 9-4.3 2.5" stroke-opacity=".2"/>
-        <path d="M30 16h-5" stroke-opacity=".3"/>
-        <path d="m28.1 23-4.3-2.5m-.8 7.6-2.5-4.3" stroke-opacity=".4"/>
-        <path d="M16 30v-5" stroke-opacity=".5"/>
-        <path d="m9 28.1 2.5-4.3" stroke-opacity=".6"/>
-        <path d="m3.9 23 4.3-2.5" stroke-opacity=".7"/>
-        <path d="M2 16h5M3.9 9l4.3 2.5" stroke-opacity=".8"/>
-        <path d="m9 3.9 2.5 4.3" stroke-opacity=".9"/>
-        <path d="M16 2v5"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38">
+  <g transform="translate(1 1)" stroke-width="2" fill="none" fill-rule="evenodd">
+    <circle stroke-opacity=".2" stroke="#000" cx="18" cy="18" r="18"/>
+    <path d="M36 18C36 8 28 0 18 0" stroke="#fff">
+      <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/>
+    </path>
+  </g>
 </svg>
