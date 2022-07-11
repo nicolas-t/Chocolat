@@ -1,3 +1,11 @@
+:root {
+    --chocolat-icon-left: url('./../icons/icon-left.svg');
+    --chocolat-icon-right: url('./../icons/icon-right.svg');
+    --chocolat-icon-close: url('./../icons/icon-close.svg');
+    --chocolat-icon-loader: url('./../icons/icon-loader.svg');
+    --chocolat-icon-fullscreen: url('./../icons/icon-fullscreen.svg');
+}
+
 .chocolat-zoomable.chocolat-zoomed {
     cursor: zoom-out;
 }
@@ -45,15 +53,15 @@
 }
 .chocolat-loader {
     transition: opacity 0.3s;
-    height: 32px;
-    width: 32px;
+    height: 38px;
+    width: 38px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -16px;
-    margin-top: -16px;
+    margin-left: -19px;
+    margin-top: -19px;
     z-index: 11;
-    background: url(../images/loader.gif);
+    background: var(--chocolat-icon-loader);
     opacity: 0;
 }
 .chocolat-loader.chocolat-visible {
@@ -80,7 +88,7 @@
     width: 50px;
     height: 100px;
     cursor: pointer;
-    background: url(../images/left.png) 50% 50% no-repeat;
+    background: var(--chocolat-icon-left) 50% 50% / 2rem auto no-repeat;
     z-index: 17;
     visibility: hidden;
 }
@@ -115,7 +123,7 @@
     width: 50px;
     height: 100px;
     cursor: pointer;
-    background: url(../images/right.png) 50% 50% no-repeat;
+    background: var(--chocolat-icon-right) 50% 50% / 2rem auto no-repeat;
     z-index: 17;
     visibility: hidden;
 }
@@ -138,7 +146,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    background: url(../images/close.png) 50% 50% no-repeat;
+    background: var(--chocolat-icon-close) 50% 50% / 2rem auto no-repeat;
 }
 .chocolat-wrapper .chocolat-bottom {
     height: 40px;
@@ -169,7 +177,7 @@
 .chocolat-wrapper .chocolat-fullscreen {
     width: 16px;
     height: 40px;
-    background: url(../images/fullscreen.png) 50% 50% no-repeat;
+    background: var(--chocolat-icon-fullscreen) 50% 50% / 1rem auto no-repeat;
     display: block;
     cursor: pointer;
     float: right;
