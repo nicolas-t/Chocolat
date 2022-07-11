@@ -4,9 +4,8 @@ module.exports = {
       "@babel/preset-env",
       {
         targets: {
-          browsers: "> 0.5%, ie >= 11"
+          browsers: "> 0.5%"
         },
-        spec: true,
         useBuiltIns: "usage",
         forceAllTransforms: true,
         corejs: {
