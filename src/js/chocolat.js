@@ -76,7 +76,7 @@ export class Chocolat {
             elements.forEach((el, i) => {
                 this.images.push({
                     title: el.getAttribute('title'),
-                    src: el.getAttribute(settings.imageSource),
+                    src: el.getAttribute(settings.imageSourceAttribute),
                     srcset: el.getAttribute('data-srcset'),
                     sizes: el.getAttribute('data-sizes'),
                 })
