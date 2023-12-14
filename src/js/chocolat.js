@@ -20,7 +20,7 @@ export const defaults = {
     currentImageIndex: undefined,
     allowZoom: true,
     closeOnBackgroundClick: true,
-    imageSource: "href",
+    imageSourceAttribute: 'href',
     setTitle: function() {
         return ''
     },
