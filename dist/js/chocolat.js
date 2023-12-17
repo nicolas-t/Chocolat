@@ -200,7 +200,7 @@
     return sharedStore[key] || (sharedStore[key] = value !== undefined ? value : {});
   })('versions', []).push({
     version: '3.18.3',
-    mode: isPure ? 'pure' : 'global',
+    mode: 'global',
     copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
   });
   });
