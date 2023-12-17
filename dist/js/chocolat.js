@@ -3371,6 +3371,7 @@
 	  currentImageIndex: undefined,
 	  allowZoom: true,
 	  closeOnBackgroundClick: true,
+	  imageSource: "href",
 	  setTitle: function setTitle() {
 	    return '';
 	  },
@@ -3420,7 +3421,7 @@
 
 	        this.images.push({
 	          title: el.getAttribute('title'),
-	          src: el.getAttribute('href'),
+                  src: el.getAttribute(settings.imageSource),
 	          srcset: el.getAttribute('data-srcset'),
 	          sizes: el.getAttribute('data-sizes')
 	        });
