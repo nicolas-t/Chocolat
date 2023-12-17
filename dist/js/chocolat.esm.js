@@ -197,6 +197,7 @@ var defaults = {
   currentImageIndex: undefined,
   allowZoom: true,
   closeOnBackgroundClick: true,
+  imageSourceAttribute: 'href',
   setTitle: function setTitle() {
     return '';
   },
@@ -242,7 +243,7 @@ var Chocolat = /*#__PURE__*/function () {
       elements.forEach(function (el, i) {
         _this.images.push({
           title: el.getAttribute('title'),
-          src: el.getAttribute('href'),
+          src: el.getAttribute(settings.imageSourceAttribute),
           srcset: el.getAttribute('data-srcset'),
           sizes: el.getAttribute('data-sizes')
         });

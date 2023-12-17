@@ -200,7 +200,7 @@
     return sharedStore[key] || (sharedStore[key] = value !== undefined ? value : {});
   })('versions', []).push({
     version: '3.18.3',
-    mode: 'global',
+    mode: isPure ? 'pure' : 'global',
     copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
   });
   });
@@ -1323,6 +1323,7 @@
     currentImageIndex: undefined,
     allowZoom: true,
     closeOnBackgroundClick: true,
+    imageSourceAttribute: 'href',
     setTitle: function setTitle() {
       return '';
     },
@@ -1368,7 +1369,7 @@
         elements.forEach(function (el, i) {
           _this.images.push({
             title: el.getAttribute('title'),
-            src: el.getAttribute('href'),
+            src: el.getAttribute(settings.imageSourceAttribute),
             srcset: el.getAttribute('data-srcset'),
             sizes: el.getAttribute('data-sizes')
           });
