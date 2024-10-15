@@ -4,6 +4,7 @@
     --chocolat-icon-close: url('./../icons/icon-close.svg');
     --chocolat-icon-loader: url('./../icons/icon-loader.svg');
     --chocolat-icon-fullscreen: url('./../icons/icon-fullscreen.svg');
+    --chocolat-transition-time: 0.4s;
 }
 
 .chocolat-zoomable.chocolat-zoomed {
@@ -13,7 +14,7 @@
     overflow: hidden;
 }
 .chocolat-overlay {
-    transition: opacity 0.4s ease, visibility 0s 0.4s ease;
+    transition: opacity var(--chocolat-transition-time) ease, visibility 0s var(--chocolat-transition-time) ease;
     height: 100%;
     width: 100%;
     position: fixed;
@@ -25,13 +26,13 @@
     opacity: 0;
 }
 .chocolat-overlay.chocolat-visible {
-    transition: opacity 0.4s, visibility 0s;
+    transition: opacity var(--chocolat-transition-time), visibility 0s;
     visibility: visible;
     opacity: 0.8;
 }
 
 .chocolat-wrapper {
-    transition: opacity 0.4s ease, visibility 0s 0.4s ease;
+    transition: opacity var(--chocolat-transition-time) ease, visibility 0s var(--chocolat-transition-time) ease;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -43,7 +44,7 @@
     visibility: hidden;
 }
 .chocolat-wrapper.chocolat-visible {
-    transition: opacity 0.4s, visibility 0s;
+    transition: opacity var(--chocolat-transition-time), visibility 0s;
     opacity: 1;
     visibility: visible;
 }
