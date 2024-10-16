@@ -164,7 +164,7 @@ export class Chocolat {
     }
 
     load(index) {
-       this.settings.beforeImageLoad.call(this)
+        this.settings.beforeImageLoad.call(this)
 
         if (!this.state.visible) {
             this.state.visible = true

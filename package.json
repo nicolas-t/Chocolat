@@ -11,6 +11,7 @@
     "build": "npm run prettier && rollup -c",
     "dev": "rollup -c -w",
     "test": "mocha-chrome test/index.html",
+    "release": "yarn version --patch && git push origin HEAD --follow-tags",
     "prettier": "./node_modules/.bin/prettier src/js/*.js test/*.js --write"
   },
   "dependencies": {
