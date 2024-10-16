@@ -35,6 +35,7 @@ export const defaults = {
     },
     afterInitialize() {},
     afterMarkup() {},
+    beforeImageLoad() {},
     afterImageLoad() {},
     afterClose() {},
     zoomedPaddingX: function(canvasWidth, imgWidth) {
@@ -163,6 +164,8 @@ export class Chocolat {
     }
 
     load(index) {
+       this.settings.beforeImageLoad.call(this)
+
         if (!this.state.visible) {
             this.state.visible = true
 
