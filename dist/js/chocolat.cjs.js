@@ -213,6 +213,7 @@ var defaults = {
   },
   afterInitialize: function afterInitialize() {},
   afterMarkup: function afterMarkup() {},
+  beforeImageLoad: function beforeImageLoad() {},
   afterImageLoad: function afterImageLoad() {},
   afterClose: function afterClose() {},
   zoomedPaddingX: function zoomedPaddingX(canvasWidth, imgWidth) {
@@ -324,6 +325,8 @@ var Chocolat = /*#__PURE__*/function () {
     key: "load",
     value: function load(index) {
       var _this2 = this;
+
+      this.settings.beforeImageLoad.call(this);
 
       if (!this.state.visible) {
         this.state.visible = true;
